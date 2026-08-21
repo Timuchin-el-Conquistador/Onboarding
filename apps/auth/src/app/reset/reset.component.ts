@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
+import { AppRoute } from '../app.routes';
 
 @Component({
   selector: 'app-reset-password-page',
@@ -20,6 +21,8 @@ import { RouterLink } from '@angular/router';
     RouterLink,
   ],
   templateUrl: './reset.component.html',
-  styleUrl: './reset.component.css',
+  styleUrls: ['../auth-shared.scss', './reset.component.scss'],
 })
-export class ResetPasswordPageComponent {}
+export class ResetPasswordPageComponent {
+  protected readonly appRoute = AppRoute;
+}

@@ -18,6 +18,6 @@ import { MatInputModule } from '@angular/material/input';
     MatButtonModule,
   ],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.css',
+  styleUrls: ['../auth-shared.scss', './signup.component.scss'],
 })
 export class SignupPageComponent {}

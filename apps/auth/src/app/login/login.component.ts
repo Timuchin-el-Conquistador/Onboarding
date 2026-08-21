@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
+import { AppRoute } from '../app.routes';
 
 @Component({
   selector: 'app-login-page',
@@ -20,6 +21,8 @@ import { RouterLink } from '@angular/router';
     RouterLink,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  styleUrls: ['../auth-shared.scss', './login.component.scss'],
 })
-export class LoginPageComponent {}
+export class LoginPageComponent {
+  protected readonly appRoute = AppRoute;
+}

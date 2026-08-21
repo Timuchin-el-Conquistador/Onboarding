@@ -24,7 +24,6 @@
         ],
         "styles": [
           "apps/auth/src/material-theme.scss",
-          "apps/auth/src/styles.css"
         ]
       },
       "configurations": {
@@ -59,7 +58,8 @@
           "buildTarget": "auth:build:production"
         },
         "development": {
-          "buildTarget": "auth:build:development"
+          "buildTarget": "auth:build:development",
+          "port": 8000
         }
       }
     },
