@@ -1,0 +1,86 @@
+:host {
+  --auth-page-bg: #f7f8fc;
+  --auth-surface: #ffffff;
+  --auth-primary: #3b82f6;
+  --auth-primary-soft: rgb(220, 231, 250);
+  --auth-border-soft: rgba(255, 255, 255, 0.85);
+  --auth-shadow-soft: rgba(15, 23, 42, 0.12);
+
+  display: block;
+  min-height: 100vh;
+  background: var(--auth-page-bg);
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: none;
+
+  &__toolbar-inner {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+
+  &__brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 600px) {
+    &__toolbar-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0.75rem 1rem;
+    }
+
+    &__brand {
+      display: none;
+    }
+
+    &__links {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+}
+
+.nav-button {
+  min-width: 120px;
+  border-radius: 999px;
+  border-color: var(--auth-border-soft) !important;
+}
+
+.active-link {
+  background-color: var(--auth-primary-soft);
+  border-color: var(--mat-button-outlined-outline-color, var(--mat-sys-outline)) !important;
+}
+
+.page-shell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+@media (max-width: 600px) {
+  .nav-button {
+    flex: 1 1 45%;
+    min-width: 0;
+  }
+}
