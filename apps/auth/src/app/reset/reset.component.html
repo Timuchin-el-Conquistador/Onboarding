@@ -3,18 +3,16 @@
     <div class="auth-card__header">
       <h1 class="auth-card__title">Reset password</h1>
     </div>
-
     <form class="auth-form auth-card__form">
       <mat-form-field appearance="outline" class="auth-form__field auth-form__field--full-width">
         <mat-label>Email</mat-label>
         <input matInput type="email" placeholder="Enter your email" class="auth-form__input" />
       </mat-form-field>
-      <app-password-field></app-password-field>
+      <app-password-field/>
       <button mat-flat-button color="primary" type="submit" class="auth-form__action">
         Send reset link
       </button>
     </form>
-
     <div class="auth-card__actions">
       <button
         mat-link

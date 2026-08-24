@@ -1,0 +1,1 @@
+export const ALPHA_NUMERIC = /[a-zA-Z0-9]/g
