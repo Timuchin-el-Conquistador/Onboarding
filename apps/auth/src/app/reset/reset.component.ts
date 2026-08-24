@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,16 +14,17 @@ import { PasswordFieldComponent } from '../ui/password-field/password-field.comp
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     RouterLink,
-    PasswordFieldComponent,
   ],
   templateUrl: './reset.component.html',
   styleUrls: ['../auth-shared.scss', './reset.component.scss'],
 })
 export class ResetPasswordPageComponent {
   protected readonly appRoute = AppRoute;
+
 }

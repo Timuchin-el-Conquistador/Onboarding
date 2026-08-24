@@ -3,7 +3,7 @@
     <div class="auth-card__header">
       <h1 class="auth-card__title">Login</h1>
     </div>
-    <form class="auth-form auth-card__form" ngForm>
+    <form class="auth-form auth-card__form" [formGroup]="form">
       <mat-form-field
         appearance="outline"
         class="auth-form__field auth-form__field--full-width"
@@ -12,11 +12,12 @@
         <input
           matInput
           type="text"
+          formControlName="email"
           placeholder="Email or username"
           class="auth-form__input"
         />
       </mat-form-field>
-      <app-password-field/>
+      <app-password-field formControlName="password" />
       <button
         mat-flat-button
         color="primary"
@@ -38,3 +39,6 @@
     </div>
   </mat-card>
 </section>
+<p>Текущее значение в FormBuilder: {{ form.value.password }}</p>
+<p>Текущее значение в FormBuilder: {{ form.controls.password.touched }}</p>
+<p>Текущее значение в FormBuilder: {{ form.controls.password.dirty }}</p>

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -33,5 +33,12 @@ export interface LoginForm {
 })
 export class LoginPageComponent {
   protected readonly appRoute = AppRoute;
+
+  private fb = inject(FormBuilder);
+
+  readonly form = this.fb.group({
+    email: [''],
+    password: ['weewfd', [Validators.required, Validators.minLength(6)]],
+  });
 
 }
