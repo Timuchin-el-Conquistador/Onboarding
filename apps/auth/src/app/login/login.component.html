@@ -1,24 +1,33 @@
 <section class="auth-page">
   <!-- Блок auth-card вложен в auth-page -->
   <mat-card class="auth-card auth-page__card">
-    
     <div class="auth-card__header">
       <h1 class="auth-card__title">Login</h1>
     </div>
 
     <form class="auth-form auth-card__form">
       <!-- Использование микса: элемент формы + кастомный плоский класс -->
-      <mat-form-field appearance="outline" class="auth-form__field auth-form__field--full-width">
+      <mat-form-field
+        appearance="outline"
+        class="auth-form__field auth-form__field--full-width"
+      >
         <mat-label>Login</mat-label>
-        <input matInput type="text" placeholder="Email or username" class="auth-form__input" />
+        <input
+          matInput
+          type="text"
+          placeholder="Email or username"
+          class="auth-form__input"
+        />
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="auth-form__field auth-form__field--full-width">
-        <mat-label>Password</mat-label>
-        <input matInput type="password" placeholder="Password" class="auth-form__input" />
-      </mat-form-field>
+      <app-password-field></app-password-field>
 
-      <button mat-flat-button color="primary" type="submit" class="auth-form__action">
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        class="auth-form__action"
+      >
         Sign In
       </button>
     </form>
@@ -33,6 +42,5 @@
         Reset Password
       </button>
     </div>
-    
   </mat-card>
 </section>

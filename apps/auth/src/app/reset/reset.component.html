@@ -9,10 +9,7 @@
         <mat-label>Email</mat-label>
         <input matInput type="email" placeholder="Enter your email" class="auth-form__input" />
       </mat-form-field>
-      <mat-form-field appearance="outline" class="auth-form__field auth-form__field--full-width">
-        <mat-label>Password</mat-label>
-        <input matInput type="email" placeholder="Enter your new password" class="auth-form__input" />
-      </mat-form-field>
+      <app-password-field></app-password-field>
       <button mat-flat-button color="primary" type="submit" class="auth-form__action">
         Send reset link
       </button>

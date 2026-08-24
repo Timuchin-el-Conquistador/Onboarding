@@ -7,10 +7,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 import { AppRoute } from '../app.routes';
+import { PasswordFieldComponent } from '../ui/password-field/password-field.component';
 
 @Component({
   selector: 'app-reset-password-page',
-  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
@@ -19,6 +19,7 @@ import { AppRoute } from '../app.routes';
     MatInputModule,
     MatButtonModule,
     RouterLink,
+    PasswordFieldComponent,
   ],
   templateUrl: './reset.component.html',
   styleUrls: ['../auth-shared.scss', './reset.component.scss'],
