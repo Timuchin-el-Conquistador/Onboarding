@@ -17,8 +17,7 @@ import { MaskingInputPipe } from '../../pipes/masking';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MaskingInputPipe,
-    ɵInternalFormsSharedModule
+    MaskingInputPipe
 ],
   templateUrl: './password-field.component.html',
   styleUrls: ['../../auth-shared.scss', './password-field.component.scss'],
