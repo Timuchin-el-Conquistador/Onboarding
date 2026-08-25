@@ -26,9 +26,9 @@ import { PasswordFieldComponent } from '../ui/password-field/password-field.comp
   styleUrls: ['../auth-shared.scss', './signup.component.scss'],
 })
 export class SignupPageComponent {
-  private fb = inject(FormBuilder);
+  readonly #fb = inject(FormBuilder);
 
-  readonly form = this.fb.group({
+  form = this.#fb.group({
     email: ['', [Validators.required,Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });

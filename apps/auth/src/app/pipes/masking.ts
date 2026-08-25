@@ -1,21 +1,21 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { ALPHA_NUMERIC } from '../types/regexp';
 
-@Pipe({ 
-  name: 'mask',
+@Pipe({
+  name: 'maskRange',
 })
 export class MaskingInputPipe implements PipeTransform {
   transform(
-    value: string | null | undefined, 
-    start: number = 0, 
-    end: number = 0, 
-    maskChar:string = '*'
+    value: string,
+    start: number = 0,
+    end: number = 0,
+    maskChar: string = '*',
   ): string {
-    if (!value) return '';
-
-    const prefix = value.slice(0, start);
-    const toMask = value.slice(start, end);
-    const suffix = value.slice(end);
+    const [prefix, toMask, suffix] = [
+      value.slice(0, start),
+      value.slice(start, end),
+      value.slice(end),
+    ];
 
     const maskedPart = toMask.replace(ALPHA_NUMERIC, maskChar);
 

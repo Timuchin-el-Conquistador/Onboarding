@@ -1,7 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -73,10 +70,14 @@ export class PasswordFieldComponent implements ControlValueAccessor {
     }
 
     const inputEvent = event as InputEvent;
-
     if (inputEvent.inputType === 'deleteContentBackward') {
+      const deleteStart =
+        this.selectionStart === this.selectionEnd
+          ? this.selectionStart - 1
+          : this.selectionStart;
+
       this.realPassword =
-        this.realPassword.slice(0, this.selectionStart) +
+        this.realPassword.slice(0, deleteStart) +
         this.realPassword.slice(this.selectionEnd);
     } else {
       const newChar = value[this.selectionStart];
@@ -89,7 +90,7 @@ export class PasswordFieldComponent implements ControlValueAccessor {
 
     this.onChange(this.realPassword);
 
-    const selectionStart = inputElement.selectionStart
+    const selectionStart = inputElement.selectionStart;
     requestAnimationFrame(() => {
       inputElement.setSelectionRange(selectionStart, selectionStart);
     });
