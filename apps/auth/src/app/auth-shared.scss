@@ -11,6 +11,7 @@
   }
 }
 .auth-card {
+  height: 420px;
   width: min(100%, 620px);
   padding: 1.5rem 1.75rem 1.75rem;
   box-shadow: none;
@@ -41,7 +42,8 @@
   &__link {
     background-color: transparent;
     border: none;
-    color: var(--auth-primary);
+    color: var(--auth-blue-800);
+    font-size: medium;
     cursor: pointer;
   }
 
@@ -67,6 +69,18 @@
     margin-top: 0.5rem;
     min-height: 44px;
     border-radius: 10px;
-    background-color: var(--auth-primary);
+    background: var(--auth-blue-800);
+    color: white;
+    font-size: large;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
+    &:hover {
+      background: white;
+      color: var(--auth-blue-800);
+      transform: translateY(-1px);
+      border: 1px solid var(--auth-blue-800);
+    }
   }
 }
