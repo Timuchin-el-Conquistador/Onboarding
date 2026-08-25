@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ALPHA_NUMERIC } from '../models/regexp';
+import { ALPHA_NUMERIC } from '../models';
 
 @Pipe({
   name: 'maskRange',

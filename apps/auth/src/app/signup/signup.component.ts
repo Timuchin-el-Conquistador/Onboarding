@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { PasswordFieldComponent } from '../ui/password-field/password-field.component';
+import { PasswordFieldComponent } from '../ui';
 
 @Component({
   selector: 'app-signup-page',
@@ -28,7 +28,7 @@ import { PasswordFieldComponent } from '../ui/password-field/password-field.comp
 export class SignupPageComponent {
   readonly #fb = inject(FormBuilder);
 
-  form = this.#fb.group({
+  readonly form = this.#fb.group({
     email: ['', [Validators.required,Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });

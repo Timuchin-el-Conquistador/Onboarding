@@ -13,7 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 import { AppRoute } from '../app.routes';
-import { PasswordFieldComponent } from '../ui/password-field/password-field.component';
+import { PasswordFieldComponent } from '../ui';
 
 @Component({
   selector: 'app-login-page',
@@ -36,7 +36,7 @@ export class LoginPageComponent {
 
   readonly #fb = inject(FormBuilder);
 
-  form = this.#fb.group({
+  readonly form = this.#fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
