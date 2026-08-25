@@ -1,4 +1,7 @@
-import { ChangeDetectionStrategy, Component, forwardRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,7 +24,7 @@ import { MaskingInputPipe } from '../../pipes/masking';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting:  PasswordFieldComponent,
+      useExisting: PasswordFieldComponent,
       multi: true,
     },
   ],
@@ -31,34 +34,64 @@ import { MaskingInputPipe } from '../../pipes/masking';
 })
 export class PasswordFieldComponent implements ControlValueAccessor {
   isMasked = true;
-  realPassword = ''; 
+  realPassword = '';
+
+  private selectionStart = 0;
+  private selectionEnd = 0;
+
+  onBeforeInput(event: InputEvent): void {
+    const input = event.target as HTMLInputElement;
+
+    this.selectionStart = input.selectionStart ?? 0;
+    this.selectionEnd = input.selectionEnd ?? 0;
+  }
 
   onChange: (value: any) => void = () => {};
   onTouched: () => void = () => {};
   writeValue(obj: any): void {
     this.realPassword = obj || '';
   }
-  registerOnChange(fn: any): void { this.onChange = fn; }
-  registerOnTouched(fn: any): void { this.onTouched = fn; }
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
 
   toggleVisibility(): void {
     this.isMasked = !this.isMasked;
   }
+
   onInputChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     const value = inputElement.value;
 
     if (!this.isMasked) {
       this.realPassword = value;
+      this.onChange(this.realPassword);
+      return;
+    }
+
+    const inputEvent = event as InputEvent;
+
+    if (inputEvent.inputType === 'deleteContentBackward') {
+      this.realPassword =
+        this.realPassword.slice(0, this.selectionStart) +
+        this.realPassword.slice(this.selectionEnd);
     } else {
-      let realIndex = 0;
-      this.realPassword = value
-        .split('')
-        .map((char) => (char === '*' ? this.realPassword[realIndex++] : char))
-        .join('');
+      const newChar = value[this.selectionStart];
+
+      this.realPassword =
+        this.realPassword.slice(0, this.selectionStart) +
+        newChar +
+        this.realPassword.slice(this.selectionEnd);
     }
 
     this.onChange(this.realPassword);
-  }
 
+    const selectionStart = inputElement.selectionStart
+    requestAnimationFrame(() => {
+      inputElement.setSelectionRange(selectionStart, selectionStart);
+    });
+  }
 }

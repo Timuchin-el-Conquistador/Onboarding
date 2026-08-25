@@ -9,12 +9,9 @@ export class MaskingInputPipe implements PipeTransform {
     value: string | null | undefined, 
     start: number = 0, 
     end: number = 0, 
-    isMasked: boolean = true,
     maskChar:string = '*'
   ): string {
     if (!value) return '';
-
-    if (!isMasked) return value;
 
     const prefix = value.slice(0, start);
     const toMask = value.slice(start, end);

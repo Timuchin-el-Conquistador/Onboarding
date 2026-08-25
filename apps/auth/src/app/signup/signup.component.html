@@ -3,7 +3,7 @@
     <div class="auth-card__header">
       <h1 class="auth-card__title">Sign Up</h1>
     </div>
-    <form class="auth-form auth-card__form">
+    <form class="auth-form auth-card__form" [formGroup]="form">
       <mat-form-field
         appearance="outline"
         class="auth-form__field auth-form__field--full-width"
@@ -12,12 +12,12 @@
         <input
           matInput
           type="text"
-          formControlName="login"
+          formControlName="email"
           placeholder="Choose a username"
           class="auth-form__input"
         />
       </mat-form-field>
-      
+      <app-password-field formControlName="password" />
       <button
         mat-flat-button
         color="primary"
