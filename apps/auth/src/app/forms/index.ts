@@ -1,1 +1,1 @@
-export {AUTH_FORM_FACTORY, CredentialsFormFactory} from './auth-form.factory'
+export { CredentialsFormFactory} from './dynamic-form.factory'

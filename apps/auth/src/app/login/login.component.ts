@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
-  ReactiveFormsModule,
+  ReactiveFormsModule
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 import { AppRoute } from '../app.routes';
 import { PasswordFieldComponent } from '../ui';
-import { AUTH_FORM_FACTORY } from '../forms';
+import { CREDENTIALS_FORM_CONFIG, DYNAMIC_FORM_FACTORY, IAuthForm } from '../models';
 
 @Component({
   selector: 'app-login-page',
@@ -32,7 +32,5 @@ import { AUTH_FORM_FACTORY } from '../forms';
 export class LoginPageComponent {
   protected readonly appRoute = AppRoute;
 
-  readonly #fb = inject(AUTH_FORM_FACTORY);
-
-  readonly form = this.#fb.create()
+  readonly form = inject(DYNAMIC_FORM_FACTORY).createForm<IAuthForm>(CREDENTIALS_FORM_CONFIG);
 }

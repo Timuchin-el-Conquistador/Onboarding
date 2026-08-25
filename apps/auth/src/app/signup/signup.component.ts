@@ -8,7 +8,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { PasswordFieldComponent } from '../ui';
-import { AUTH_FORM_FACTORY } from '../forms';
+import {
+  CREDENTIALS_FORM_CONFIG,
+  DYNAMIC_FORM_FACTORY,
+  IAuthForm,
+} from '../models';
 
 @Component({
   selector: 'app-signup-page',
@@ -25,7 +29,5 @@ import { AUTH_FORM_FACTORY } from '../forms';
   styleUrls: ['../auth-shared.scss', './signup.component.scss'],
 })
 export class SignupPageComponent {
-  readonly #fb = inject(AUTH_FORM_FACTORY);
-
-  readonly form = this.#fb.create()
+  readonly form = inject(DYNAMIC_FORM_FACTORY).createForm<IAuthForm>(CREDENTIALS_FORM_CONFIG);
 }
