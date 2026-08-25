@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {FormControl, ɵInternalFormsSharedModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MaskingInputPipe } from '../../pipes/masking';
+import { MaskingInputPipe } from '../../pipes';
 
 @Component({
   selector: 'app-password-field',
@@ -17,20 +17,20 @@ import { MaskingInputPipe } from '../../pipes/masking';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MaskingInputPipe
-],
+    MaskingInputPipe,
+  ],
   templateUrl: './password-field.component.html',
   styleUrls: ['../../auth-shared.scss', './password-field.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PasswordFieldComponent  {
+export class PasswordFieldComponent {
+  @Input() control!: FormControl;
+
   isMasked = true;
   realPassword = '';
 
   private selectionStart = 0;
   private selectionEnd = 0;
-
-  @Input() control!: FormControl;
 
   onBeforeInput(event: InputEvent): void {
     const input = event.target as HTMLInputElement;

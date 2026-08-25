@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 import { AppRoute } from '../app.routes';
-import { PasswordFieldComponent } from '../ui/password-field/password-field.component';
+import { PasswordFieldComponent } from '../ui';
 
 @Component({
   selector: 'app-reset-password-page',
@@ -29,7 +29,7 @@ export class ResetPasswordPageComponent {
 
   readonly #fb = inject(FormBuilder)
 
-  form = this.#fb.group({
+  readonly form = this.#fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]]
   })
