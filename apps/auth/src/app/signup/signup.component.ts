@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
-  FormBuilder,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { PasswordFieldComponent } from '../ui';
+import { DYNAMIC_FORM_FACTORY, DEFAULT_AUTH_FORM } from '../models';
+import type { IAuthForm } from '../models';
 
 @Component({
   selector: 'app-signup-page',
@@ -26,10 +26,5 @@ import { PasswordFieldComponent } from '../ui';
   styleUrls: ['../auth-shared.scss', './signup.component.scss'],
 })
 export class SignupPageComponent {
-  readonly #fb = inject(FormBuilder);
-
-  readonly form = this.#fb.group({
-    email: ['', [Validators.required,Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-  });
+  readonly form = inject(DYNAMIC_FORM_FACTORY).createForm<IAuthForm>(DEFAULT_AUTH_FORM)
 }
