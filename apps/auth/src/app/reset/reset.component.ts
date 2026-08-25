@@ -8,7 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 import { AppRoute } from '../app.routes';
 import { PasswordFieldComponent } from '../ui';
-import { AUTH_FORM_FACTORY } from '../forms';
+import { DYNAMIC_FORM_FACTORY, DEFAULT_AUTH_FORM } from '../models';
+import type { IAuthForm } from '../models';
 
 @Component({
   selector: 'app-reset-password-page',
@@ -28,7 +29,5 @@ import { AUTH_FORM_FACTORY } from '../forms';
 export class ResetPasswordPageComponent {
   protected readonly appRoute = AppRoute;
 
-  readonly #fb = inject(AUTH_FORM_FACTORY);
-
-  readonly form = this.#fb.create()
+  readonly form = inject(DYNAMIC_FORM_FACTORY).createForm<IAuthForm>(DEFAULT_AUTH_FORM)
 }
