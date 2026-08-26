@@ -3,7 +3,19 @@
     <div class="auth-card__header">
       <h1 class="auth-card__title">Login</h1>
     </div>
-    <form class="auth-form auth-card__form" [formGroup]="form">
+    <form
+      class="auth-form auth-card__form"
+      [formGroup]="form"
+      (ngSubmit)="login()"
+    >
+      @if (form.hasError('serverError')) {
+        <div class="auth-form__message auth-form__message--error" role="alert">
+          <mat-icon class="auth-form__server-error-icon">
+            error_outline
+          </mat-icon>
+          <mat-error>{{ form.getError('serverError') }}</mat-error>
+        </div>
+      }
       <mat-form-field
         appearance="outline"
         class="auth-form__field auth-form__field--full-width"
@@ -29,8 +41,15 @@
         color="primary"
         type="submit"
         class="auth-form__action"
+        [disabled]="loading || form.invalid"
       >
-        Sign In
+        @if (loading) {
+          <mat-icon style="width: fit-content">
+            <mat-spinner diameter="30"></mat-spinner>
+          </mat-icon>
+        } @else {
+          Sign In
+        }
       </button>
     </form>
     <div class="auth-card__actions">

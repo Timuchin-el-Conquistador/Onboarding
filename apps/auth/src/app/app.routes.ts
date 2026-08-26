@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { authGuard } from './custom-name-guard';
 
 export enum AppRoute {
   Root = '',
@@ -26,5 +27,9 @@ export const appRoutes: Route[] = [
       import('./reset/reset.component').then(
         (c) => c.ResetPasswordPageComponent,
       ),
+  },
+  {
+    path: 'test',
+    canActivate: [authGuard],
   }
 ];
