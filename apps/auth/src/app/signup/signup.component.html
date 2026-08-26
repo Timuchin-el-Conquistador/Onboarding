@@ -8,12 +8,18 @@
       [formGroup]="form"
       (ngSubmit)="signup()"
     >
-          @if (form.hasError('serverError')) {
+      @if (form.hasError('serverError')) {
         <div class="auth-form__message auth-form__message--error" role="alert">
           <mat-icon class="auth-form__server-error-icon">
             error_outline
           </mat-icon>
           <mat-error>{{ form.getError('serverError') }}</mat-error>
+        </div>
+      }
+
+      @if (successMessage) {
+        <div class="auth-form__message auth-form__message--success">
+          {{ successMessage }}
         </div>
       }
       <mat-form-field

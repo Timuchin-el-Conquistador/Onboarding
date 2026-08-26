@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -14,7 +19,6 @@ import { DYNAMIC_FORM_FACTORY, DEFAULT_AUTH_FORM } from '../models';
 import type { IAuthForm } from '../models';
 import { UserIdentityManager } from '../services';
 import { finalize } from 'rxjs/operators';
-import { INCORRECT_CREDENTIALS } from '../constants';
 
 @Component({
   selector: 'app-login-page',
@@ -32,8 +36,13 @@ import { INCORRECT_CREDENTIALS } from '../constants';
   ],
   templateUrl: './login.component.html',
   styleUrls: ['../auth-shared.scss', './login.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginPageComponent {
+  loading = false;
+
+  successMessage = '';
+
   protected readonly appRoute = AppRoute;
 
   readonly form =
@@ -41,22 +50,30 @@ export class LoginPageComponent {
 
   readonly #userIdentityManager = inject(UserIdentityManager);
 
-  loading = false;
+  readonly #cd = inject(ChangeDetectorRef);
 
   login() {
     this.loading = true;
 
     const email = this.form.value.email?.trim() ?? '';
-    const password = 'AzericS@2016';
+    const password = this.form.value.password?.trim() ?? '';
 
     this.#userIdentityManager
       .login({ email, password })
       .pipe(
         finalize(() => {
           this.loading = false;
+
+          setTimeout(() => {
+            this.successMessage = '';
+            this.#cd.markForCheck();
+          }, 100);
         }),
       )
       .subscribe({
+        next: () => {
+          this.successMessage = 'Account created successfully.';
+        },
         error: (error) => {
           this.form.setErrors({
             serverError: error.error.error,
