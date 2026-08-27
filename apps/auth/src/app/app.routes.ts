@@ -28,8 +28,4 @@ export const appRoutes: Route[] = [
         (c) => c.ResetPasswordPageComponent,
       ),
   },
-  {
-    path: 'test',
-    canActivate: [authGuard],
-  }
 ];

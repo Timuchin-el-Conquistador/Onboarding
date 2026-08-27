@@ -39,6 +39,7 @@ export class UserIdentityManager {
   }
 
   isAuthenticated(){
-    return true
+    const isAuthenticated = !!localStorage.getItem('T-Auth')
+    return isAuthenticated
   }
 }
