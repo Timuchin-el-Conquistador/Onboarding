@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ALPHA_NUMERIC } from '../models';
+import { ALPHANUMERIC_SPECIAL_REGEXP } from '../models';
 
 @Pipe({
   name: 'maskRange',
@@ -17,7 +17,7 @@ export class MaskingInputPipe implements PipeTransform {
       value.slice(end),
     ];
 
-    const maskedPart = toMask.replace(ALPHA_NUMERIC, maskChar);
+    const maskedPart = toMask.replace(ALPHANUMERIC_SPECIAL_REGEXP, maskChar);
 
     return prefix + maskedPart + suffix;
   }
