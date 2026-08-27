@@ -4,6 +4,7 @@ import {
   ElementRef,
   HostBinding,
   Input,
+  OnDestroy,
   Optional,
   Self,
 } from '@angular/core';
@@ -11,7 +12,7 @@ import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
   ControlValueAccessor,
-  NgControl
+  NgControl,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -45,8 +46,22 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
   ],
 })
 export class PasswordFieldComponent
-  implements ControlValueAccessor, MatFormFieldControl<string>
+  implements ControlValueAccessor, MatFormFieldControl<string>, OnDestroy
 {
+  @Input()
+  get required() {
+    return this.#_required;
+  }
+  @Input()
+  get disabled(): boolean {
+    return this.#_disabled;
+  }
+
+  @Input()
+  get placeholder() {
+    return this.#_placeholder;
+  }
+
   isMasked = true;
   realPassword = '';
   focused = false;
@@ -62,7 +77,13 @@ export class PasswordFieldComponent
   static nextId = 0;
 
   @HostBinding() id = `${PasswordFieldComponent.nextId++}`;
+
   @HostBinding('attr.aria-describedby') describedBy = '';
+
+  @HostBinding('class.floating')
+  get shouldLabelFloat() {
+    return this.focused || !this.empty;
+  }
 
   constructor(
     @Optional() @Self() public ngControl: NgControl,
@@ -84,31 +105,17 @@ export class PasswordFieldComponent
     this.fm.stopMonitoring(this.elRef.nativeElement);
   }
 
-  @Input()
-  get placeholder() {
-    return this.#_placeholder;
-  }
   get empty(): boolean {
     return !this.realPassword;
   }
-  @HostBinding('class.floating')
-  get shouldLabelFloat() {
-    return this.focused || !this.empty;
-  }
-  @Input()
-  get required() {
-    return this.#_required;
-  }
-  @Input()
-  get disabled(): boolean {
-    return this.#_disabled;
-  }
+
   get errorState(): boolean {
     return (
       !!this.ngControl?.invalid &&
       !!(this.ngControl?.touched || this.ngControl?.dirty)
     );
   }
+
   get value(): string {
     return this.realPassword;
   }
@@ -117,14 +124,17 @@ export class PasswordFieldComponent
     this.#_required = coerceBooleanProperty(req);
     this.stateChanges.next();
   }
+
   set placeholder(plh) {
     this.#_placeholder = plh;
     this.stateChanges.next();
   }
+
   set value(val: string | null) {
     this.realPassword = val ?? '';
     this.stateChanges.next();
   }
+  
   set disabled(value: boolean) {
     this.#_disabled = coerceBooleanProperty(value);
 
@@ -148,6 +158,7 @@ export class PasswordFieldComponent
   }
 
   onChange(value: string) {}
+
   onTouch() {}
 
   writeValue(value: string | null): void {
