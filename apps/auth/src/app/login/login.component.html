@@ -17,7 +17,13 @@
           class="auth-form__input"
         />
       </mat-form-field>
-      <app-password-field [control]="form.controls.password" />
+      <mat-form-field
+        appearance="outline"
+        class="auth-form__field auth-form__field--full-width"
+      >
+        <mat-label>Password</mat-label>
+        <app-password-field formControlName="password" />
+      </mat-form-field>
       <button
         mat-flat-button
         color="primary"
