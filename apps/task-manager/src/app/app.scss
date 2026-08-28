@@ -1,0 +1,44 @@
+:host {
+  --primary: #4a6fa5;
+  --primary-dark: #3a5982;
+  --secondary: #e76f51;
+  --light: #f8f9fa;
+  --dark: #343a40;
+  --shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.1);
+  --border-radius: 0.5rem;
+  --auth-blue-800: #1e40af;
+
+  --summary-border-color: rgba(0, 0, 0, 0.1);
+  --summary-text-color: #777;
+  --summary-action-hover-color: white;
+}
+
+.task-manager {
+  max-width: 90%;
+  min-height: 95vh;
+  margin: auto;
+  overflow: hidden;
+  background-color: var(--summary-action-hover-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+
+  &__header {
+    position: relative;
+    padding: 1.875rem;
+    background-color: var(--primary);
+    color: var(--summary-action-hover-color);
+    text-align: center;
+  }
+  &__title {
+    margin-bottom: 0.3125rem;
+    font-size: 2.5rem;
+
+    @media (max-width: 31.25rem) {
+      font-size: 1.8rem;
+    }
+  }
+
+  &__description {
+    font-size: 1.2rem;
+  }
+}
