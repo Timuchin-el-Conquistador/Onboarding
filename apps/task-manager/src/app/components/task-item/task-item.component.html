@@ -1,0 +1,18 @@
+<li class="task-item">
+  <input
+    type="checkbox"
+    class="task-item__checkbox"
+    [id]="'task-' + task()?.id"
+    [attr.aria-label]="`${task()?.finished ? 'Finished' : 'Pending'} Task`"
+    [checked]="task()?.finished"
+  />
+
+  <label class="task-item__details" [htmlFor]="'task-' + task()?.id">
+    <p class="task-item__title">{{ task()?.title }}</p>
+    <span class="task-item__description">
+      {{ task()?.description }}
+    </span>
+  </label>
+
+  <button type="button" class="task-item__delete">×</button>
+</li>
