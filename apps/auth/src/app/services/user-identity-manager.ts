@@ -6,7 +6,9 @@ import {
   HttpContextToken,
 } from '@angular/common/http';
 import type { IUser } from '../models';
-import { finalize } from 'rxjs';
+import { Observable } from 'rxjs';
+import { withLoading, withSuccessMessage } from '../pipes';
+import { AUTH_HEADER, SUCCESS_MESSAGES } from '../models';
 
 export const HANDLE_LOGIN = new HttpContextToken(() => false);
 export const HANDLE_LOGOUT = new HttpContextToken(() => false);
@@ -15,58 +17,58 @@ export const HANDLE_LOGOUT = new HttpContextToken(() => false);
   providedIn: 'root',
 })
 export class UserIdentityManager {
-  loading = signal(false);
+  readonly loading = signal(false);
+  readonly successMessage = signal('');
 
   readonly #http = inject(HttpClient);
   readonly #base_url = inject(API_URL_TOKEN);
   readonly #storage = inject(LOCAL_STORAGE);
 
-  login(user: IUser) {
-    this.loading.set(true);
+  login(user: IUser): Observable<unknown> {
     return this.#http
       .post(this.#base_url + '/v1/sign-in/', user, {
         context: new HttpContext().set(HANDLE_LOGIN, true),
       })
       .pipe(
-        finalize(() => {
-          this.loading.set(false);
-        }),
+        withLoading(this.loading),
+        withSuccessMessage(this.successMessage, SUCCESS_MESSAGES.LOGIN),
       );
   }
 
-  signup(user: IUser) {
-    this.loading.set(true);
-    return this.#http.post(this.#base_url + '/v1/sign-up/', user).pipe(
-      finalize(() => {
-        this.loading.set(false);
-      }),
-    );
+  signup(user: IUser): Observable<unknown> {
+    return this.#http
+      .post(this.#base_url + '/v1/sign-up/', user)
+      .pipe(
+        withLoading(this.loading),
+        withSuccessMessage(this.successMessage, SUCCESS_MESSAGES.SIGN_UP),
+      );
   }
 
-  reset(user: IUser) {
-    this.loading.set(true);
-    return this.#http.post(this.#base_url + '/v1/sign-in/reset', user).pipe(
-      finalize(() => {
-        this.loading.set(false);
-      }),
-    );
+  reset(user: IUser): Observable<unknown> {
+    return this.#http
+      .post(this.#base_url + '/v1/sign-in/reset', user)
+      .pipe(
+        withLoading(this.loading),
+        withSuccessMessage(
+          this.successMessage,
+          SUCCESS_MESSAGES.RESET_PASSWORD,
+        ),
+      );
   }
 
-  logout() {
-    this.loading.set(true);
+  logout(): Observable<unknown> {
     return this.#http
       .delete(this.#base_url + '/v1/sign-in/out', {
         context: new HttpContext().set(HANDLE_LOGOUT, true),
       })
       .pipe(
-        finalize(() => {
-          this.loading.set(false);
-        }),
+        withLoading(this.loading),
+        withSuccessMessage(this.successMessage, SUCCESS_MESSAGES.LOGOUT),
       );
   }
 
-  isAuthenticated() {
-    const isAuthenticated = !!this.#storage.getItem('T-Auth');
+  isAuthenticated(): boolean {
+    const isAuthenticated = !!this.#storage.getItem(AUTH_HEADER);
     return isAuthenticated;
   }
 }

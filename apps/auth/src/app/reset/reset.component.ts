@@ -1,10 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -38,31 +33,28 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResetPasswordPageComponent {
-  readonly successMessage = signal('');
-
   readonly appRoute = AppRoute;
 
   readonly loading = inject(UserIdentityManager).loading;
+  readonly successMessage = inject(UserIdentityManager).successMessage;
 
   readonly form =
     inject(DYNAMIC_FORM_FACTORY).createForm<IAuthForm>(DEFAULT_AUTH_FORM);
 
   readonly #userIdentityManager = inject(UserIdentityManager);
 
-  reset() {
+  reset(): void {
     const email = this.form.value.email?.trim() ?? '';
     const password = this.form.value.password?.trim() ?? '';
 
     this.#userIdentityManager.reset({ email, password }).subscribe({
-      next: () => {
-        this.successMessage.set('Account restored successfully.');
-        setTimeout(() => {
-          this.successMessage.set('');
-        }, 2000);
-      },
       error: (error) => {
+        const {
+          error: { error: serverError },
+        } = error;
+
         this.form.setErrors({
-          serverError: error.error.error,
+          serverError,
         });
       },
     });

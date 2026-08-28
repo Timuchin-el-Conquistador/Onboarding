@@ -7,13 +7,13 @@ import {
 import { Observable, tap } from 'rxjs';
 import { HANDLE_LOGIN, HANDLE_LOGOUT } from '../services/user-identity-manager';
 import { inject } from '@angular/core';
-import { LOCAL_STORAGE, T_AUTH_HEADER } from '../tokens';
+import { LOCAL_STORAGE } from '../tokens';
+import { AUTH_HEADER } from '../models';
 
 export function authInterceptor(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> {
-  const authHeader = inject(T_AUTH_HEADER);
   const storage = inject(LOCAL_STORAGE);
 
   if (req.context.get(HANDLE_LOGIN)) {
@@ -23,19 +23,19 @@ export function authInterceptor(
           return;
         }
 
-        const token = event.headers.get(authHeader);
+        const token = event.headers.get(AUTH_HEADER);
 
         if (token) {
-          storage.setItem(authHeader, token);
+          storage.setItem(AUTH_HEADER, token);
         }
       }),
     );
   }
 
   if (req.context.get(HANDLE_LOGOUT)) {
-    const token = storage.getItem(authHeader) ?? '';
+    const token = storage.getItem(AUTH_HEADER) ?? '';
     const newReq = req.clone({
-      headers: req.headers.append('T-Auth', token),
+      headers: req.headers.append(AUTH_HEADER, token),
     });
 
     return next(newReq);
