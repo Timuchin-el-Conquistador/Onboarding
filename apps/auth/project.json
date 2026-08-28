@@ -8,9 +8,7 @@
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/auth",
@@ -22,9 +20,7 @@
             "input": "apps/auth/public"
           }
         ],
-        "styles": [
-          "apps/auth/src/material-theme.scss",
-        ]
+        "styles": ["apps/auth/src/material-theme.scss"]
       },
       "configurations": {
         "production": {
@@ -40,7 +36,13 @@
               "maximumError": "8kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "fileReplacements": [
+            {
+              "replace": "apps/auth/src/environments/environment.ts",
+              "with": "apps/auth/src/environments/environment.prod.ts"
+            }
+          ]
         },
         "development": {
           "optimization": false,
@@ -55,7 +57,8 @@
       "defaultConfiguration": "development",
       "configurations": {
         "production": {
-          "buildTarget": "auth:build:production"
+          "buildTarget": "auth:build:production",
+          "port": 8000
         },
         "development": {
           "buildTarget": "auth:build:development",

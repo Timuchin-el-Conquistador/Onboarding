@@ -83,5 +83,44 @@
       transform: translateY(-1px);
       border: 1px solid var(--auth-blue-800);
     }
+    &:disabled {
+      background-color: var(--auth-blue-200);
+    }
+  }
+
+  &__message {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+
+    margin-bottom: 20px;
+    padding: 12px 14px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+    line-height: 20px;
+
+    &--error {
+      background: var(--auth-error-bg);
+      border: 1px solid var(--auth-error-border);
+      color: var(--auth-error-text);
+    }
+
+    &--success {
+      background: var(--auth-success-bg);
+      border: 1px solid var(--auth-success-border);
+      color: var(--auth-success-text);
+    }
+  }
+
+  &__server-error-icon {
+    flex: 0 0 auto;
+
+    width: 20px;
+    height: 20px;
+
+    font-size: 20px;
+    line-height: 20px;
   }
 }

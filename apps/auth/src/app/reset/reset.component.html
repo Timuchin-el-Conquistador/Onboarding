@@ -3,7 +3,24 @@
     <div class="auth-card__header">
       <h1 class="auth-card__title">Reset password</h1>
     </div>
-    <form class="auth-form auth-card__form" [formGroup]="form">
+    <form
+      class="auth-form auth-card__form"
+      [formGroup]="form"
+      (ngSubmit)="reset()"
+    >
+      @if (form.hasError('serverError')) {
+        <div class="auth-form__message auth-form__message--error" role="alert">
+          <mat-icon class="auth-form__server-error-icon">
+            error_outline
+          </mat-icon>
+          <mat-error>{{ form.getError('serverError') }}</mat-error>
+        </div>
+      }
+      @if (successMessage()) {
+        <div class="auth-form__message auth-form__message--success">
+          {{ successMessage() }}
+        </div>
+      }
       <mat-form-field
         appearance="outline"
         class="auth-form__field auth-form__field--full-width"
@@ -29,8 +46,15 @@
         color="primary"
         type="submit"
         class="auth-form__action"
+        [disabled]="loading() || form.invalid"
       >
-        Send reset link
+        @if (loading()) {
+          <mat-icon style="width: fit-content">
+            <mat-spinner diameter="30"></mat-spinner>
+          </mat-icon>
+        } @else {
+          Reset
+        }
       </button>
     </form>
     <div class="auth-card__actions">

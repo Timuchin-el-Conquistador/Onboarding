@@ -5,6 +5,7 @@ export interface IAuthForm {
   email: FormControl<string>;
   password: FormControl<string>;
 }
+
 export const DEFAULT_AUTH_FORM: IFormSchemaConfig = {
   fields: [
     {
