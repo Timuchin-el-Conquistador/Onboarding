@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import type { IUser } from '../models';
 import { Observable } from 'rxjs';
-import { withLoading, withSuccessMessage } from '../pipes';
+import { withLoading, withSuccessMessage } from '../operators';
 import { AUTH_HEADER, SUCCESS_MESSAGES } from '../models';
 
 export const HANDLE_LOGIN = new HttpContextToken(() => false);
