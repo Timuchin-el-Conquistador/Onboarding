@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "auth": "nx serve auth"
+    "auth": "nx serve auth",
+    "task-manager": "nx serve task-manager"
   },
   "private": true,
   "dependencies": {

@@ -3,8 +3,8 @@
     type="checkbox"
     class="task-item__checkbox"
     [id]="'task-' + task()?.id"
-    [attr.aria-label]="`${task()?.finished ? 'Finished' : 'Pending'} Task`"
-    [checked]="task()?.finished"
+    [attr.aria-label]="label()"
+    [checked]="finished()"
   />
 
   <label class="task-item__details" [htmlFor]="'task-' + task()?.id">

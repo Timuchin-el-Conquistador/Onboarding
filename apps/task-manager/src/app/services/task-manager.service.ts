@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { TASKS_MOCK } from '../mocks';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { ITask } from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskManagerService {
-  readonly tasks$ = of(TASKS_MOCK);
+  readonly tasks$: Observable<ITask[]> = of(TASKS_MOCK);
 }

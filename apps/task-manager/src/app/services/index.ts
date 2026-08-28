@@ -1,1 +1,1 @@
-export {TaskManagerService} from './task-manager.service'
+export { TaskManagerService } from './task-manager.service';

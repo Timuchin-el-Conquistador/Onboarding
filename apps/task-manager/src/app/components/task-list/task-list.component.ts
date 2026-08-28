@@ -6,7 +6,7 @@ import { TaskSummaryComponent } from '../task-summary/task-summary.component';
 
 @Component({
   imports: [TaskItemComponent, TaskSummaryComponent, AsyncPipe],
-  selector: 'task-list',
+  selector: 'app-task-list',
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss'],
 })

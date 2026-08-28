@@ -4,7 +4,7 @@
   @if (tasks?.length) {
     <ul class="task-list">
       @for (task of tasks; track task.id) {
-        <task-item [task]="task" />
+        <app-task-item [task]="task" />
       }
     </ul>
   } @else {
@@ -15,4 +15,4 @@
   }
 </div>
 
-<task-summary [totalTasksCount]="tasks?.length ?? 0" />
+<app-task-summary [totalTasksCount]="tasks?.length ?? 0" />
