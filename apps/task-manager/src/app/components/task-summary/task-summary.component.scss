@@ -4,12 +4,10 @@
   color: var(--summary-text-color);
   font-size: 0.9rem;
   text-align: center;
-
   &__task-count {
     color: var(--summary-count-color);
     font-weight: 600;
   }
-
   &__task-all {
     margin-top: 0.625rem;
     padding: 0.5rem 0.9375rem;

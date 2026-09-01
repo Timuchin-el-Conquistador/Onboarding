@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-task-summary',
@@ -7,4 +7,5 @@ import { Component, input } from '@angular/core';
 })
 export class TaskSummaryComponent {
   readonly totalTasksCount = input<number>();
+  readonly clearTasks = output<void>();
 }

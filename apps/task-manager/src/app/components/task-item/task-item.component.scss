@@ -4,7 +4,7 @@
   padding: 0.9375rem;
   margin-bottom: 0.625rem;
   background-color: var(--summary-action-hover-color);
-  border: 0.0625rem solid rgba(0, 0, 0, 0.1);
+  border: 0.0625rem solid var(--box-shadow);
   border-radius: var(--border-radius);
   box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.05);
   transition:
@@ -13,9 +13,10 @@
   cursor: pointer;
   animation: slideIn 0.3s ease-out;
   height: 6.25rem;
+
   &:hover {
     transform: translateY(-0.125rem);
-    box-shadow: 0 0.3125rem 0.625rem rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.3125rem 0.625rem var(--box-shadow);
   }
 
   &--completed {
@@ -55,7 +56,7 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     font-size: 1rem;
-    margin-top: 7px;
+    margin-top: 0.4375rem;
   }
 
   &__delete {
@@ -82,5 +83,46 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+.task-form {
+  margin: 1.25rem 0;
+  width: 100%;
+  display: flex;
+  gap: 0.625rem;
+
+  &__save {
+    padding: 0.75rem 1.25rem;
+    background-color: var(--primary);
+    border: none;
+    border-radius: var(--border-radius);
+    color: var(--summary-action-hover-color);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: var(--primary-dark);
+    }
+  }
+
+  &__cancel {
+    padding: 0.75rem 1.25rem;
+    background-color: var(--summary-action-hover-color);
+    border: none;
+    border-radius: var(--border-radius);
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.3s;
+  }
+}
+
+@media (max-width: 31.25rem) {
+  .task-form {
+    flex-direction: column;
   }
 }

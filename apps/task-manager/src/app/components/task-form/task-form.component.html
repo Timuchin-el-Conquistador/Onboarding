@@ -1,15 +1,7 @@
-<form class="task-form">
-  <input
-    type="text"
-    class="task-form__input"
-    placeholder="Add a new task..."
-    aria-label="Add new task"
+<form class="task-form" [formGroup]="form" (ngSubmit)="onSave()">
+  <app-task-fields
+    [titleControl]="form.controls.title"
+    [descriptionControl]="form.controls.description"
   />
-
-  <button
-    type="submit"
-    class="task-form__add"
-  >
-    Add Task
-  </button>
+  <button type="submit" class="task-form__add">Add Task</button>
 </form>

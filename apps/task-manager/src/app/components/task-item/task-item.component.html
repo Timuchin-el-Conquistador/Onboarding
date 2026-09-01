@@ -1,18 +1,33 @@
-<li class="task-item">
+@let completed = completedControl.value;
+
+<li class="task-item" (mouseenter)="edit()" (mouseleave)="onSave()">
   <input
     type="checkbox"
     class="task-item__checkbox"
-    [id]="'task-' + task()?.id"
-    [attr.aria-label]="label()"
-    [checked]="finished()"
+    [id]="'task-' + id"
+    [attr.aria-label]="completed ? 'Finished Task' : 'Pending Task'"
+    [formControl]="completedControl"
   />
+  @if (editing()) {
+    <form class="task-form" [formGroup]="task()" (ngSubmit)="onSave()">
+      <app-task-fields
+        [titleControl]="titleControl"
+        [descriptionControl]="descriptionControl"
+      />
+      <button type="submit" class="task-form__save">Save</button>
+    </form>
+  } @else {
+    <label class="task-item__details" [htmlFor]="'task-' + id">
+      <p class="task-item__title">
+        {{ title }}
+      </p>
 
-  <label class="task-item__details" [htmlFor]="'task-' + task()?.id">
-    <p class="task-item__title">{{ task()?.title }}</p>
-    <span class="task-item__description">
-      {{ task()?.description }}
-    </span>
-  </label>
-
-  <button type="button" class="task-item__delete">×</button>
+      <span class="task-item__description">
+        {{ description }}
+      </span>
+    </label>
+  }
+  <button type="button" class="task-item__delete" (click)="removeTask.emit()">
+    ×
+  </button>
 </li>

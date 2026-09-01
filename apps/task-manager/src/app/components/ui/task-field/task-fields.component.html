@@ -1,0 +1,20 @@
+<div class="task-fields">
+  <input
+    #title
+    type="text"
+    id="task-title"
+    class="task-fields__input"
+    placeholder="Add a new task..."
+    aria-label="Task title"
+    [formControl]="titleControl()"
+  />
+  <input
+    #description
+    type="text"
+    id="task-description"
+    class="task-fields__input"
+    placeholder="Description..."
+    aria-label="Task description"
+    [formControl]="descriptionControl()"
+  />
+</div>

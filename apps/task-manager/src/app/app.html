@@ -5,7 +5,10 @@
       Keep track of your daily tasks with ease
     </p>
   </header>
-
   <app-task-form />
   <app-task-list />
+  <app-task-summary
+    [totalTasksCount]="totalTasksCount"
+    (clearTasks)="clearTasks()"
+  />
 </div>

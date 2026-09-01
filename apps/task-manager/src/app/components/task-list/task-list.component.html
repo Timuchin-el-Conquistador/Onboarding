@@ -1,10 +1,14 @@
-@let tasks = tasks$ | async;
-
 <div class="tasks-container">
-  @if (tasks?.length) {
+  @let xxx = tasksForm$ | async;
+
+  @if (xxx?.length) {
     <ul class="task-list">
-      @for (task of tasks; track task.id) {
-        <app-task-item [task]="task" />
+      @for (
+        task of tasksForm.controls;
+        track tasksForm.controls;
+        let i = $index
+      ) {
+        <app-task-item [task]="task" (removeTask)="removeTask(i)" />
       }
     </ul>
   } @else {
@@ -14,5 +18,3 @@
     </div>
   }
 </div>
-
-<app-task-summary [totalTasksCount]="tasks?.length ?? 0" />

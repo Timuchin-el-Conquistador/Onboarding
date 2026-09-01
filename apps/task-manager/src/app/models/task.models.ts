@@ -3,6 +3,7 @@ export interface ITask {
   title: string;
   description: string;
   createdAt: string;
-  finished: boolean;
-  finishedAt: string | null;
+  completed: boolean;
+  completedAt: string | null;
+  editAt: string | null;
 }

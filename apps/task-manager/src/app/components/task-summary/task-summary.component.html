@@ -6,5 +6,7 @@
     }}</span>
     tasks remaining
   </div>
-  <button class="summary__task-all" id="clear-all">Clear All Tasks</button>
+  <button class="summary__task-all" id="clear-all" (click)="clearTasks.emit()">
+    Clear All Tasks
+  </button>
 </div>
