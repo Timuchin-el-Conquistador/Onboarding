@@ -30,4 +30,14 @@ export class FormFieldsComponent {
       inputs[invalidIndex]?.nativeElement.focus();
     }
   }
+
+  blur(): void {
+    const controls = this.controls();
+    const inputs = this.inputs.toArray();
+    const touchedIndex = controls.findIndex((control) => control.dirty);
+
+    if (touchedIndex !== -1) {
+      inputs[touchedIndex]?.nativeElement.blur();
+    }
+  }
 }

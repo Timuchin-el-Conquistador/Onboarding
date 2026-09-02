@@ -43,7 +43,7 @@ export class TodoFormManagerService {
 
   createTask(todoIndex: number, title: string): void {
     this.getTodoTasks(todoIndex).push(
-      this.createTaskGroup(this.getNextTaskId(todoIndex), title, false),
+      this.createTaskGroup(this.#getNextTaskId(todoIndex), title, false),
     );
   }
 
@@ -74,7 +74,7 @@ export class TodoFormManagerService {
     this.getTodoTasks(todoIndex).removeAt(taskIndex);
   }
 
-  private getNextTaskId(todoIndex: number): number {
+  #getNextTaskId(todoIndex: number): number {
     const tasks = this.getTodoTasks(todoIndex);
 
     return tasks.length

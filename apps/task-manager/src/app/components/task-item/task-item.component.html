@@ -9,10 +9,12 @@
     <span class="task-item__checkbox-icon"></span>
   </label>
   @if (editing()) {
-    <form class="task-item__form" [formGroup]="task()" (ngSubmit)="onSave()">
-      <app-form-fields [controls]="[task().controls.title]" />
-      <button type="submit" class="task-item__save">Save</button>
-    </form>
+    <app-todo-form
+      [form]="task()"
+      (save)="onSave()"
+      [resetOnSave]="false"
+      submitLabel="Save"
+    />
   } @else {
     <label class="task-item__details" [for]="'task-' + id">
       <p class="task-item__title">

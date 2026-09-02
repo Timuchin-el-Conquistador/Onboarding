@@ -2,15 +2,15 @@ import {
   Component,
   ChangeDetectionStrategy,
   ViewChild,
-  inject,
   output,
   input,
+  inject,
 } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormFieldsComponent } from '../ui/form-fields/form-fields.component';
-import { DYNAMIC_FORM_FACTORY } from '@org/my-lib/forms';
-import type { ITodoForm } from '../../models';
+import type { ITaskForm } from '../../models';
 import { DEFAULT_TODO_FORM } from '../../mocks';
+import { DYNAMIC_FORM_FACTORY } from '@org/my-lib/forms';
 
 @Component({
   selector: 'app-todo-form',
@@ -20,33 +20,45 @@ import { DEFAULT_TODO_FORM } from '../../mocks';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoFormComponent {
+  readonly resetOnSave = input(true);
   readonly submitLabel = input.required<string>();
+  readonly form = input<FormGroup<ITaskForm>>(
+    inject(DYNAMIC_FORM_FACTORY).createForm<ITaskForm>(DEFAULT_TODO_FORM),
+  );
   readonly save = output<string>();
-
-  readonly form =
-    inject(DYNAMIC_FORM_FACTORY).createForm<ITodoForm>(DEFAULT_TODO_FORM);
 
   @ViewChild(FormFieldsComponent)
   private taskFields!: FormFieldsComponent;
 
   onSave(): void {
-    const { title } = this.form.getRawValue();
+    const form = this.form();
 
-    if (!title.trim()) {
-      this.form.controls.title.setErrors({ required: true });
-      this.form.controls.title.markAsTouched();
+    const { title } = form.getRawValue();
+    const trimmed = title.trim();
+
+    if (!trimmed) {
+      form.controls.title.setErrors({ required: true });
+      form.controls.title.markAsTouched();
       this.taskFields.focusInvalid();
       return;
     }
 
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+    if (form.invalid) {
+      form.markAllAsTouched();
       this.taskFields.focusInvalid();
       return;
     }
 
-    this.save.emit(title);
+    form.controls.title.setValue(trimmed);
 
-    this.form.reset();
+    this.taskFields.blur();
+
+    this.save.emit(trimmed);
+
+    if (!this.resetOnSave()) {
+      return;
+    }
+
+    form.reset();
   }
 }
