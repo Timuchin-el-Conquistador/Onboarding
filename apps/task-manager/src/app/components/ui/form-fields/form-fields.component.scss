@@ -1,7 +1,11 @@
 :host {
-  width: 70%;
+  width: 100%;
+  height: fit-content;
+  @media screen and (min-width: 37.5rem) {
+    max-width: 70%;
+  }
 }
-.task-fields {
+.form-fields {
   display: flex;
   gap: 0.625rem;
   width: 100%;
@@ -30,7 +34,7 @@
   }
 }
 @media (max-width: 31.25rem) {
-  .task-fields {
+  .form-fields {
     flex-direction: column;
   }
 }

@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "auth": "nx serve auth",
-    "task-manager": "nx serve task-manager"
+    "todo-manager": "nx serve task-manager"
   },
   "private": true,
   "dependencies": {

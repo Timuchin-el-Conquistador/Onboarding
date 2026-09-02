@@ -6,13 +6,13 @@ import {
   output,
   ViewChild,
 } from '@angular/core';
-import type { ITaskForm } from '../../services';
+import type { ITaskForm } from '../../models';
 import { FormGroup } from '@angular/forms';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
-import { TaskFieldsComponent } from '../ui/task-field/task-fields.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormFieldsComponent } from '../ui/form-fields/form-fields.component';
 
 @Component({
-  imports: [ReactiveFormsModule, TaskFieldsComponent],
+  imports: [ReactiveFormsModule, FormFieldsComponent],
   selector: 'app-task-item',
   templateUrl: './task-item.component.html',
   styleUrls: ['./task-item.component.scss'],
@@ -21,38 +21,21 @@ import { TaskFieldsComponent } from '../ui/task-field/task-fields.component';
 export class TaskItemComponent {
   readonly task = input.required<FormGroup<ITaskForm>>();
   readonly removeTask = output<void>();
-
   readonly editing = signal(false);
 
-  @ViewChild(TaskFieldsComponent)
-  private readonly taskFields!: TaskFieldsComponent;
+  @ViewChild(FormFieldsComponent)
+  private readonly taskFields!: FormFieldsComponent;
 
   get id(): number {
     return this.task().controls.id.value;
   }
 
   get title(): string {
-    return this.task().controls.title.value;
-  }
-
-  get description(): string {
-    return this.task().controls.description.value;
+    return this.task().controls.title.value ?? '';
   }
 
   get completed(): boolean {
-    return this.task().controls.completed.value;
-  }
-
-  get completedControl(): FormControl<boolean> {
-    return this.task().controls.completed;
-  }
-
-  get titleControl(): FormControl<string> {
-    return this.task().controls.title;
-  }
-
-  get descriptionControl(): FormControl<string> {
-    return this.task().controls.description;
+    return this.task().controls.completed.value ?? false;
   }
 
   edit(): void {
@@ -60,11 +43,23 @@ export class TaskItemComponent {
   }
 
   onSave(): void {
-    if (this.task().invalid) {
-      this.task().markAllAsTouched();
+    const task = this.task();
+
+    if (task.invalid) {
+      task.markAllAsTouched();
       this.taskFields.focusInvalid();
       return;
     }
+    
+    if (!task.controls.title.value.trim()) {
+      task.controls.title.setErrors({ required: true });
+      task.controls.title.markAsTouched();
+      this.taskFields.focusInvalid();
+      return
+    }
+
+    task.markAsUntouched();
+    task.markAsPristine();
 
     this.editing.set(false);
   }

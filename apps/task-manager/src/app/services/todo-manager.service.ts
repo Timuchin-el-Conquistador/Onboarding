@@ -1,15 +1,18 @@
-import { Injectable } from '@angular/core';
-import { TASKS_MOCK } from '../mocks';
-import { ITask } from '../models';
+import { Injectable, signal } from '@angular/core';
+import { TODO_LISTS_MOCK } from '../mocks';
+import { ITodoList } from '../models';
 import { delay, Observable, of } from 'rxjs';
+import { withLoading } from '@org/my-lib/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodoManagerService {
-  readonly #tasks = of(TASKS_MOCK);
+  readonly loading = signal(false);
 
-  getTasks(): Observable<ITask[]> {
-    return this.#tasks.pipe(delay(2000));
+  readonly #tasks = of(TODO_LISTS_MOCK);
+
+  getTasks(): Observable<ITodoList[]> {
+    return this.#tasks.pipe(delay(2000), withLoading(this.loading));
   }
 }

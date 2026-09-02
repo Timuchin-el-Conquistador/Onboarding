@@ -1,8 +1,13 @@
+:host {
+  position: relative;
+  overflow: auto;
+  display: block;
+  height: 100%;
+}
+
 .tasks-container {
   max-height: 25rem;
   margin: 0 auto;
-  padding: 1.25rem;
-  overflow-y: auto;
 
   &__list {
     margin: 0;
@@ -10,13 +15,16 @@
     list-style: none;
   }
 
-  &__empty-state {
+  &--empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 1.875rem 0;
     color: var(--summary-text-color);
     text-align: center;
   }
 
-  &__empty-state-icon {
+  &--empty-icon {
     margin-bottom: 0.625rem;
     font-size: 3rem;
     color: var(--summary-action-hover-color);

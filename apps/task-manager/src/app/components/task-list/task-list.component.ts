@@ -1,7 +1,13 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  inject,
+  ChangeDetectionStrategy,
+  input,
+} from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { TaskItemComponent } from '../task-item/task-item.component';
-import { ITaskForm, TodoFormManagerService } from '../../services';
+import { TodoFormManagerService } from '../../services';
+import { ITaskForm } from '../../models';
 import { ReactiveFormsModule, FormArray, FormGroup } from '@angular/forms';
 
 @Component({
@@ -12,24 +18,22 @@ import { ReactiveFormsModule, FormArray, FormGroup } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskListComponent {
+  readonly todoIndex = input.required<number>();
   readonly #todoFormManager = inject(TodoFormManagerService);
 
-  readonly todoForm = this.#todoFormManager.form;
-  readonly tasksForm$ = this.todoForm.controls.tasks.valueChanges;
-
-  get hasTasks(): boolean {
-    return this.todoForm.controls.tasks.length > 0;
-  }
-
-  get tasksCount(): number {
-    return this.todoForm.controls.tasks.length;
-  }
-
   get tasksForm(): FormArray<FormGroup<ITaskForm>> {
-    return this.todoForm.controls.tasks;
+    return this.#todoFormManager.getTodoTasks(this.todoIndex());
   }
 
-  removeTask = (index: number): void => {
-    this.#todoFormManager.removeTask(index);
-  };
+  get tasksForm$() {
+    return this.tasksForm.valueChanges;
+  }
+
+  get tasksGroup(): FormGroup<ITaskForm>[] {
+    return this.tasksForm.controls;
+  }
+
+  removeTask(index: number): void {
+    this.#todoFormManager.removeTask(this.todoIndex(), index);
+  }
 }
