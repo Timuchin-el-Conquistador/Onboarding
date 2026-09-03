@@ -1,18 +1,19 @@
-@let tasks = tasks$ | async;
-
 <div class="tasks-container">
-  @if (tasks?.length) {
-    <ul class="task-list">
-      @for (task of tasks; track task.id) {
-        <app-task-item [task]="task" />
+  @let xxx = this.form().valueChanges | async;
+
+  @if (xxx?.length) {
+    <ul class="tasks-container__list">
+      @for (
+        task of this.form().controls;
+        track task.value.id;
+      ) {
+        <app-task-item [task]="task" (removeTask)="removeTask($index)"/>
       }
     </ul>
   } @else {
-    <div class="empty-state">
-      <div>📝</div>
+    <div class="tasks-container--empty">
+      <div class="tasks-container--empty-icon">📝</div>
       <p>No tasks yet. Add a task to get started!</p>
     </div>
   }
 </div>
-
-<app-task-summary [totalTasksCount]="tasks?.length ?? 0" />

@@ -1,0 +1,141 @@
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 32rem;
+}
+
+.todo-list-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 32rem;
+  margin: 0 auto;
+  overflow: hidden;
+  background-color: var(--summary-action-hover-color);
+  border: 0.0625rem solid var(--summary-border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+
+  &--completed {
+    border-color: var(--success);
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    width: 100%;
+    min-height: 5rem;
+    box-sizing: border-box;
+    padding: 1rem 1.25rem;
+    background-color: var(--primary);
+    color: var(--summary-action-hover-color);
+
+    &--completed {
+      background-color: var(--success);
+    }
+  }
+
+  &__title {
+    max-width: 16rem;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  &__count {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  &__delete {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    color: var(--summary-action-hover-color);
+    cursor: pointer;
+    font-size: 1.75rem;
+    line-height: 1;
+    opacity: 0.75;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &__form {
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem 1.25rem;
+    border-bottom: 0.0625rem solid var(--summary-border-color);
+  }
+
+  &__tasks {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem 1.25rem;
+    overflow-y: auto;
+  }
+
+  &__task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &--empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--summary-text-color);
+    text-align: center;
+  }
+
+  &--empty-icon {
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+  }
+
+  &--empty p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 31.25rem) {
+  .todo-list-card {
+    max-width: 100%;
+    height: 30rem;
+
+    &__header {
+      padding: 1rem;
+    }
+
+    &__form,
+    &__tasks {
+      padding: 1rem;
+    }
+
+    &__title {
+      max-width: 12rem;
+    }
+  }
+}

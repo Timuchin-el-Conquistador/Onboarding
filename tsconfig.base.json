@@ -13,7 +13,11 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "paths": {}
+    "paths": {
+      "@org/my-lib/operators": ["./libs/my-lib//src/index.ts"],
+      "@org/my-lib/forms": ["./libs/my-lib/src/index.ts"],
+      "@org/my-lib": ["/libs/my-lib/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

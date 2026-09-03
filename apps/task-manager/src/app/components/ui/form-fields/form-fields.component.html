@@ -1,0 +1,13 @@
+<div class="form-fields">
+  @for (field of controls(); track field) {
+    <input
+      #inputElement
+      type="text"
+      id="Title"
+      class="form-fields__input"
+      placeholder="Title"
+      aria-label="Tile"
+      [formControl]="field"
+    />
+  }
+</div>

@@ -1,11 +1,10 @@
 <div class="task-manager">
   <header class="task-manager__header">
-    <h1 class="task-manager__title">Task Master</h1>
+    <h1 class="task-manager__title">Todo Master</h1>
     <p class="task-manager__description">
       Keep track of your daily tasks with ease
     </p>
   </header>
-
-  <app-task-form />
-  <app-task-list />
+  <app-todo-form (save)="createTodo($event)" submitLabel="Add Todo"/>
+  <app-todo-list />
 </div>
