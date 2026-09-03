@@ -1,24 +1,25 @@
-<li class="task-item" [class.task-item--completed]="completed">
-  <label class="task-item__checkbox" [for]="'task-' + id">
+<li class="task-item" [class.task-item--completed]="task().controls.completed.value">
+  <label class="task-item__checkbox" [for]="'task-' + task().controls.id.value">
     <input
       type="checkbox"
-      [id]="'task-' + id"
-      [attr.aria-label]="completed ? 'Finished Task' : 'Pending Task'"
+      [id]="'task-' + task().controls.id.value"
+      [attr.aria-label]="task().controls.completed.value ? 'Finished Task' : 'Pending Task'"
       [formControl]="task().controls.completed"
     />
     <span class="task-item__checkbox-icon"></span>
   </label>
+
   @if (editing()) {
     <app-todo-form
+      (save)="onSave($event)"
+      [shouldResetOnSave]="false"
       [form]="task()"
-      (save)="onSave()"
-      [resetOnSave]="false"
       submitLabel="Save"
     />
   } @else {
-    <label class="task-item__details" [for]="'task-' + id">
+    <label class="task-item__details" [for]="'task-' + task().controls.id.value">
       <p class="task-item__title">
-        {{ title }}
+        {{ task().controls.title.value }}
       </p>
     </label>
     <button type="button" class="task-item__edit" (click)="edit()">
@@ -48,6 +49,7 @@
       </svg>
     </button>
   }
+
   <button type="button" class="task-item__delete" (click)="removeTask.emit()">
     <svg
       class="summary__delete-icon"

@@ -1,7 +1,7 @@
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
-export interface ITodoForm {
-  title: FormControl<string>;
+export interface IForm {
+  todo: FormArray<FormGroup<ITodoForm>>
 }
 
 export interface ITaskForm {
@@ -10,7 +10,7 @@ export interface ITaskForm {
   completed: FormControl<boolean>;
 }
 
-export interface ITodoListForm {
+export interface ITodoForm {
   id: FormControl<number>;
   title: FormControl<string>;
   tasks: FormArray<FormGroup<ITaskForm>>;

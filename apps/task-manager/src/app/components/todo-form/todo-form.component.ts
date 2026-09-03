@@ -9,7 +9,6 @@ import {
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormFieldsComponent } from '../ui/form-fields/form-fields.component';
 import type { ITaskForm } from '../../models';
-import { DEFAULT_TODO_FORM } from '../../mocks';
 import { DYNAMIC_FORM_FACTORY } from '@org/my-lib/forms';
 
 @Component({
@@ -20,10 +19,23 @@ import { DYNAMIC_FORM_FACTORY } from '@org/my-lib/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoFormComponent {
-  readonly resetOnSave = input(true);
+  readonly shouldResetOnSave = input(true);
   readonly submitLabel = input.required<string>();
   readonly form = input<FormGroup<ITaskForm>>(
-    inject(DYNAMIC_FORM_FACTORY).createForm<ITaskForm>(DEFAULT_TODO_FORM),
+    inject(DYNAMIC_FORM_FACTORY).createForm({
+      fields: [
+        {
+          name: 'title',
+          type: 'custom',
+          isCollection: false,
+          defaultValue: '',
+          children: [],
+          validators: {
+            required: true,
+          },
+        },
+      ],
+    }),
   );
   readonly save = output<string>();
 
@@ -32,11 +44,9 @@ export class TodoFormComponent {
 
   onSave(): void {
     const form = this.form();
-
     const { title } = form.getRawValue();
-    const trimmed = title.trim();
 
-    if (!trimmed) {
+    if (!title.trim()) {
       form.controls.title.setErrors({ required: true });
       form.controls.title.markAsTouched();
       this.taskFields.focusInvalid();
@@ -49,13 +59,11 @@ export class TodoFormComponent {
       return;
     }
 
-    form.controls.title.setValue(trimmed);
-
     this.taskFields.blur();
 
-    this.save.emit(trimmed);
+    this.save.emit(title.trim());
 
-    if (!this.resetOnSave()) {
+    if (!this.shouldResetOnSave()) {
       return;
     }
 

@@ -14,7 +14,9 @@ export type ValidatorsType = {
 export interface IFormFieldConfig {
   name: string;
   type: FieldTypes;
-  defaultValue: string;
+  defaultValue: any;
+  isCollection?: boolean;
+  children: IFormFieldConfig[];
   validators?: ValidatorsType;
 }
 

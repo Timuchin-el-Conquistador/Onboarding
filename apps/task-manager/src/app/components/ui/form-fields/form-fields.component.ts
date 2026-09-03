@@ -18,7 +18,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 export class FormFieldsComponent {
   readonly controls = input.required<FormControl<string>[]>();
 
-  @ViewChildren('field')
+  @ViewChildren('inputElement')
   private readonly inputs!: QueryList<ElementRef<HTMLElement>>;
 
   focusInvalid(): void {

@@ -7,8 +7,9 @@
     [class.todo-list-card__header--completed]="isTodoCompleted(todoIndex())"
   >
     <h2 class="todo-list-card__title">
-      {{ title() }}
+      {{ todoForm().controls.title.value }}
     </h2>
+
     @if (isTodoCompleted(todoIndex())) {
       <span
         class="todo-list-card__completed-icon"
@@ -53,7 +54,10 @@
   </div>
 
   <div class="todo-list-card__tasks">
-    <app-task-list [todoIndex]="todoIndex()" />
+    <app-task-list
+      [todoIndex]="todoIndex()"
+      [form]="todoForm().controls.tasks"
+    />
   </div>
 
   <app-todo-actions

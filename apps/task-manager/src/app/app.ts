@@ -3,12 +3,12 @@ import {
   inject,
   ChangeDetectionStrategy,
   OnInit,
-  OnDestroy,
+  DestroyRef,
 } from '@angular/core';
 import { TodoFormComponent } from './components/todo-form/todo-form.component';
 import { TodoFormManagerService, TodoManagerService } from './services';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   imports: [TodoFormComponent, TodoListComponent],
@@ -17,26 +17,20 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class App implements OnInit, OnDestroy {
+export class App implements OnInit {
   readonly #todoFormManager = inject(TodoFormManagerService);
   readonly #todoManager = inject(TodoManagerService);
-
-  readonly #destroy$ = new Subject<void>();
+  readonly #destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.#todoManager
       .getTasks()
-      .pipe(takeUntil(this.#destroy$))
+      .pipe(takeUntilDestroyed(this.#destroyRef))
       .subscribe((tasks) => {
         tasks.forEach((todo) => {
           this.#todoFormManager.createTodo(todo.title, todo.id, todo.tasks);
         });
       });
-  }
-
-  ngOnDestroy(): void {
-    this.#destroy$.next();
-    this.#destroy$.complete();
   }
 
   createTodo(title: string): void {

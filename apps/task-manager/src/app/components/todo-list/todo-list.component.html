@@ -1,19 +1,19 @@
 <div class="todo-container">
-  @let xxx = todoForm$ | async;
-  @if (xxx?.length) {
+  @let todos = todoForm$ | async;
+
+  @if (todos?.length) {
     <ul class="todo-container__list">
-      @for (todo of todos.controls; track todo.value.id) {
-        <app-todo-card
-          [todoForm]="todo"
-          [todoIndex]="$index"
-        />
+      @for (todo of todosForm.controls; track todo.value.id) {
+        <app-todo-card [todoForm]="todo" [todoIndex]="$index" />
       }
     </ul>
   }
+
   @if (loading()) {
     <app-card-loading />
   }
-  @if (!loading() && !xxx?.length) {
+
+  @if (!loading() && !todos?.length) {
     <div class="todo-container--empty">
       <div class="todo-container--empty-icon">📝</div>
       <p>No lists found. Create your first Todo List above.</p>

@@ -22,23 +22,12 @@ export class TaskItemComponent {
   readonly removeTask = output<void>();
   readonly editing = signal(false);
 
-  get id(): number {
-    return this.task().controls.id.value;
-  }
-
-  get title(): string {
-    return this.task().controls.title.value ?? '';
-  }
-
-  get completed(): boolean {
-    return this.task().controls.completed.value ?? false;
-  }
-
   edit(): void {
     this.editing.set(true);
   }
 
-  onSave(): void {
+  onSave(title: string): void {
+    this.task().controls.title.setValue(title);
     this.editing.set(false);
   }
 }

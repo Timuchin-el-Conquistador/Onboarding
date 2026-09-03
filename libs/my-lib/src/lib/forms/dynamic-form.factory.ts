@@ -1,8 +1,9 @@
 import {
   AbstractControl,
-  FormBuilder,
+  FormArray,
   FormControl,
   FormGroup,
+  NonNullableFormBuilder,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
@@ -15,23 +16,44 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class DynamicFormFactory implements IDynamicFormFactory {
-  readonly #fb = inject(FormBuilder);
+  readonly #fb = inject(NonNullableFormBuilder);
 
   createForm<T extends { [K in keyof T]: AbstractControl }>(
     schema: IFormSchemaConfig,
   ): FormGroup<T> {
-    const controls: Record<string, AbstractControl> = {};
+    const fields: Record<string, AbstractControl> = {};
 
     for (const field of schema.fields) {
-      controls[field.name] = this.#createControl(field);
+      if (field.isCollection) {
+        fields[field.name] = this.#createArray(field);
+        continue;
+      }
+      fields[field.name] = this.#createControl(field);
     }
 
-    return this.#fb.group(controls) as unknown as FormGroup<T>;
+    return this.#fb.group(fields) as unknown as FormGroup<T>;
   }
 
+  #createGroup(field: IFormFieldConfig): FormGroup {
+    const fields: Record<string, AbstractControl> = {};
+
+    for (const child of field.children) {
+      fields[child.name] = child.isCollection
+        ? this.#createArray(child)
+        : this.#createControl(child);
+    }
+
+    return this.#fb.group(fields);
+  }
+
+  #createArray(field: IFormFieldConfig): FormArray {
+    return this.#fb.array(field.children.map(() => this.#createGroup(field)));
+  }
+  
   #createControl(field: IFormFieldConfig): FormControl {
     return this.#fb.control(
       field.defaultValue,
+
       this.#resolveValidatorsfield(field),
     );
   }

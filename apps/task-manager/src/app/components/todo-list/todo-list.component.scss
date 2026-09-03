@@ -1,6 +1,7 @@
 .todo-container {
   margin: 0 auto;
   padding: 1.25rem;
+
   &__list {
     margin: 0;
     padding: 0;
@@ -10,6 +11,7 @@
     flex-wrap: wrap;
     gap: 1.25rem;
   }
+
   &--empty {
     padding: 1.875rem 0;
     color: var(--summary-text-color);
@@ -19,12 +21,14 @@
     justify-content: space-around;
     flex-wrap: wrap;
   }
+
   &--empty-icon {
     margin-bottom: 0.625rem;
     font-size: 3rem;
     color: var(--summary-action-hover-color);
   }
 }
+
 @media (max-width: 31.25rem) {
   .todo-container {
     max-width: 100%;

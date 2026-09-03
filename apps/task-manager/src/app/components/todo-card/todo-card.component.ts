@@ -2,7 +2,6 @@ import {
   Component,
   input,
   ChangeDetectionStrategy,
-  computed,
   inject,
 } from '@angular/core';
 import { TodoFormManagerService } from '../../services';
@@ -11,7 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TaskListComponent } from '../task-list/task-list.component';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { TodoActionsComponent } from '../todo-actions/todo-actions.component';
-import type { ITodoListForm } from '../../models';
+import type { ITodoForm } from '../../models';
 
 @Component({
   imports: [
@@ -27,10 +26,8 @@ import type { ITodoListForm } from '../../models';
 })
 export class TodoCardComponent {
   readonly todoIndex = input.required<number>();
-  readonly todoForm = input.required<FormGroup<ITodoListForm>>();
-
-  readonly title = computed(() => this.todoForm().controls.title.value);
-
+  readonly todoForm = input.required<FormGroup<ITodoForm>>();
+  
   readonly #todoFormManager = inject(TodoFormManagerService);
 
   createTask(todoIndex: number, title: string): void {
