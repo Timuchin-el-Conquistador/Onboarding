@@ -7,6 +7,7 @@ import {
   IFormSchemaConfig,
 } from '@org/my-lib/operators';
 import { DEFAULT_TODO_FORM } from '../mocks';
+import { requiredTrimmed } from '../validators';
 
 @Injectable({
   providedIn: 'root',
@@ -89,7 +90,10 @@ export class TodoFormManagerService {
   ): IFormSchemaConfig {
     return {
       fields: [
-        this.#createField('title', title, { required: true }),
+        this.#createField('title', title, {
+          required: true,
+          custom: [requiredTrimmed()],
+        }),
         this.#createField('id', id),
         this.#createField('completed', completed),
       ],

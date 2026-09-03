@@ -49,7 +49,7 @@ export class DynamicFormFactory implements IDynamicFormFactory {
   #createArray(field: IFormFieldConfig): FormArray {
     return this.#fb.array(field.children.map(() => this.#createGroup(field)));
   }
-  
+
   #createControl(field: IFormFieldConfig): FormControl {
     return this.#fb.control(
       field.defaultValue,
@@ -64,11 +64,17 @@ export class DynamicFormFactory implements IDynamicFormFactory {
     if (field.validators?.required) {
       validators.push(Validators.required);
     }
+
     if (field.validators?.email) {
       validators.push(Validators.email);
     }
+
     if (field.validators?.minLength) {
       validators.push(Validators.minLength(field.validators.minLength));
+    }
+
+    if (field.validators?.custom) {
+      validators.push(...field.validators?.custom);
     }
 
     return validators;

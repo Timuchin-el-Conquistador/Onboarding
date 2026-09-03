@@ -1,0 +1,1 @@
+export {requiredTrimmed} from './trimmed.validator'

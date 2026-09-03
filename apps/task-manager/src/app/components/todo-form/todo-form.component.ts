@@ -10,6 +10,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormFieldsComponent } from '../ui/form-fields/form-fields.component';
 import type { ITaskForm } from '../../models';
 import { DYNAMIC_FORM_FACTORY } from '@org/my-lib/forms';
+import { requiredTrimmed } from '../../validators';
 
 @Component({
   selector: 'app-todo-form',
@@ -32,6 +33,7 @@ export class TodoFormComponent {
           children: [],
           validators: {
             required: true,
+            custom: [requiredTrimmed()]
           },
         },
       ],
@@ -45,13 +47,6 @@ export class TodoFormComponent {
   onSave(): void {
     const form = this.form();
     const { title } = form.getRawValue();
-
-    if (!title.trim()) {
-      form.controls.title.setErrors({ required: true });
-      form.controls.title.markAsTouched();
-      this.taskFields.focusInvalid();
-      return;
-    }
 
     if (form.invalid) {
       form.markAllAsTouched();
