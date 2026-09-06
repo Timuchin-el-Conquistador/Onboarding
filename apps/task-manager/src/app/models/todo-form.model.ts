@@ -1,17 +1,17 @@
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
 export interface IForm {
-  todo: FormArray<FormGroup<ITodoForm>>
-}
-
-export interface ITaskForm {
-  id: FormControl<number>;
-  title: FormControl<string>;
-  completed: FormControl<boolean>;
+  todo: FormArray<FormGroup<ITodoForm>>;
 }
 
 export interface ITodoForm {
-  id: FormControl<number>;
-  title: FormControl<string>;
+  id: FormControl<string>;
+  name: FormControl<string>;
   tasks: FormArray<FormGroup<ITaskForm>>;
+}
+
+export interface ITaskForm {
+  id: FormControl<string>;
+  name: FormControl<string>;
+  completed: FormControl<boolean>;
 }

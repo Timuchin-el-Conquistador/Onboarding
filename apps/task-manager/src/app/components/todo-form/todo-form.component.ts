@@ -20,20 +20,21 @@ import { requiredTrimmed } from '../../validators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoFormComponent {
+  readonly loading = input<boolean>();
   readonly shouldResetOnSave = input(true);
   readonly submitLabel = input.required<string>();
   readonly form = input<FormGroup<ITaskForm>>(
     inject(DYNAMIC_FORM_FACTORY).createForm({
       fields: [
         {
-          name: 'title',
+          name: 'name',
           type: 'custom',
           isCollection: false,
           defaultValue: '',
-          children: [],
+          fields: [],
           validators: {
             required: true,
-            custom: [requiredTrimmed()]
+            custom: [requiredTrimmed()],
           },
         },
       ],
@@ -46,7 +47,7 @@ export class TodoFormComponent {
 
   onSave(): void {
     const form = this.form();
-    const { title } = form.getRawValue();
+    const { name } = form.getRawValue();
 
     if (form.invalid) {
       form.markAllAsTouched();
@@ -56,7 +57,7 @@ export class TodoFormComponent {
 
     this.taskFields.blur();
 
-    this.save.emit(title.trim());
+    this.save.emit(name.trim());
 
     if (!this.shouldResetOnSave()) {
       return;

@@ -16,7 +16,7 @@ export interface IFormFieldConfig {
   type: FieldTypes;
   defaultValue: any;
   isCollection?: boolean;
-  children: IFormFieldConfig[];
+  fields: IFormFieldConfig[][];
   validators?: ValidatorsType;
 }
 

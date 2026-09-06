@@ -1,4 +1,10 @@
-<form class="todo-form" [formGroup]="form()" (ngSubmit)="onSave()">
-  <app-form-fields [controls]="[form().controls.title]" />
-  <button type="submit" class="todo-form__add">{{submitLabel()}}</button>
+<form
+  class="todo-form"
+  [class.todo-form--loading]="loading()"
+  [formGroup]="form()"
+  (ngSubmit)="onSave()"
+>
+  <app-form-fields [controls]="[form().controls.name]" />
+  
+  <button type="submit" class="todo-form__add">{{ submitLabel() }}</button>
 </form>

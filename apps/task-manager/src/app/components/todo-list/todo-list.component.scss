@@ -1,15 +1,12 @@
 .todo-container {
-  margin: 0 auto;
-  padding: 1.25rem;
-
   &__list {
     margin: 0;
     padding: 0;
     list-style: none;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     flex-wrap: wrap;
-    gap: 1.25rem;
+    gap: 5rem;
   }
 
   &--empty {
@@ -27,10 +24,16 @@
     font-size: 3rem;
     color: var(--summary-action-hover-color);
   }
+
+  @media (max-width: 31.25rem) {
+    max-width: 100%;
+  }
 }
 
-@media (max-width: 31.25rem) {
-  .todo-container {
-    max-width: 100%;
+.todo-list {
+  &__skeleton {
+    width: 100%;
+    min-width: 0;
+    max-width: 32rem;
   }
 }

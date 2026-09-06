@@ -29,10 +29,8 @@
     font-size: 3rem;
     color: var(--summary-action-hover-color);
   }
-}
 
-@media (max-width: 31.25rem) {
-  .tasks-container {
+  @media (max-width: 31.25rem) {
     max-width: 100%;
   }
 }

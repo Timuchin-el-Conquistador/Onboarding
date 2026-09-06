@@ -3,14 +3,21 @@ import {
   input,
   ChangeDetectionStrategy,
   inject,
+  signal,
 } from '@angular/core';
-import { TodoFormManagerService } from '../../services';
+import {
+  TodoFormManagerService,
+  TodoManagerService,
+  TaskManagerService,
+} from '../../services';
 import { FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TaskListComponent } from '../task-list/task-list.component';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { TodoActionsComponent } from '../todo-actions/todo-actions.component';
-import type { ITodoForm } from '../../models';
+import type { ITodo, ITodoForm } from '../../models';
+import { withLoading } from '@org/my-lib/interceptors';
+import { TaskLoadingComponent } from '../ui/loading/task/task-loading.component';
 
 @Component({
   imports: [
@@ -18,6 +25,7 @@ import type { ITodoForm } from '../../models';
     TaskListComponent,
     TodoFormComponent,
     TodoActionsComponent,
+    TaskLoadingComponent,
   ],
   selector: 'app-todo-card',
   templateUrl: './todo-card.component.html',
@@ -25,23 +33,36 @@ import type { ITodoForm } from '../../models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoCardComponent {
-  readonly todoIndex = input.required<number>();
   readonly todoForm = input.required<FormGroup<ITodoForm>>();
-  
+
+  readonly removingTodo = signal(false);
+  readonly loadingTasks = signal(false);
+
+  readonly #todoManager = inject(TodoManagerService);
+  readonly #taskManager = inject(TaskManagerService);
   readonly #todoFormManager = inject(TodoFormManagerService);
 
-  createTask(todoIndex: number, title: string): void {
-    this.#todoFormManager.createTask(todoIndex, title);
+  createTask(title: string): void {
+    this.#taskManager
+      .createTask(this.todoForm().controls.id.value, title)
+      .pipe(withLoading(this.loadingTasks))
+      .subscribe((todo: ITodo) => {
+        this.#todoFormManager.setTasks(
+          this.todoForm().controls.id.value,
+          todo.tasks,
+        );
+      });
   }
 
-  totalTasksCount(index: number): number {
-    return this.#todoFormManager
-      .getTodoTasks(index)
-      .controls.filter((task) => !task.controls.completed.value).length;
+  incompleteTasksCount(): number {
+    const tasks = this.todoForm().controls.tasks;
+
+    return tasks.controls.filter((task) => !task.controls.completed.value)
+      .length;
   }
 
-  isTodoCompleted(index: number): boolean {
-    const tasks = this.#todoFormManager.getTodoTasks(index);
+  isTodoCompleted(): boolean {
+    const tasks = this.todoForm().controls.tasks;
 
     return (
       tasks.length > 0 &&
@@ -49,7 +70,7 @@ export class TodoCardComponent {
     );
   }
 
-  removeTodo(index: number): void {
+  removeTodo(): void {
     const confirmed = confirm(
       'Are you sure you want to delete this todo?\n\nThis will also delete all tasks associated with it.',
     );
@@ -58,6 +79,11 @@ export class TodoCardComponent {
       return;
     }
 
-    this.#todoFormManager.removeTodo(index);
+    this.#todoManager
+      .removeTodo(this.todoForm().controls.id.value)
+      .pipe(withLoading(this.removingTodo))
+      .subscribe(() => {
+        this.#todoFormManager.removeTodo(this.todoForm().controls.id.value);
+      });
   }
 }

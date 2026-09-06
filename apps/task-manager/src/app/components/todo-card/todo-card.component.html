@@ -1,16 +1,17 @@
 <article
   class="todo-list-card"
-  [class.todo-list-card--completed]="isTodoCompleted(todoIndex())"
+  [class.todo-list-card--completed]="isTodoCompleted()"
+  [class.todo-list-card--removing]="removingTodo()"
 >
   <header
     class="todo-list-card__header"
-    [class.todo-list-card__header--completed]="isTodoCompleted(todoIndex())"
+    [class.todo-list-card__header--completed]="isTodoCompleted()"
   >
     <h2 class="todo-list-card__title">
-      {{ todoForm().controls.title.value }}
+      {{ todoForm().controls.name.value }}
     </h2>
 
-    @if (isTodoCompleted(todoIndex())) {
+    @if (isTodoCompleted()) {
       <span
         class="todo-list-card__completed-icon"
         aria-label="All tasks completed"
@@ -47,21 +48,22 @@
   </header>
 
   <div class="todo-list-card__form">
-    <app-todo-form
-      (save)="createTask(this.todoIndex(), $event)"
-      submitLabel="Add Task"
-    />
+    <app-todo-form (save)="createTask($event)" submitLabel="Add Task" />
   </div>
 
   <div class="todo-list-card__tasks">
-    <app-task-list
-      [todoIndex]="todoIndex()"
-      [form]="todoForm().controls.tasks"
-    />
+    @if (!loadingTasks()) {
+      <app-task-list
+        [todoId]="todoForm().controls.id.value"
+        [form]="todoForm().controls.tasks"
+      />
+    } @else {
+      <app-task-loading />
+    }
   </div>
 
   <app-todo-actions
-    [totalTasksCount]="totalTasksCount(todoIndex())"
-    (removeTodo)="removeTodo(todoIndex())"
+    [totalTasksCount]="incompleteTasksCount()"
+    (removeTodo)="removeTodo()"
   />
 </article>

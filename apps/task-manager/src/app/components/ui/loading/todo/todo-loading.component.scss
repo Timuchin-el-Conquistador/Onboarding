@@ -4,6 +4,7 @@
   min-width: 0;
   max-width: 32rem;
 }
+
 .todo-list-card-skeleton {
   display: flex;
   flex-direction: column;
@@ -14,6 +15,7 @@
   border: 0.0625rem solid var(--summary-border-color);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
+
   &__header {
     display: flex;
     align-items: center;
@@ -22,6 +24,7 @@
     padding: 1rem 1.25rem;
     background-color: var(--summary-border-color);
   }
+
   &__form {
     display: flex;
     align-items: center;
@@ -29,15 +32,6 @@
     flex-shrink: 0;
     padding: 1rem 1.25rem;
     border-bottom: 0.0625rem solid var(--summary-border-color);
-  }
-
-  &__tasks {
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-    flex: 1;
-    min-height: 0;
-    padding: 1rem 1.25rem;
   }
 
   &__actions {
@@ -59,69 +53,56 @@
   );
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s ease-in-out infinite;
+
   &--title {
     width: 55%;
     height: 1.5rem;
     border-radius: 0.25rem;
   }
+
   &--input {
     flex: 1;
     height: 2.5rem;
     border-radius: var(--border-radius);
   }
+
   &--button {
     width: 5rem;
     height: 2.5rem;
     border-radius: var(--border-radius);
   }
-  &--checkbox {
-    width: 1.125rem;
-    height: 1.125rem;
-    flex-shrink: 0;
-    border-radius: 0.25rem;
-  }
-  &--text {
-    width: 70%;
-    height: 0.875rem;
-    border-radius: 0.25rem;
-  }
-  &--text-short {
-    width: 45%;
-  }
+
   &--count {
     width: 9rem;
     height: 0.875rem;
     border-radius: 0.25rem;
   }
+
   &--delete {
     width: 5rem;
     height: 2rem;
     border-radius: var(--border-radius);
   }
 }
-.skeleton-task {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  min-height: 3rem;
-  padding: 0.625rem 0.75rem;
-  border: 0.0625rem solid var(--summary-border-color);
-  border-radius: var(--border-radius);
-}
+
 @keyframes skeleton-loading {
   0% {
     background-position: 200% 0;
   }
+
   100% {
     background-position: -200% 0;
   }
 }
+
 @media (max-width: 31.25rem) {
   .todo-list-card-skeleton {
     height: 30rem;
+
     &__header {
       padding: 1rem;
     }
+
     &__form,
     &__tasks {
       padding: 1rem;

@@ -21,39 +21,26 @@ export class DynamicFormFactory implements IDynamicFormFactory {
   createForm<T extends { [K in keyof T]: AbstractControl }>(
     schema: IFormSchemaConfig,
   ): FormGroup<T> {
-    const fields: Record<string, AbstractControl> = {};
+    const controls: Record<string, AbstractControl> = {};
 
     for (const field of schema.fields) {
-      if (field.isCollection) {
-        fields[field.name] = this.#createArray(field);
-        continue;
-      }
-      fields[field.name] = this.#createControl(field);
+      controls[field.name] = field.isCollection
+        ? this.#createArray(field.fields)
+        : this.#createControl(field);
     }
 
-    return this.#fb.group(fields) as unknown as FormGroup<T>;
+    return this.#fb.group(controls) as unknown as FormGroup<T>;
   }
 
-  #createGroup(field: IFormFieldConfig): FormGroup {
-    const fields: Record<string, AbstractControl> = {};
-
-    for (const child of field.children) {
-      fields[child.name] = child.isCollection
-        ? this.#createArray(child)
-        : this.#createControl(child);
-    }
-
-    return this.#fb.group(fields);
-  }
-
-  #createArray(field: IFormFieldConfig): FormArray {
-    return this.#fb.array(field.children.map(() => this.#createGroup(field)));
+  #createArray(fields: IFormFieldConfig[][]): FormArray {
+    return this.#fb.array(
+      fields.map((field) => this.createForm({ fields: field })),
+    );
   }
 
   #createControl(field: IFormFieldConfig): FormControl {
     return this.#fb.control(
       field.defaultValue,
-
       this.#resolveValidatorsfield(field),
     );
   }

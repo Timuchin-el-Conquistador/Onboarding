@@ -9,6 +9,8 @@ import { TodoFormComponent } from './components/todo-form/todo-form.component';
 import { TodoFormManagerService, TodoManagerService } from './services';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ITodo } from './models';
+import { from, switchMap } from 'rxjs';
 
 @Component({
   imports: [TodoFormComponent, TodoListComponent],
@@ -24,16 +26,22 @@ export class App implements OnInit {
 
   ngOnInit(): void {
     this.#todoManager
-      .getTasks()
-      .pipe(takeUntilDestroyed(this.#destroyRef))
-      .subscribe((tasks) => {
-        tasks.forEach((todo) => {
-          this.#todoFormManager.createTodo(todo.title, todo.id, todo.tasks);
-        });
+      .getTodos()
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef),
+        switchMap((todos: ITodo[]) => from(todos)),
+      )
+      .subscribe((todo: ITodo) => {
+        this.#todoFormManager.createTodo(todo.id, todo.name, todo.tasks);
       });
   }
 
   createTodo(title: string): void {
-    this.#todoFormManager.createTodo(title);
+    this.#todoManager
+      .createTodo(title)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe((todo: ITodo) =>
+        this.#todoFormManager.createTodo(todo.id, todo.name, todo.tasks),
+      );
   }
 }

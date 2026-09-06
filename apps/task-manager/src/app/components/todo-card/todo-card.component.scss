@@ -16,6 +16,12 @@
   border: 0.0625rem solid var(--summary-border-color);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
+  transition: opacity 0.3s ease;
+
+  &--removing {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 
   &--completed {
     border-color: var(--success);

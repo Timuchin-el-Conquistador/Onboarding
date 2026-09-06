@@ -14,6 +14,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "paths": {
+      "@org/my-lib/interceptors": ["./libs/my-lib//src/index.ts"],
+      "@org/my-lib/tokens": ["./libs/my-lib//src/index.ts"],
+      "@org/my-lib/storages": ["./libs/my-lib//src/index.ts"],
       "@org/my-lib/operators": ["./libs/my-lib//src/index.ts"],
       "@org/my-lib/forms": ["./libs/my-lib/src/index.ts"],
       "@org/my-lib": ["/libs/my-lib/src/index.ts"]

@@ -1,0 +1,31 @@
+:host {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  flex: 1;
+  min-height: 0;
+  padding: 1rem 1.25rem;
+}
+
+.task {
+  background: linear-gradient(
+    90deg,
+    var(--summary-border-color) 25%,
+    var(--summary-action-hover-color) 50%,
+    var(--summary-border-color) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  height: 100%;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}

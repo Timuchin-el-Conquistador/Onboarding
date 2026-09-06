@@ -14,11 +14,23 @@
   --box-shadow: rgba(0, 0, 0, 0.1);
   --success: #28a745;
 }
+
 .task-manager {
   min-height: 100vh;
   background-color: var(--summary-action-hover-color);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
+
+  &__container {
+    @media (max-width: 32rem) {
+      padding: 0 1rem;
+    }
+    
+    @media (min-width: 32rem) {
+      padding: 0 3rem;
+    }
+  }
+
   &__header {
     position: relative;
     padding: 1.875rem;
@@ -26,10 +38,12 @@
     color: var(--summary-action-hover-color);
     text-align: center;
   }
+
   &__title {
-    margin-bottom: 0.3125rem;
+    margin-bottom: 0.32rem;
     font-size: 2.5rem;
-    @media (max-width: 31.25rem) {
+
+    @media (max-width: 0.32rem) {
       font-size: 1.8rem;
     }
   }

@@ -8,9 +8,9 @@ export const DEFAULT_TODO_FORM: IFormSchemaConfig = {
       isCollection: true,
       defaultValue: '',
       validators: {
-        required: true
+        required: true,
       },
-      children: [],
+      fields: [],
     },
   ],
 };
