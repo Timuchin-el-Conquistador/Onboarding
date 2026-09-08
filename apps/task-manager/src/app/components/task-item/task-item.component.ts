@@ -3,12 +3,16 @@ import {
   input,
   ChangeDetectionStrategy,
   signal,
-  output,
+  inject,
+  computed,
+  OnInit,
 } from '@angular/core';
-import type { ITaskForm } from '../../models';
-import { FormGroup } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+import type { ITask, ITaskForm } from '../../models';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
+import { TaskManagerService, TodoManagerService } from '../../services';
+import { DynamicFormFactory, withLoading } from '@org/shared/operators';
+import { requiredTrimmed } from '../../validators';
 
 @Component({
   imports: [ReactiveFormsModule, TodoFormComponent],
@@ -17,17 +21,66 @@ import { TodoFormComponent } from '../todo-form/todo-form.component';
   styleUrls: ['./task-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TaskItemComponent {
-  readonly task = input.required<FormGroup<ITaskForm>>();
-  readonly removeTask = output<void>();
-  readonly editing = signal(false);
+export class TaskItemComponent implements OnInit {
+  readonly todoId = input.required<string>();
+  readonly task = input.required<ITask>();
 
-  edit(): void {
+  readonly editing = signal(false);
+  readonly loading = signal(false);
+
+  readonly id = computed<string>(() => this.task().id);
+  readonly name = computed<string>(() => this.task().name);
+  readonly completed = computed<boolean>(() => this.task().completed);
+
+  taskForm!: FormGroup<ITaskForm>;
+
+  readonly #formFactory = inject(DynamicFormFactory);
+  readonly #taskManager = inject(TaskManagerService);
+  readonly #todoManager = inject(TodoManagerService);
+
+  ngOnInit(): void {
+    this.taskForm = this.#formFactory.createForm<ITaskForm>({
+      fields: [
+        {
+          name: 'name',
+          type: 'custom',
+          defaultValue: this.name(),
+          isCollection: false,
+          fields: [],
+          validators: {
+            required: true,
+            custom: [requiredTrimmed()],
+          },
+        },
+      ],
+    });
+  }
+
+  removeTask(): void {
+    this.#taskManager
+      .removeTask(this.todoId(), this.id())
+      .pipe(withLoading(this.loading))
+      .subscribe(() => this.#todoManager.refreshTodos());
+  }
+
+  toggleTaskCompletion(completed: boolean): void {
+    this.#taskManager
+      .updateTask({ name: this.name(), completed }, this.todoId(), this.id())
+      .pipe(withLoading(this.loading))
+      .subscribe(() => this.#todoManager.refreshTodos());
+  }
+
+  beginTaskEdit(): void {
     this.editing.set(true);
   }
 
-  onSave(title: string): void {
-    this.task().controls.title.setValue(title);
-    this.editing.set(false);
+  completeTaskEdit(name: string): void {
+    this.#taskManager
+      .updateTask({ name }, this.todoId(), this.id())
+      .pipe(withLoading(this.loading))
+      .subscribe(() => {
+        this.#todoManager.refreshTodos();
+        this.editing.set(false);
+      });
   }
 }

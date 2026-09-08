@@ -20,6 +20,21 @@
     font-weight: 600;
   }
 
+  span{
+    font-size: 1rem;
+    font-weight: 500;
+    color: #5f6368;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .summary__task-count {
+    font-size: 1.3rem;
+    color: #5f6368;
+    font-weight: 500;
+    line-height: 1;
+  }
+
   &__todo-all {
     display: inline-flex;
     align-items: center;
@@ -47,7 +62,7 @@
       outline-offset: 0.125rem;
     }
   }
-  
+
   &__delete-icon {
     width: 1.125rem;
     height: 1.125rem;

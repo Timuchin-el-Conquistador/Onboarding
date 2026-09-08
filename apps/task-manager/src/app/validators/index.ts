@@ -1,1 +1,1 @@
-export {requiredTrimmed} from './trimmed.validator'
+export { requiredTrimmed } from './trimmed.validator';

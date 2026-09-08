@@ -1,28 +1,34 @@
-<li class="task-item" [class.task-item--completed]="task().controls.completed.value">
-  <label class="task-item__checkbox" [for]="'task-' + task().controls.id.value">
+<div
+  class="task-item"
+  [class.task-item--completed]="!this.editing() && completed()"
+  [class.task-item--loading]="loading()"
+>
+  <label class="task-item__checkbox" [for]="`task- ${id()}`">
     <input
       type="checkbox"
-      [id]="'task-' + task().controls.id.value"
-      [attr.aria-label]="task().controls.completed.value ? 'Finished Task' : 'Pending Task'"
-      [formControl]="task().controls.completed"
+      [id]="`task- ${id()}`"
+      [checked]="completed()"
+      [attr.aria-label]="completed() ? 'Finished Task' : 'Pending Task'"
+      (change)="toggleTaskCompletion($event.target.checked)"
     />
     <span class="task-item__checkbox-icon"></span>
   </label>
 
   @if (editing()) {
     <app-todo-form
-      (save)="onSave($event)"
+      (save)="completeTaskEdit($event)"
       [shouldResetOnSave]="false"
-      [form]="task()"
       submitLabel="Save"
+      [form]="taskForm"
+      [loading]="loading()"
     />
   } @else {
-    <label class="task-item__details" [for]="'task-' + task().controls.id.value">
+    <label class="task-item__details" [for]="`task- ${id()}`">
       <p class="task-item__title">
-        {{ task().controls.title.value }}
+        {{ name() }}
       </p>
     </label>
-    <button type="button" class="task-item__edit" (click)="edit()">
+    <button type="button" class="task-item__edit" (click)="beginTaskEdit()" aria-label="Edit task">
       <svg
         class="task-item__edit-icon"
         viewBox="0 0 24 24"
@@ -50,7 +56,7 @@
     </button>
   }
 
-  <button type="button" class="task-item__delete" (click)="removeTask.emit()">
+  <button type="button" class="task-item__delete" (click)="removeTask()" aria-label="Remove task">
     <svg
       class="summary__delete-icon"
       viewBox="0 0 24 24"
@@ -69,4 +75,4 @@
       />
     </svg>
   </button>
-</li>
+</div>

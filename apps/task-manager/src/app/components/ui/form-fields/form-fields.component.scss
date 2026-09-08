@@ -39,10 +39,8 @@
     color: var(--danger);
     font-size: 0.75rem;
   }
-}
 
-@media (max-width: 31.25rem) {
-  .form-fields {
+  @media (max-width: 31.25rem) {
     flex-direction: column;
   }
 }

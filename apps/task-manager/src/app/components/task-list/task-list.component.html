@@ -1,13 +1,10 @@
 <div class="tasks-container">
-  @let xxx = this.form().valueChanges | async;
-
-  @if (xxx?.length) {
+  @if (tasks().length) {
     <ul class="tasks-container__list">
-      @for (
-        task of this.form().controls;
-        track task.value.id;
-      ) {
-        <app-task-item [task]="task" (removeTask)="removeTask($index)"/>
+      @for (task of tasks(); track task.id) {
+        <li>
+          <app-task-item [todoId]="todoId()" [task]="task" />
+        </li>
       }
     </ul>
   } @else {

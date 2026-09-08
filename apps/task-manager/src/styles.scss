@@ -1,1 +1,48 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+body {
+  color-scheme: light;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+  height: 100%;
+}
+
+.success-toast {
+  @include mat.snack-bar-overrides(
+    (
+      button-color: #2e7d32,
+      container-color: #e8f5e9,
+      supporting-text-color: #1b5e20,
+    )
+  );
+}
+.error-toast {
+  @include mat.snack-bar-overrides(
+    (
+      button-color: #c62828,
+      container-color: #ffebee,
+      supporting-text-color: #b71c1c,
+    )
+  );
+}
+
+.info-toast,
+.warning-toast {
+  display: none;
+}

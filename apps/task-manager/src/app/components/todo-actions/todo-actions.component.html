@@ -1,10 +1,13 @@
 <div class="actions">
   <div>
-    You have
+    <span>You have</span>
     <span class="summary__task-count" id="task-count">
       {{ totalTasksCount() }}
     </span>
-    tasks remaining
+    <span>
+      task{{ totalTasksCount() > 1 ? 's' : '' }}
+      remaining
+    </span>
   </div>
 
   <button

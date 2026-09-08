@@ -8,8 +8,8 @@ import {
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormFieldsComponent } from '../ui/form-fields/form-fields.component';
-import type { ITaskForm } from '../../models';
-import { DYNAMIC_FORM_FACTORY } from '@org/my-lib/forms';
+import type { ITaskForm, ITodoForm } from '../../models';
+import { DYNAMIC_FORM_FACTORY } from '@org/shared/forms';
 import { requiredTrimmed } from '../../validators';
 
 @Component({
@@ -20,20 +20,21 @@ import { requiredTrimmed } from '../../validators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoFormComponent {
-  readonly shouldResetOnSave = input(true);
   readonly submitLabel = input.required<string>();
-  readonly form = input<FormGroup<ITaskForm>>(
-    inject(DYNAMIC_FORM_FACTORY).createForm({
+  readonly loading = input<boolean>();
+  readonly shouldResetOnSave = input<boolean>(true);
+  readonly form = input<FormGroup<ITaskForm | ITodoForm>>(
+    inject(DYNAMIC_FORM_FACTORY).createForm<ITodoForm>({
       fields: [
         {
-          name: 'title',
+          name: 'name',
           type: 'custom',
           isCollection: false,
           defaultValue: '',
-          children: [],
+          fields: [],
           validators: {
             required: true,
-            custom: [requiredTrimmed()]
+            custom: [requiredTrimmed()],
           },
         },
       ],
@@ -46,7 +47,7 @@ export class TodoFormComponent {
 
   onSave(): void {
     const form = this.form();
-    const { title } = form.getRawValue();
+    const { name } = form.getRawValue();
 
     if (form.invalid) {
       form.markAllAsTouched();
@@ -56,12 +57,10 @@ export class TodoFormComponent {
 
     this.taskFields.blur();
 
-    this.save.emit(title.trim());
+    this.save.emit(name.trim());
 
-    if (!this.shouldResetOnSave()) {
-      return;
+    if (this.shouldResetOnSave()) {
+      form.reset();
     }
-
-    form.reset();
   }
 }

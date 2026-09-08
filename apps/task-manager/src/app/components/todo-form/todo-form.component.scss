@@ -4,6 +4,12 @@
   gap: 0.625rem;
   justify-content: space-between;
   width: 100%;
+  transition: opacity 0.2s ease;
+
+  &--loading {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 
   &__add {
     padding: 0.75rem 1.25rem;
@@ -21,10 +27,8 @@
       background-color: var(--primary-dark);
     }
   }
-}
 
-@media (max-width: 31.25rem) {
-  .todo-form {
+  @media (max-width: 31.25rem) {
     flex-direction: column;
   }
 }

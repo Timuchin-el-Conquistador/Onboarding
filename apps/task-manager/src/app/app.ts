@@ -2,13 +2,11 @@ import {
   Component,
   inject,
   ChangeDetectionStrategy,
-  OnInit,
-  DestroyRef,
+  AfterViewInit,
 } from '@angular/core';
 import { TodoFormComponent } from './components/todo-form/todo-form.component';
-import { TodoFormManagerService, TodoManagerService } from './services';
+import { TodoManagerService } from './services';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   imports: [TodoFormComponent, TodoListComponent],
@@ -17,23 +15,17 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class App implements OnInit {
-  readonly #todoFormManager = inject(TodoFormManagerService);
+export class App implements AfterViewInit {
+  readonly loading = inject(TodoManagerService).loading;
   readonly #todoManager = inject(TodoManagerService);
-  readonly #destroyRef = inject(DestroyRef);
 
-  ngOnInit(): void {
-    this.#todoManager
-      .getTasks()
-      .pipe(takeUntilDestroyed(this.#destroyRef))
-      .subscribe((tasks) => {
-        tasks.forEach((todo) => {
-          this.#todoFormManager.createTodo(todo.title, todo.id, todo.tasks);
-        });
-      });
+  ngAfterViewInit(): void {
+    this.#todoManager.refreshTodos(true);
   }
 
   createTodo(title: string): void {
-    this.#todoFormManager.createTodo(title);
+    this.#todoManager
+      .createTodo(title)
+      .subscribe(() => this.#todoManager.refreshTodos());
   }
 }

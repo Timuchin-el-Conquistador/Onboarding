@@ -1,4 +1,4 @@
-import { IFormSchemaConfig } from '@org/my-lib/operators';
+import { IFormSchemaConfig } from '@org/shared/operators';
 
 export const DEFAULT_TODO_FORM: IFormSchemaConfig = {
   fields: [
@@ -8,9 +8,9 @@ export const DEFAULT_TODO_FORM: IFormSchemaConfig = {
       isCollection: true,
       defaultValue: '',
       validators: {
-        required: true
+        required: true,
       },
-      children: [],
+      fields: [],
     },
   ],
 };

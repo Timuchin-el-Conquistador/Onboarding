@@ -12,6 +12,6 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoActionsComponent {
-  readonly totalTasksCount = input<number>();
+  readonly totalTasksCount = input.required<number>();
   readonly removeTodo = output<void>();
 }
