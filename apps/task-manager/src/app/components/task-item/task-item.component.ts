@@ -10,8 +10,8 @@ import {
 import type { ITask, ITaskForm } from '../../models';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
-import { TaskManagerService } from '../../services';
-import { DynamicFormFactory, withLoading } from '@org/my-lib/interceptors';
+import { TaskManagerService, TodoManagerService } from '../../services';
+import { DynamicFormFactory, withLoading } from '@org/shared/operators';
 import { requiredTrimmed } from '../../validators';
 
 @Component({
@@ -36,6 +36,7 @@ export class TaskItemComponent implements OnInit {
 
   readonly #formFactory = inject(DynamicFormFactory);
   readonly #taskManager = inject(TaskManagerService);
+  readonly #todoManager = inject(TodoManagerService);
 
   ngOnInit(): void {
     this.taskForm = this.#formFactory.createForm<ITaskForm>({
@@ -59,14 +60,14 @@ export class TaskItemComponent implements OnInit {
     this.#taskManager
       .removeTask(this.todoId(), this.id())
       .pipe(withLoading(this.loading))
-      .subscribe();
+      .subscribe(() => this.#todoManager.refreshTodos());
   }
 
   toggleTaskCompletion(completed: boolean): void {
     this.#taskManager
       .updateTask({ name: this.name(), completed }, this.todoId(), this.id())
       .pipe(withLoading(this.loading))
-      .subscribe();
+      .subscribe(() => this.#todoManager.refreshTodos());
   }
 
   beginTaskEdit(): void {
@@ -78,6 +79,7 @@ export class TaskItemComponent implements OnInit {
       .updateTask({ name }, this.todoId(), this.id())
       .pipe(withLoading(this.loading))
       .subscribe(() => {
+        this.#todoManager.refreshTodos();
         this.editing.set(false);
       });
   }

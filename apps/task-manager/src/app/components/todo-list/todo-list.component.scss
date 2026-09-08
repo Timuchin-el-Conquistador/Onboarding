@@ -40,6 +40,11 @@
     color: var(--summary-action-hover-color);
   }
 
+  &--empty p {
+    color: #5f6368;
+    font-weight: 500;
+  }
+
   &__skeleton {
     width: 100%;
     min-width: 0;

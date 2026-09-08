@@ -12,7 +12,7 @@ import {
   IFormFieldConfig,
   IDynamicFormFactory,
   IFormSchemaConfig,
-} from './dynamic-form.models';
+} from '../models/dynamic-form.model';
 
 @Injectable({ providedIn: 'root' })
 export class DynamicFormFactory implements IDynamicFormFactory {

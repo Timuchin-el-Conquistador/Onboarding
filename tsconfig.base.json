@@ -14,12 +14,17 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "paths": {
+      "@org/my-lib": ["/libs/my-lib/src/index.ts"],
       "@org/my-lib/interceptors": ["./libs/my-lib//src/index.ts"],
-      "@org/my-lib/tokens": ["./libs/my-lib//src/index.ts"],
-      "@org/my-lib/storages": ["./libs/my-lib//src/index.ts"],
       "@org/my-lib/operators": ["./libs/my-lib//src/index.ts"],
-      "@org/my-lib/forms": ["./libs/my-lib/src/index.ts"],
-      "@org/my-lib": ["/libs/my-lib/src/index.ts"]
+      "@org/my-lib/models": ["./libs/shared/src/index.ts"],
+      "@org/my-lib/services": ["./libs/shared/src/index.ts"],
+      "@org/shared": ["./libs/shared/src/index.ts"],
+      "@org/shared/forms": ["./libs/shared/src/index.ts"],
+      "@org/shared/operators": ["./libs/shared/src/index.ts"],
+      "@org/shared/models": ["./libs/shared/src/index.ts"],
+      "@org/shared/environments": ["./libs/shared/src/index.ts"],
+      "@org/shared/tokens": ["./libs/shared/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

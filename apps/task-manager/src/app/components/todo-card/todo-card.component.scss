@@ -88,7 +88,7 @@
   }
 
   &__tasks {
-    flex: 1;
+    flex: 2;
     min-height: 0;
     width: 100%;
     box-sizing: border-box;
@@ -96,34 +96,6 @@
     overflow-y: auto;
   }
 
-  &__task-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  &--empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: var(--summary-text-color);
-    text-align: center;
-  }
-
-  &--empty-icon {
-    margin-bottom: 0.5rem;
-    font-size: 2rem;
-  }
-
-  &--empty p {
-    margin: 0;
-    font-size: 0.9rem;
-  }
 }
 
 @media (max-width: 31.25rem) {

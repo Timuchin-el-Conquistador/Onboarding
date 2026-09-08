@@ -11,7 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { TodoActionsComponent } from '../todo-actions/todo-actions.component';
 import type { ITodo } from '../../models';
-import { withLoading } from '@org/my-lib/interceptors';
+import { withLoading } from '@org/shared/operators';
 import { TaskLoadingComponent } from '../ui/loading/task/task-loading.component';
 import { TaskListComponent } from '../task-list/task-list.component';
 
@@ -44,7 +44,7 @@ export class TodoCardComponent {
     this.#taskManager
       .createTask(this.id(), title)
       .pipe(withLoading(this.loadingTasks))
-      .subscribe();
+      .subscribe(() => this.#todoManager.refreshTodos());
   }
 
   incompleteTasksCount(): number {
@@ -69,6 +69,6 @@ export class TodoCardComponent {
     this.#todoManager
       .removeTodo(this.id())
       .pipe(withLoading(this.removingTodo))
-      .subscribe();
+      .subscribe(() => this.#todoManager.refreshTodos());
   }
 }

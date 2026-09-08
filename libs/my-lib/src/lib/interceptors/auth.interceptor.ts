@@ -1,7 +1,7 @@
 import { HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { inject } from '@angular/core';
-import { LOCAL_STORAGE } from '../tokens/local.storage';
+import { LOCAL_STORAGE } from '@org/shared/tokens'
 
 export function authInterceptor(
   req: HttpRequest<unknown>,

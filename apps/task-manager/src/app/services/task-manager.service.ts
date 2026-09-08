@@ -1,14 +1,10 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import {
-  API_URL_TOKEN,
-  ToasterService,
-  withToaster,
-} from '@org/my-lib/operators';
+import { ToasterService, withToaster } from '@org/my-lib/operators';
+import { API_URL_TOKEN } from '@org/shared/tokens';
 import { ITodo, IEditTask } from '../models';
 import { TASK_SUCCESS_MESSAGES } from '../types';
-import { TodoManagerService } from './todo-manager.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,17 +13,13 @@ export class TaskManagerService {
   readonly #http = inject(HttpClient);
   readonly #base_url = inject(API_URL_TOKEN);
   readonly #toasterService = inject(ToasterService);
-  readonly #todoManager = inject(TodoManagerService);
 
   createTask(id: string, name: string): Observable<ITodo> {
     const params = new HttpParams().set('id', id);
 
     return this.#http
       .post<ITodo>(this.#base_url + '/v1/todo/task', { name }, { params })
-      .pipe(
-        tap(() => this.#todoManager.refreshTodos()),
-        withToaster(this.#toasterService, TASK_SUCCESS_MESSAGES.CREATE),
-      );
+      .pipe(withToaster(this.#toasterService, TASK_SUCCESS_MESSAGES.CREATE));
   }
 
   updateTask(
@@ -41,10 +33,7 @@ export class TaskManagerService {
       .post<ITodo>(this.#base_url + '/v1/todo/edit-task', task, {
         params,
       })
-      .pipe(
-        tap(() => this.#todoManager.refreshTodos()),
-        withToaster(this.#toasterService, TASK_SUCCESS_MESSAGES.UPDATE),
-      );
+      .pipe(withToaster(this.#toasterService, TASK_SUCCESS_MESSAGES.UPDATE));
   }
 
   removeTask(todoId: string, taskId: string): Observable<ITodo> {
@@ -54,9 +43,6 @@ export class TaskManagerService {
       .delete<ITodo>(this.#base_url + '/v1/todo/task', {
         params,
       })
-      .pipe(
-        tap(() => this.#todoManager.refreshTodos()),
-        withToaster(this.#toasterService, TASK_SUCCESS_MESSAGES.DELETE),
-      );
+      .pipe(withToaster(this.#toasterService, TASK_SUCCESS_MESSAGES.DELETE));
   }
 }

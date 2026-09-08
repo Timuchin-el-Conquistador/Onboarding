@@ -30,6 +30,10 @@
     color: var(--summary-action-hover-color);
   }
 
+  &--empty p {
+    color: #5f6368;
+  }
+
   @media (max-width: 31.25rem) {
     max-width: 100%;
   }

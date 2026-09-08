@@ -4,8 +4,8 @@ import {
   importProvidersFrom,
 } from '@angular/core';
 import { environment } from '../environments/environment';
-import { API_URL_TOKEN } from '@org/my-lib/tokens';
-import { authInterceptor } from '@org/my-lib/tokens';
+import { API_URL_TOKEN } from '@org/shared/tokens';
+import { authInterceptor } from '@org/my-lib/interceptors';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 

@@ -1,6 +1,6 @@
 import { InjectionToken, inject } from '@angular/core';
 import { AbstractControl, FormGroup, ValidatorFn } from '@angular/forms';
-import { DynamicFormFactory } from './dynamic-form.factory';
+import { DynamicFormFactory } from '../forms/dynamic-form.factory';
 
 export type FieldTypes = 'email' | 'password' | 'custom';
 

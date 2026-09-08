@@ -9,7 +9,7 @@ import {
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormFieldsComponent } from '../ui/form-fields/form-fields.component';
 import type { ITaskForm, ITodoForm } from '../../models';
-import { DYNAMIC_FORM_FACTORY } from '@org/my-lib/forms';
+import { DYNAMIC_FORM_FACTORY } from '@org/shared/forms';
 import { requiredTrimmed } from '../../validators';
 
 @Component({
