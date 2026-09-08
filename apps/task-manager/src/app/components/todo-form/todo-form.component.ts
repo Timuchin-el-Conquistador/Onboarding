@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormFieldsComponent } from '../ui/form-fields/form-fields.component';
-import type { ITaskForm } from '../../models';
+import type { ITaskForm, ITodoForm } from '../../models';
 import { DYNAMIC_FORM_FACTORY } from '@org/my-lib/forms';
 import { requiredTrimmed } from '../../validators';
 
@@ -20,11 +20,11 @@ import { requiredTrimmed } from '../../validators';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoFormComponent {
-  readonly loading = input<boolean>();
-  readonly shouldResetOnSave = input(true);
   readonly submitLabel = input.required<string>();
-  readonly form = input<FormGroup<ITaskForm>>(
-    inject(DYNAMIC_FORM_FACTORY).createForm({
+  readonly loading = input<boolean>();
+  readonly shouldResetOnSave = input<boolean>(true);
+  readonly form = input<FormGroup<ITaskForm | ITodoForm>>(
+    inject(DYNAMIC_FORM_FACTORY).createForm<ITodoForm>({
       fields: [
         {
           name: 'name',
@@ -59,10 +59,8 @@ export class TodoFormComponent {
 
     this.save.emit(name.trim());
 
-    if (!this.shouldResetOnSave()) {
-      return;
+    if (this.shouldResetOnSave()) {
+      form.reset();
     }
-
-    form.reset();
   }
 }

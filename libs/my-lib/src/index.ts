@@ -3,6 +3,7 @@ export * from './lib/forms/dynamic-form.models';
 export * from './lib/operators/withLoading';
 export * from './lib/operators/withSuccessMessage';
 export * from './lib/operators/withToaster';
+export * from './lib/operators/withCondition';
 export * from './lib/tokens/local.storage';
 export * from './lib/tokens/api.token';
 export * from './lib/interceptors/auth.interceptor';

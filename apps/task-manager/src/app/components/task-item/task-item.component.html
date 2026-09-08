@@ -1,19 +1,14 @@
 <li
   class="task-item"
-  [class.task-item--completed]="taskForm().controls.completed.value && !this.editing()"
+  [class.task-item--completed]="!this.editing() && completed()"
   [class.task-item--loading]="loading()"
 >
-  <label
-    class="task-item__checkbox"
-    [for]="'task-' + taskForm().controls.id.value"
-  >
+  <label class="task-item__checkbox" [for]="`task- ${id()}`">
     <input
       type="checkbox"
-      [id]="'task-' + taskForm().controls.id.value"
-      [attr.aria-label]="
-        taskForm().controls.completed.value ? 'Finished Task' : 'Pending Task'
-      "
-      [formControl]="taskForm().controls.completed"
+      [id]="`task- ${id()}`"
+      [checked]="completed()"
+      [attr.aria-label]="completed() ? 'Finished Task' : 'Pending Task'"
       (change)="toggleTaskCompletion($event.target.checked)"
     />
     <span class="task-item__checkbox-icon"></span>
@@ -23,17 +18,14 @@
     <app-todo-form
       (save)="completeTaskEdit($event)"
       [shouldResetOnSave]="false"
-      [form]="taskForm()"
       submitLabel="Save"
+      [form]="taskForm"
       [loading]="loading()"
     />
   } @else {
-    <label
-      class="task-item__details"
-      [for]="'task-' + taskForm().controls.id.value"
-    >
+    <label class="task-item__details" [for]="`task- ${id()}`">
       <p class="task-item__title">
-        {{ taskForm().controls.name.value }}
+        {{ name() }}
       </p>
     </label>
     <button type="button" class="task-item__edit" (click)="beginTaskEdit()">

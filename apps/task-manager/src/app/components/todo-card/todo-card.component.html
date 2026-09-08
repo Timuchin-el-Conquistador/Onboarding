@@ -8,7 +8,7 @@
     [class.todo-list-card__header--completed]="isTodoCompleted()"
   >
     <h2 class="todo-list-card__title">
-      {{ todoForm().controls.name.value }}
+      {{ name() }}
     </h2>
 
     @if (isTodoCompleted()) {
@@ -53,10 +53,7 @@
 
   <div class="todo-list-card__tasks">
     @if (!loadingTasks()) {
-      <app-task-list
-        [todoId]="todoForm().controls.id.value"
-        [form]="todoForm().controls.tasks"
-      />
+      <app-task-list [todoId]="id()" [tasks]="tasks()" />
     } @else {
       <app-task-loading />
     }

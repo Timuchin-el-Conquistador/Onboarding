@@ -6,11 +6,11 @@ import {
   ElementRef,
   effect,
 } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
-import { TodoFormManagerService, TodoManagerService } from '../../services';
+import { TodoManagerService } from '../../services';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TodoCardComponent } from '../todo-card/todo-card.component';
 import { TodoLoadingComponent } from '../ui/loading/todo/todo-loading.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   imports: [
@@ -25,11 +25,8 @@ import { TodoLoadingComponent } from '../ui/loading/todo/todo-loading.component'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoListComponent {
+  readonly todos$ = inject(TodoManagerService).todos$;
   readonly loading = inject(TodoManagerService).loading;
-  readonly form = inject(TodoFormManagerService).form;
-
-  readonly todosForm = this.form.controls.todo;
-  readonly todoForm$ = this.todosForm.valueChanges;
 
   @ViewChild('skeleton', { read: ElementRef })
   skeleton?: ElementRef<HTMLElement>;

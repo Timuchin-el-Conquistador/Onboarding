@@ -4,20 +4,16 @@ import {
   ChangeDetectionStrategy,
   inject,
   signal,
+  computed,
 } from '@angular/core';
-import {
-  TodoFormManagerService,
-  TodoManagerService,
-  TaskManagerService,
-} from '../../services';
-import { FormGroup } from '@angular/forms';
+import { TodoManagerService, TaskManagerService } from '../../services';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TaskListComponent } from '../task-list/task-list.component';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { TodoActionsComponent } from '../todo-actions/todo-actions.component';
-import type { ITodo, ITodoForm } from '../../models';
+import type { ITodo } from '../../models';
 import { withLoading } from '@org/my-lib/interceptors';
 import { TaskLoadingComponent } from '../ui/loading/task/task-loading.component';
+import { TaskListComponent } from '../task-list/task-list.component';
 
 @Component({
   imports: [
@@ -33,40 +29,31 @@ import { TaskLoadingComponent } from '../ui/loading/task/task-loading.component'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoCardComponent {
-  readonly todoForm = input.required<FormGroup<ITodoForm>>();
+  readonly todo = input.required<ITodo>();
 
   readonly removingTodo = signal(false);
   readonly loadingTasks = signal(false);
+  readonly id = computed(() => this.todo().id);
+  readonly name = computed(() => this.todo().name);
+  readonly tasks = computed(() => this.todo().tasks);
 
   readonly #todoManager = inject(TodoManagerService);
   readonly #taskManager = inject(TaskManagerService);
-  readonly #todoFormManager = inject(TodoFormManagerService);
 
   createTask(title: string): void {
     this.#taskManager
-      .createTask(this.todoForm().controls.id.value, title)
+      .createTask(this.id(), title)
       .pipe(withLoading(this.loadingTasks))
-      .subscribe((todo: ITodo) => {
-        this.#todoFormManager.setTasks(
-          this.todoForm().controls.id.value,
-          todo.tasks,
-        );
-      });
+      .subscribe();
   }
 
   incompleteTasksCount(): number {
-    const tasks = this.todoForm().controls.tasks;
-
-    return tasks.controls.filter((task) => !task.controls.completed.value)
-      .length;
+    return this.tasks().filter((task) => !task.completed).length;
   }
 
   isTodoCompleted(): boolean {
-    const tasks = this.todoForm().controls.tasks;
-
     return (
-      tasks.length > 0 &&
-      tasks.controls.every((task) => task.controls.completed.value)
+      this.tasks().length > 0 && this.tasks().every((task) => task.completed)
     );
   }
 
@@ -80,10 +67,8 @@ export class TodoCardComponent {
     }
 
     this.#todoManager
-      .removeTodo(this.todoForm().controls.id.value)
+      .removeTodo(this.id())
       .pipe(withLoading(this.removingTodo))
-      .subscribe(() => {
-        this.#todoFormManager.removeTodo(this.todoForm().controls.id.value);
-      });
+      .subscribe();
   }
 }
