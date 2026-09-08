@@ -2,7 +2,9 @@
   @if (tasks().length) {
     <ul class="tasks-container__list">
       @for (task of tasks(); track task.id) {
-        <app-task-item [todoId]="todoId()" [task]="task" />
+        <li>
+          <app-task-item [todoId]="todoId()" [task]="task" />
+        </li>
       }
     </ul>
   } @else {

@@ -31,7 +31,10 @@
   }
 
   &--empty p {
+    font-size: 1.3rem;
     color: #5f6368;
+    font-weight: 500;
+    line-height: 1;
   }
 
   @media (max-width: 31.25rem) {
