@@ -4,7 +4,10 @@
     <span class="summary__task-count" id="task-count">
       {{ totalTasksCount() }}
     </span>
-    <span>tasks remaining</span>
+    <span>
+      task{{ totalTasksCount() > 1 ? 's' : '' }}
+      remaining
+    </span>
   </div>
 
   <button
