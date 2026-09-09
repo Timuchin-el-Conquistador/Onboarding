@@ -1,0 +1,47 @@
+<div
+  class="confirm-dialog"
+  role="dialog"
+  aria-labelledby="confirm-title"
+  aria-describedby="confirm-message"
+>
+  <div class="confirm-dialog__header">
+    <h2 id="confirm-title" mat-dialog-title class="confirm-dialog__title">
+      {{ data.title }}
+    </h2>
+    <button
+      mat-icon-button
+      mat-dialog-close
+      [aria-label]="data.cancelText"
+      class="confirm-dialog__close-btn"
+      (click)="cancel()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content class="confirm-dialog__content">
+    <p id="confirm-message" class="confirm-dialog__message">
+      {{ data.message }}
+    </p>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="confirm-dialog__actions">
+    <button
+      mat-button
+      type="button"
+      class="confirm-dialog__button confirm-dialog__button--cancel"
+      (click)="cancel()"
+    >
+      {{ data.cancelText }}
+    </button>
+
+    <button
+      mat-flat-button
+      type="button"
+      class="confirm-dialog__button confirm-dialog__button--confirm"
+      (click)="confirm()"
+    >
+      {{ data.confirmText }}
+    </button>
+  </mat-dialog-actions>
+</div>

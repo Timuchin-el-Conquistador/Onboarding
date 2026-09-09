@@ -1,4 +1,4 @@
-import { IFormSchemaConfig } from '@org/shared/operators';
+import { IFormSchemaConfig } from '@org/shared/models';
 
 export const DEFAULT_TODO_FORM: IFormSchemaConfig = {
   fields: [

@@ -11,7 +11,8 @@ import type { ITask, ITaskForm } from '../../models';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { TaskManagerService, TodoManagerService } from '../../services';
-import { DynamicFormFactory, withLoading } from '@org/shared/operators';
+import { withLoading } from '@org/shared/operators';
+import { DynamicFormFactory } from '@org/shared/forms';
 import { requiredTrimmed } from '../../validators';
 
 @Component({
