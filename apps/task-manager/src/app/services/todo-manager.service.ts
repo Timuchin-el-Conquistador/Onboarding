@@ -1,9 +1,9 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, Subject, switchMap } from 'rxjs';
 import { withCondition, withToaster } from '@org/my-lib/operators';
 import { ToasterService } from '@org/my-lib/services';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { API_URL_TOKEN } from '@org/shared/tokens';
+import { API_URL_TOKEN, LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 import { withLoading } from '@org/shared/operators';
 import { ITodo } from '../models';
 import { TODO_SUCCESS_MESSAGES } from '../types';
@@ -12,7 +12,7 @@ import { TODO_SUCCESS_MESSAGES } from '../types';
   providedIn: 'root',
 })
 export class TodoManagerService {
-  readonly loading = signal(false);
+  readonly loadingManagerService = inject(LOADER_MANAGER_SERVICE);
 
   readonly #refreshTodos$ = new Subject<boolean>();
 
@@ -26,7 +26,7 @@ export class TodoManagerService {
         .get<ITodo[]>(this.#base_url + '/v1/todo')
         .pipe(
           withCondition(initial, [
-            withLoading(this.loading),
+            withLoading(this.loadingManagerService),
             withToaster(this.#toasterService, TODO_SUCCESS_MESSAGES.GET),
           ]),
         ),
@@ -40,10 +40,7 @@ export class TodoManagerService {
   createTodo(name: string): Observable<ITodo> {
     return this.#http
       .post<ITodo>(this.#base_url + '/v1/todo', { name })
-      .pipe(
-        withLoading(this.loading),
-        withToaster(this.#toasterService, TODO_SUCCESS_MESSAGES.CREATE),
-      );
+      .pipe(withToaster(this.#toasterService, TODO_SUCCESS_MESSAGES.CREATE));
   }
 
   removeTodo(id: string): Observable<unknown> {

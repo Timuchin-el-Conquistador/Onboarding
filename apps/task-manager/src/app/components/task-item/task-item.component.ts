@@ -13,27 +13,34 @@ import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { TaskManagerService, TodoManagerService } from '../../services';
 import { withLoading } from '@org/shared/operators';
 import { DynamicFormFactory } from '@org/shared/forms';
+import { LoaderManagerService } from '@org/shared/services';
 import { requiredTrimmed } from '../../validators';
+import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
+import { TodoLoadingDirective } from '../../directives';
 
 @Component({
-  imports: [ReactiveFormsModule, TodoFormComponent],
+  imports: [ReactiveFormsModule, TodoFormComponent, TodoLoadingDirective],
   selector: 'app-task-item',
   templateUrl: './task-item.component.html',
   styleUrls: ['./task-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    { provide: LOADER_MANAGER_SERVICE, useClass: LoaderManagerService },
+  ],
 })
 export class TaskItemComponent implements OnInit {
   readonly todoId = input.required<string>();
   readonly task = input.required<ITask>();
 
-  readonly editing = signal(false);
-  readonly loading = signal(false);
-
   readonly id = computed<string>(() => this.task().id);
   readonly name = computed<string>(() => this.task().name);
   readonly completed = computed<boolean>(() => this.task().completed);
 
+  readonly editing = signal(false);
+
   taskForm!: FormGroup<ITaskForm>;
+
+  readonly loaderManagerService = inject(LOADER_MANAGER_SERVICE);
 
   readonly #formFactory = inject(DynamicFormFactory);
   readonly #taskManager = inject(TaskManagerService);
@@ -60,14 +67,14 @@ export class TaskItemComponent implements OnInit {
   removeTask(): void {
     this.#taskManager
       .removeTask(this.todoId(), this.id())
-      .pipe(withLoading(this.loading))
+      .pipe(withLoading(this.loaderManagerService))
       .subscribe(() => this.#todoManager.refreshTodos());
   }
 
   toggleTaskCompletion(completed: boolean): void {
     this.#taskManager
       .updateTask({ name: this.name(), completed }, this.todoId(), this.id())
-      .pipe(withLoading(this.loading))
+      .pipe(withLoading(this.loaderManagerService))
       .subscribe(() => this.#todoManager.refreshTodos());
   }
 
@@ -78,7 +85,7 @@ export class TaskItemComponent implements OnInit {
   completeTaskEdit(name: string): void {
     this.#taskManager
       .updateTask({ name }, this.todoId(), this.id())
-      .pipe(withLoading(this.loading))
+      .pipe(withLoading(this.loaderManagerService))
       .subscribe(() => {
         this.#todoManager.refreshTodos();
         this.editing.set(false);

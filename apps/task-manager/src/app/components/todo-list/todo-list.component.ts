@@ -9,15 +9,18 @@ import {
 import { TodoManagerService } from '../../services';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TodoCardComponent } from '../todo-card/todo-card.component';
-import { TodoLoadingComponent } from '../ui/loading/todo/todo-loading.component';
 import { AsyncPipe } from '@angular/common';
+import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
+import { EmptyStateComponent } from '../ui/empty-state/empty-state.component';
+import { TodoLoadingDirective } from '../../directives';
 
 @Component({
   imports: [
     TodoCardComponent,
     ReactiveFormsModule,
-    TodoLoadingComponent,
     AsyncPipe,
+    EmptyStateComponent,
+    TodoLoadingDirective,
   ],
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
@@ -25,15 +28,16 @@ import { AsyncPipe } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoListComponent {
+  readonly loadingManagerService = inject(LOADER_MANAGER_SERVICE);
+
   readonly todos$ = inject(TodoManagerService).todos$;
-  readonly loading = inject(TodoManagerService).loading;
 
   @ViewChild('skeleton', { read: ElementRef })
   skeleton?: ElementRef<HTMLElement>;
 
   constructor() {
     effect(() => {
-      if (!this.loading()) {
+      if (!this.loadingManagerService.loading()) {
         return;
       }
 

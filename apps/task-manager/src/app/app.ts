@@ -7,6 +7,8 @@ import {
 import { TodoFormComponent } from './components/todo-form/todo-form.component';
 import { TodoManagerService } from './services';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
+import { withLoading } from '@org/shared/operators';
+import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 
 @Component({
   imports: [TodoFormComponent, TodoListComponent],
@@ -16,7 +18,8 @@ import { TodoListComponent } from './components/todo-list/todo-list.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App implements AfterViewInit {
-  readonly loading = inject(TodoManagerService).loading;
+  readonly loadingManagerService = inject(LOADER_MANAGER_SERVICE);
+
   readonly #todoManager = inject(TodoManagerService);
 
   ngAfterViewInit(): void {
@@ -26,6 +29,7 @@ export class App implements AfterViewInit {
   createTodo(title: string): void {
     this.#todoManager
       .createTodo(title)
+      .pipe(withLoading(this.loadingManagerService))
       .subscribe(() => this.#todoManager.refreshTodos());
   }
 }

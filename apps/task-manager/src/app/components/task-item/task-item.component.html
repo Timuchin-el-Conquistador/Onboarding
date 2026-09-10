@@ -1,7 +1,7 @@
 <div
   class="task-item"
   [class.task-item--completed]="!this.editing() && completed()"
-  [class.task-item--loading]="loading()"
+  *appTodoLoading="loaderManagerService.loading(); loader: 'task'"
 >
   <label class="task-item__checkbox" [for]="`task- ${id()}`">
     <input
@@ -20,7 +20,7 @@
       [shouldResetOnSave]="false"
       submitLabel="Save"
       [form]="taskForm"
-      [loading]="loading()"
+      [loading]="loaderManagerService.loading()"
     />
   } @else {
     <label class="task-item__details" [for]="`task- ${id()}`">
@@ -28,7 +28,12 @@
         {{ name() }}
       </p>
     </label>
-    <button type="button" class="task-item__edit" (click)="beginTaskEdit()" aria-label="Edit task">
+    <button
+      type="button"
+      class="task-item__edit"
+      (click)="beginTaskEdit()"
+      aria-label="Edit task"
+    >
       <svg
         class="task-item__edit-icon"
         viewBox="0 0 24 24"
@@ -56,7 +61,12 @@
     </button>
   }
 
-  <button type="button" class="task-item__delete" (click)="removeTask()" aria-label="Remove task">
+  <button
+    type="button"
+    class="task-item__delete"
+    (click)="removeTask()"
+    aria-label="Remove task"
+  >
     <svg
       class="summary__delete-icon"
       viewBox="0 0 24 24"

@@ -3,7 +3,6 @@ import {
   input,
   ChangeDetectionStrategy,
   inject,
-  signal,
   computed,
 } from '@angular/core';
 import { TodoManagerService, TaskManagerService } from '../../services';
@@ -12,10 +11,14 @@ import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { TodoActionsComponent } from '../todo-actions/todo-actions.component';
 import type { ITodo } from '../../models';
 import { withLoading } from '@org/shared/operators';
-import { ConfirmDialogManagerService } from '@org/shared/services';
-import { TaskLoadingComponent } from '../ui/loading/task/task-loading.component';
+import {
+  ConfirmDialogManagerService,
+  LoaderManagerService,
+} from '@org/shared/services';
+import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 import { TaskListComponent } from '../task-list/task-list.component';
 import { CONFIRM_MODAL_CONFIG } from '../../config';
+import { TodoLoadingDirective } from '../../directives';
 
 @Component({
   imports: [
@@ -23,21 +26,24 @@ import { CONFIRM_MODAL_CONFIG } from '../../config';
     TaskListComponent,
     TodoFormComponent,
     TodoActionsComponent,
-    TaskLoadingComponent,
+    TodoLoadingDirective,
   ],
   selector: 'app-todo-card',
   templateUrl: './todo-card.component.html',
   styleUrls: ['./todo-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    { provide: LOADER_MANAGER_SERVICE, useClass: LoaderManagerService },
+  ],
 })
 export class TodoCardComponent {
   readonly todo = input.required<ITodo>();
 
-  readonly removingTodo = signal(false);
-  readonly loadingTasks = signal(false);
   readonly id = computed(() => this.todo().id);
   readonly name = computed(() => this.todo().name);
   readonly tasks = computed(() => this.todo().tasks);
+
+  readonly loaderManagerService = inject(LOADER_MANAGER_SERVICE);
 
   readonly #todoManager = inject(TodoManagerService);
   readonly #taskManager = inject(TaskManagerService);
@@ -46,7 +52,7 @@ export class TodoCardComponent {
   createTask(title: string): void {
     this.#taskManager
       .createTask(this.id(), title)
-      .pipe(withLoading(this.loadingTasks))
+      .pipe(withLoading(this.loaderManagerService))
       .subscribe(() => this.#todoManager.refreshTodos());
   }
 
@@ -72,7 +78,7 @@ export class TodoCardComponent {
     if (confirmed) {
       this.#todoManager
         .removeTodo(this.id())
-        .pipe(withLoading(this.removingTodo))
+        .pipe(withLoading(this.loaderManagerService))
         .subscribe(() => this.#todoManager.refreshTodos());
     }
   }

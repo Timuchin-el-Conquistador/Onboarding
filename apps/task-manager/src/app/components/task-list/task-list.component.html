@@ -8,9 +8,8 @@
       }
     </ul>
   } @else {
-    <div class="tasks-container--empty">
-      <div class="tasks-container--empty-icon">📝</div>
-      <p>No tasks yet. Add a task to get started!</p>
-    </div>
+    <app-empty-state>
+      <p #p>No tasks yet. Add a task to get started!</p>
+    </app-empty-state>
   }
 </div>

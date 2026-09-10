@@ -7,18 +7,19 @@
         </li>
       }
 
-      @if (!loading() && todos.length === 0) {
+      @if (!loadingManagerService.loading() && todos.length === 0) {
         <li class="todo-list--empty">
-          <div class="todo-list--empty-icon">📝</div>
-          <p>No lists found. Create your first Todo List above.</p>
+          <app-empty-state>
+            <p #p>No todos found. Create your first Todo List above.</p>
+          </app-empty-state>
         </li>
       }
     }
 
-    <li class="todo-list__skeleton" #skeleton>
-      @if (loading()) {
-        <app-todo-loading />
-      }
-    </li>
+    <li
+      class="todo-list__skeleton"
+      #skeleton
+      *appTodoLoading="loadingManagerService.loading(); loader: 'todo'"
+    ></li>
   </ul>
 </div>

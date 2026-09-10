@@ -12,3 +12,5 @@ export type {
 } from './dynamic-form.model';
 
 export { DYNAMIC_FORM_FACTORY } from './dynamic-form.model';
+
+export type { ILoaderManagerService } from './loader-service.model';
