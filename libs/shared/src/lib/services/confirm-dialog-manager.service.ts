@@ -6,7 +6,7 @@ import {
 import { ConfirmDialogComponent } from '../components/modals/confirm/confirm-modal.component';
 import { inject, Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
-import { DialogOptionsType } from '../models';
+import { IConfirmDialogDataConfig } from '../models';
 import { CONFIRM_MODAL_DEFAULT_LAYOUT } from '../config';
 
 @Injectable({
@@ -17,24 +17,16 @@ export class ConfirmDialogManagerService {
 
   readonly #dialog = inject(MatDialog);
 
-  open(
-    options: DialogOptionsType,
-    layout: MatDialogConfig = CONFIRM_MODAL_DEFAULT_LAYOUT,
-  ): void {
-    const cfg: MatDialogConfig<DialogOptionsType> = {
-      data: {
-        title: options.title,
-        message: options.message,
-        cancelText: options.cancelText,
-        confirmText: options.confirmText,
-      },
-      ...layout,
+  open(config: MatDialogConfig<IConfirmDialogDataConfig>): void {
+    const cfg: MatDialogConfig<IConfirmDialogDataConfig> = {
+      ...CONFIRM_MODAL_DEFAULT_LAYOUT,
+      ...config,
     };
 
     this.dialogRef = this.#dialog.open(ConfirmDialogComponent, cfg);
   }
 
-  public confirmed(): Observable<any> {
+  confirmed(): Observable<any> {
     return this.dialogRef.afterClosed().pipe(take(1));
   }
 }

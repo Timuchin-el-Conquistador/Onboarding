@@ -1,6 +1,12 @@
-export type DialogOptionsType = {
+export interface IConfirmDialogDataConfig {
   title: string;
   message: string;
-  cancelText: string;
-  confirmText: string;
-};
+  buttons: IDialogButtonConfig[];
+}
+
+export interface IDialogButtonConfig {
+  label: string;
+  value: any;
+  color?: 'primary' | 'accent' | 'warn';
+  variant?: 'basic' | 'raised';
+}

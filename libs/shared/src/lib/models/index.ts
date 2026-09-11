@@ -1,4 +1,8 @@
-export type { DialogOptionsType } from './confirm-modal.model';
+export type {
+  IConfirmDialogDataConfig,
+  IDialogButtonConfig,
+} from './confirm-modal.model';
+
 export type {
   IDynamicFormFactory,
   IFormFieldConfig,
@@ -6,4 +10,5 @@ export type {
   FieldTypes,
   ValidatorsType,
 } from './dynamic-form.model';
+
 export { DYNAMIC_FORM_FACTORY } from './dynamic-form.model';

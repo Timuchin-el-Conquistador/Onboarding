@@ -11,9 +11,8 @@
     <button
       mat-icon-button
       mat-dialog-close
-      [aria-label]="data.cancelText"
+      aria-label="Close modal button"
       class="confirm-dialog__close-btn"
-      (click)="cancel()"
     >
       <mat-icon>close</mat-icon>
     </button>
@@ -26,22 +25,20 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end" class="confirm-dialog__actions">
-    <button
-      mat-button
-      type="button"
-      class="confirm-dialog__button confirm-dialog__button--cancel"
-      (click)="cancel()"
-    >
-      {{ data.cancelText }}
-    </button>
-
-    <button
-      mat-flat-button
-      type="button"
-      class="confirm-dialog__button confirm-dialog__button--confirm"
-      (click)="confirm()"
-    >
-      {{ data.confirmText }}
-    </button>
+    @for (btn of data.buttons; track btn.label) {
+      @if (btn.variant === 'raised') {
+        <button
+          mat-raised-button
+          [color]="btn.color || 'primary'"
+          [mat-dialog-close]="btn.value"
+        >
+          {{ btn.label }}
+        </button>
+      } @else {
+        <button mat-button [color]="btn.color" [mat-dialog-close]="btn.value">
+          {{ btn.label }}
+        </button>
+      }
+    }
   </mat-dialog-actions>
 </div>

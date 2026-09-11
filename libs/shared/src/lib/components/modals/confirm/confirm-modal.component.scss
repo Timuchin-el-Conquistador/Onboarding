@@ -69,8 +69,7 @@
     margin: 0;
     color: var(--confirm-text);
     font-size: 1.2rem;
-    line-height: 0.8;
-    white-space: pre-line;
+    line-height: 1.5;
   }
 
   &__actions {
@@ -78,48 +77,5 @@
     display: flex;
     justify-content: flex-end;
     gap: var(--confirm-gap);
-  }
-
-  &__button {
-    font-family: inherit;
-    font-size: 0.9rem;
-    font-weight: 500;
-    padding: 0.5rem 1.125rem;
-    height: var(--confirm-btn-height);
-    border-radius: 0.25rem;
-    transition:
-      background-color 0.2s ease,
-      box-shadow 0.2s ease;
-    cursor: pointer;
-
-    &--cancel {
-      color: var(--confirm-muted);
-      background: transparent;
-      border: none;
-
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.05);
-      }
-    }
-
-    &--confirm {
-      background-color: var(--confirm-primary);
-      color: #fff;
-      border: none;
-      box-shadow: 0 0.125rem 0.25rem rgba(75, 115, 181, 0.2);
-
-      &:hover {
-        background-color: var(--confirm-primary-dark);
-        box-shadow: 0 0.25rem 0.375rem rgba(75, 115, 181, 0.28);
-      }
-
-      &.secondary {
-        background-color: var(--confirm-danger);
-
-        &:hover {
-          background-color: var(--confirm-danger-dark);
-        }
-      }
-    }
   }
 }
