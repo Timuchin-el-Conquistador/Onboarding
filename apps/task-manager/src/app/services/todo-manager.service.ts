@@ -1,10 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Observable, Subject, switchMap } from 'rxjs';
-import {
-  ToasterService,
-  withCondition,
-  withToaster,
-} from '@org/my-lib/operators';
+import { withCondition, withToaster } from '@org/my-lib/operators';
+import { ToasterService } from '@org/my-lib/services';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { API_URL_TOKEN } from '@org/shared/tokens';
 import { withLoading } from '@org/shared/operators';

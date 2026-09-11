@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { ToasterService, withToaster } from '@org/my-lib/operators';
+import { withToaster } from '@org/my-lib/operators';
+import { ToasterService } from '@org/my-lib/services';
 import { API_URL_TOKEN } from '@org/shared/tokens';
 import { ITodo, IEditTask } from '../models';
 import { TASK_SUCCESS_MESSAGES } from '../types';

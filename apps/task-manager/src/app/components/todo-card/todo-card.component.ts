@@ -12,8 +12,10 @@ import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { TodoActionsComponent } from '../todo-actions/todo-actions.component';
 import type { ITodo } from '../../models';
 import { withLoading } from '@org/shared/operators';
+import { ConfirmDialogManagerService } from '@org/shared/services';
 import { TaskLoadingComponent } from '../ui/loading/task/task-loading.component';
 import { TaskListComponent } from '../task-list/task-list.component';
+import { CONFIRM_MODAL_CONFIG } from '../../config';
 
 @Component({
   imports: [
@@ -39,6 +41,7 @@ export class TodoCardComponent {
 
   readonly #todoManager = inject(TodoManagerService);
   readonly #taskManager = inject(TaskManagerService);
+  readonly #confirmDialogManager = inject(ConfirmDialogManagerService);
 
   createTask(title: string): void {
     this.#taskManager
@@ -57,18 +60,20 @@ export class TodoCardComponent {
     );
   }
 
-  removeTodo(): void {
-    const confirmed = confirm(
-      'Are you sure you want to delete this todo?\n\nThis will also delete all tasks associated with it.',
-    );
+  confirmTodoRemoval(): void {
+    this.#confirmDialogManager.open(CONFIRM_MODAL_CONFIG);
 
-    if (!confirmed) {
-      return;
+    this.#confirmDialogManager
+      .confirmed()
+      .subscribe(this.#removeTodo.bind(this));
+  }
+
+  #removeTodo(confirmed: boolean): void {
+    if (confirmed) {
+      this.#todoManager
+        .removeTodo(this.id())
+        .pipe(withLoading(this.removingTodo))
+        .subscribe(() => this.#todoManager.refreshTodos());
     }
-
-    this.#todoManager
-      .removeTodo(this.id())
-      .pipe(withLoading(this.removingTodo))
-      .subscribe(() => this.#todoManager.refreshTodos());
   }
 }
