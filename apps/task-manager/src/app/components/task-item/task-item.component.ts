@@ -6,12 +6,12 @@ import {
   inject,
   computed,
   OnInit,
+  Injector,
 } from '@angular/core';
 import type { ITask, ITaskForm } from '../../models';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { TaskManagerService, TodoManagerService } from '../../services';
-import { withLoading } from '@org/shared/operators';
 import { DynamicFormFactory } from '@org/shared/forms';
 import { LoaderManagerService } from '@org/shared/services';
 import { requiredTrimmed } from '../../validators';
@@ -40,8 +40,7 @@ export class TaskItemComponent implements OnInit {
 
   taskForm!: FormGroup<ITaskForm>;
 
-  readonly loaderManagerService = inject(LOADER_MANAGER_SERVICE);
-
+  readonly #injector = inject(Injector);
   readonly #formFactory = inject(DynamicFormFactory);
   readonly #taskManager = inject(TaskManagerService);
   readonly #todoManager = inject(TodoManagerService);
@@ -66,15 +65,18 @@ export class TaskItemComponent implements OnInit {
 
   removeTask(): void {
     this.#taskManager
-      .removeTask(this.todoId(), this.id())
-      .pipe(withLoading(this.loaderManagerService))
+      .removeTask(this.todoId(), this.id(), this.#injector)
       .subscribe(() => this.#todoManager.refreshTodos());
   }
 
   toggleTaskCompletion(completed: boolean): void {
     this.#taskManager
-      .updateTask({ name: this.name(), completed }, this.todoId(), this.id())
-      .pipe(withLoading(this.loaderManagerService))
+      .updateTask(
+        { name: this.name(), completed },
+        this.todoId(),
+        this.id(),
+        this.#injector,
+      )
       .subscribe(() => this.#todoManager.refreshTodos());
   }
 
@@ -84,8 +86,7 @@ export class TaskItemComponent implements OnInit {
 
   completeTaskEdit(name: string): void {
     this.#taskManager
-      .updateTask({ name }, this.todoId(), this.id())
-      .pipe(withLoading(this.loaderManagerService))
+      .updateTask({ name }, this.todoId(), this.id(), this.#injector)
       .subscribe(() => {
         this.#todoManager.refreshTodos();
         this.editing.set(false);

@@ -4,13 +4,13 @@ import {
   ChangeDetectionStrategy,
   inject,
   computed,
+  Injector,
 } from '@angular/core';
 import { TodoManagerService, TaskManagerService } from '../../services';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { TodoActionsComponent } from '../todo-actions/todo-actions.component';
 import type { ITodo } from '../../models';
-import { withLoading } from '@org/shared/operators';
 import {
   ConfirmDialogManagerService,
   LoaderManagerService,
@@ -43,16 +43,14 @@ export class TodoCardComponent {
   readonly name = computed(() => this.todo().name);
   readonly tasks = computed(() => this.todo().tasks);
 
-  readonly loaderManagerService = inject(LOADER_MANAGER_SERVICE);
-
+  readonly #injector = inject(Injector);
   readonly #todoManager = inject(TodoManagerService);
   readonly #taskManager = inject(TaskManagerService);
   readonly #confirmDialogManager = inject(ConfirmDialogManagerService);
 
   createTask(title: string): void {
     this.#taskManager
-      .createTask(this.id(), title)
-      .pipe(withLoading(this.loaderManagerService))
+      .createTask(this.id(), title, this.#injector)
       .subscribe(() => this.#todoManager.refreshTodos());
   }
 
@@ -77,8 +75,7 @@ export class TodoCardComponent {
   #removeTodo(confirmed: boolean): void {
     if (confirmed) {
       this.#todoManager
-        .removeTodo(this.id())
-        .pipe(withLoading(this.loaderManagerService))
+        .removeTodo(this.id(), this.#injector)
         .subscribe(() => this.#todoManager.refreshTodos());
     }
   }

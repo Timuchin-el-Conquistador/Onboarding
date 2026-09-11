@@ -5,6 +5,7 @@ import {
   ViewChild,
   ElementRef,
   effect,
+  Injector,
 } from '@angular/core';
 import { TodoManagerService } from '../../services';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -13,6 +14,7 @@ import { AsyncPipe } from '@angular/common';
 import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 import { EmptyStateComponent } from '../ui/empty-state/empty-state.component';
 import { TodoLoadingDirective } from '../../directives';
+import { TodoFormComponent } from '../todo-form/todo-form.component';
 
 @Component({
   imports: [
@@ -21,6 +23,7 @@ import { TodoLoadingDirective } from '../../directives';
     AsyncPipe,
     EmptyStateComponent,
     TodoLoadingDirective,
+    TodoFormComponent,
   ],
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
@@ -34,6 +37,9 @@ export class TodoListComponent {
 
   @ViewChild('skeleton', { read: ElementRef })
   skeleton?: ElementRef<HTMLElement>;
+
+  readonly #injector = inject(Injector);
+  readonly #todoManager = inject(TodoManagerService);
 
   constructor() {
     effect(() => {
@@ -51,5 +57,11 @@ export class TodoListComponent {
         inline: 'nearest',
       });
     });
+  }
+
+  createTodo(title: string): void {
+    this.#todoManager
+      .createTodo(title, this.#injector)
+      .subscribe(() => this.#todoManager.refreshTodos());
   }
 }

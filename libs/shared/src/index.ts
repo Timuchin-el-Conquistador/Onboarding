@@ -7,3 +7,4 @@ export * from './lib/services/confirm-dialog-manager.service';
 export * from './lib/tokens/loader-manager.token'
 export * from './lib/services/loader-manager.service'
 export * from './lib/models'
+export * from './lib/interceptor/loading.interceptor'

@@ -1,7 +1,7 @@
 <div
   class="task-item"
   [class.task-item--completed]="!this.editing() && completed()"
-  *appTodoLoading="loaderManagerService.loading(); loader: 'task'"
+  *appTodoLoading="'task'"
 >
   <label class="task-item__checkbox" [for]="`task- ${id()}`">
     <input
@@ -20,7 +20,6 @@
       [shouldResetOnSave]="false"
       submitLabel="Save"
       [form]="taskForm"
-      [loading]="loaderManagerService.loading()"
     />
   } @else {
     <label class="task-item__details" [for]="`task- ${id()}`">
