@@ -47,10 +47,6 @@
     }
   </header>
 
-  <div class="todo-list-card__form">
-    <app-todo-form (save)="createTask($event)" submitLabel="Add Task" />
-  </div>
-
   <div class="todo-list-card__tasks">
     <app-task-list [todoId]="id()" [tasks]="tasks()" />
   </div>

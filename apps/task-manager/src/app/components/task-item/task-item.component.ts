@@ -16,10 +16,10 @@ import { DynamicFormFactory } from '@org/shared/forms';
 import { LoaderManagerService } from '@org/shared/services';
 import { requiredTrimmed } from '../../validators';
 import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
-import { TodoLoadingDirective } from '../../directives';
+import { TaskLoadingDirective } from '../../directives';
 
 @Component({
-  imports: [ReactiveFormsModule, TodoFormComponent, TodoLoadingDirective],
+  imports: [ReactiveFormsModule, TodoFormComponent, TaskLoadingDirective],
   selector: 'app-task-item',
   templateUrl: './task-item.component.html',
   styleUrls: ['./task-item.component.scss'],

@@ -79,14 +79,6 @@
     }
   }
 
-  &__form {
-    flex-shrink: 0;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 1rem 1.25rem;
-    border-bottom: 0.0625rem solid var(--summary-border-color);
-  }
-
   &__tasks {
     flex: 2;
     min-height: 0;
@@ -107,7 +99,6 @@
       padding: 1rem;
     }
 
-    &__form,
     &__tasks {
       padding: 1rem;
     }

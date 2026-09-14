@@ -6,6 +6,7 @@ import {
   ElementRef,
   effect,
   Injector,
+  Renderer2,
 } from '@angular/core';
 import { TodoManagerService } from '../../services';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -38,6 +39,7 @@ export class TodoListComponent {
   @ViewChild('skeleton', { read: ElementRef })
   skeleton?: ElementRef<HTMLElement>;
 
+  readonly #renderer = inject(Renderer2);
   readonly #injector = inject(Injector);
   readonly #todoManager = inject(TodoManagerService);
 
@@ -47,9 +49,14 @@ export class TodoListComponent {
         return;
       }
 
-      if (!this.skeleton?.nativeElement) {
+      if (!this.skeleton) {
         return;
       }
+
+      this.#renderer.addClass(
+        this.skeleton.nativeElement,
+        'todo-app__skeleton--display',
+      );
 
       this.skeleton.nativeElement.scrollIntoView({
         behavior: 'smooth',

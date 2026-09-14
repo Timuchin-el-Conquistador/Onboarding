@@ -40,9 +40,14 @@
     height: 100%;
   }
 
-  &__todo-skeleton {
+  &__skeleton {
     width: 100%;
     min-width: 0;
     max-width: 32rem;
+    display: none;
+
+    &--display{
+      display: block;
+    }
   }
 }

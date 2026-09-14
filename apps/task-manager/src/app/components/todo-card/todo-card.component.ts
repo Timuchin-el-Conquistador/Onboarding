@@ -6,9 +6,8 @@ import {
   computed,
   Injector,
 } from '@angular/core';
-import { TodoManagerService, TaskManagerService } from '../../services';
+import { TodoManagerService } from '../../services';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { TodoActionsComponent } from '../todo-actions/todo-actions.component';
 import type { ITodo } from '../../models';
 import {
@@ -24,7 +23,6 @@ import { TodoLoadingDirective } from '../../directives';
   imports: [
     ReactiveFormsModule,
     TaskListComponent,
-    TodoFormComponent,
     TodoActionsComponent,
     TodoLoadingDirective,
   ],
@@ -45,14 +43,7 @@ export class TodoCardComponent {
 
   readonly #injector = inject(Injector);
   readonly #todoManager = inject(TodoManagerService);
-  readonly #taskManager = inject(TaskManagerService);
   readonly #confirmDialogManager = inject(ConfirmDialogManagerService);
-
-  createTask(title: string): void {
-    this.#taskManager
-      .createTask(this.id(), title, this.#injector)
-      .subscribe(() => this.#todoManager.refreshTodos());
-  }
 
   incompleteTasksCount(): number {
     return this.tasks().filter((task) => !task.completed).length;

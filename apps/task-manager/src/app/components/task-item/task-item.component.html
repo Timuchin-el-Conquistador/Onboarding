@@ -1,7 +1,7 @@
 <div
   class="task-item"
   [class.task-item--completed]="!this.editing() && completed()"
-  *appTodoLoading="'task'"
+  *appTaskLoading
 >
   <label class="task-item__checkbox" [for]="`task- ${id()}`">
     <input

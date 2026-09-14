@@ -1,23 +1,21 @@
 <div class="todo-app">
   <app-todo-form (save)="createTodo($event)" submitLabel="Add Todo" />
 
-  <ul class="todo-app__todos">
-    @if (todos$ | async; as todos) {
-      @for (todo of todos; track todo.id) {
-        <li class="todo-app__todo">
-          <app-todo-card [todo]="todo" />
-        </li>
-      }
+  @let todos = todos$ | async;
 
-      @if (todos.length === 0) {
-        <li class="todo-app--todo-empty">
-          <app-empty-state>
-            <p #p>No todos found. Create your first Todo List above.</p>
-          </app-empty-state>
-        </li>
-      }
+  <ul class="todo-app__todos">
+    @for (todo of todos; track todo.id) {
+      <li class="todo-app__todo">
+        <app-todo-card [todo]="todo" />
+      </li>
     }
 
-    <li class="todo-app__todo-skeleton" #skeleton *appTodoLoading></li>
+    <li class="todo-app__skeleton" #skeleton *appTodoLoading></li>
   </ul>
+
+  @if (todos && !todos.length && !loadingManagerService.loading()) {
+    <app-empty-state>
+      <p #p>No todos found. Create your first Todo List above.</p>
+    </app-empty-state>
+  }
 </div>
