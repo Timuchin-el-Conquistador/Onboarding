@@ -6,7 +6,8 @@ import {
   ElementRef,
   effect,
   Injector,
-  Renderer2, DestroyRef
+  DestroyRef,
+  Renderer2,
 } from '@angular/core';
 import { TodoManagerService } from '../../services';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -17,6 +18,8 @@ import { EmptyStateComponent } from '../ui/empty-state/empty-state.component';
 import { TodoLoadingDirective } from '../../directives';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ConfirmDialogManagerService } from '@org/shared/services';
+import { CONFIRM_MODAL_CONFIG } from '../../config';
 
 @Component({
   imports: [
@@ -44,6 +47,7 @@ export class TodoListComponent {
   readonly #injector = inject(Injector);
   readonly #todoManager = inject(TodoManagerService);
   readonly #destroyRef = inject(DestroyRef);
+  readonly #confirmDialogManager = inject(ConfirmDialogManagerService);
 
   constructor() {
     effect(() => {
@@ -57,7 +61,7 @@ export class TodoListComponent {
 
       this.#renderer.addClass(
         this.skeleton.nativeElement,
-        'todo-app__skeleton--display',
+        'tasks__skeleton--display',
       );
 
       this.skeleton.nativeElement.scrollIntoView({
@@ -72,6 +76,26 @@ export class TodoListComponent {
     this.#todoManager
       .createTodo(title, this.#injector)
       .pipe(takeUntilDestroyed(this.#destroyRef))
-      .subscribe(() => this.#todoManager.refreshTodos());
+      .subscribe(() => {
+        this.#todoManager.refreshTodos();
+      });
+  }
+
+  confirmTodoRemoval(todoId: string, injector: Injector): void {
+    this.#confirmDialogManager.open(CONFIRM_MODAL_CONFIG);
+
+    this.#confirmDialogManager
+      .confirmed()
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe((confirmed) => this.#removeTodo(todoId, confirmed, injector));
+  }
+
+  #removeTodo(todoId: string, confirmed: boolean, injector: Injector): void {
+    if (confirmed) {
+      this.#todoManager
+        .removeTodo(todoId, injector)
+        .pipe(takeUntilDestroyed(this.#destroyRef))
+        .subscribe(() => this.#todoManager.refreshTodos());
+    }
   }
 }

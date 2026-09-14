@@ -12,38 +12,7 @@
     </h2>
 
     @if (isTodoCompleted()) {
-      <span
-        class="todo-list-card__completed-icon"
-        aria-label="All tasks completed"
-        title="All tasks completed"
-      >
-        <svg
-          class="todo-list-card__completed-icon"
-          viewBox="0 0 24 24"
-          width="24"
-          height="24"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <circle
-            cx="12"
-            cy="12"
-            r="9"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          />
-
-          <path
-            d="m7.5 12 3 3 6-6"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-      </span>
+      <app-icon name="check_circle" label="All tasks completed" [size]="32" />
     }
   </header>
 
@@ -51,8 +20,15 @@
     <app-task-list [todoId]="id()" [tasks]="tasks()" />
   </div>
 
-  <app-todo-actions
-    [totalTasksCount]="incompleteTasksCount()"
-    (removeTodo)="confirmTodoRemoval()"
-  />
+  <app-todo-summary [totalTasksCount]="incompleteTasksCount()">
+    <app-icon-button
+      label="Delete todo list"
+      type="button"
+      buttonClass="delete delete-all"
+      (action)="remove()"
+    >
+      <span>Remove</span>
+      <app-icon name="delete" />
+    </app-icon-button>
+  </app-todo-summary>
 </article>

@@ -5,15 +5,31 @@
 <ul class="tasks">
   @for (task of tasks(); track task.id) {
     <li>
-      <app-task-item [todoId]="todoId()" [task]="task" />
+      <app-task-item
+        [task]="task"
+        (removeTask)="removeTask(task.id, $event)"
+        (toggleTaskCompletion)="
+          toggleTaskCompletion(
+            task.id,
+            task.name,
+            $event.completed,
+            $event.injector
+          )
+        "
+        (completeTaskEdit)="
+          completeTaskEdit(task.id, $event.name, $event.injector)
+        "
+      />
     </li>
   }
 
   <li class="tasks__skeleton" #skeleton *appTaskLoading></li>
-</ul>
 
-@if (!tasks().length && !loadingManagerService.loading()) {
-  <app-empty-state>
-    <p #p>No tasks yet. Add a task to get started!</p>
-  </app-empty-state>
-}
+  @if (!tasks().length && !loadingManagerService.loading()) {
+    <li>
+      <app-empty-state>
+        <p #p>No tasks yet. Add a task to get started!</p>
+      </app-empty-state>
+    </li>
+  }
+</ul>

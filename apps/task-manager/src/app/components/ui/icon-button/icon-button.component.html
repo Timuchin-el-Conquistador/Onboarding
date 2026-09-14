@@ -1,0 +1,8 @@
+<button
+  [type]="nativeType()"
+  [attr.aria-label]="label()"
+  (click)="onClick()"
+  [class]="buttonClass()"
+>
+  <ng-content></ng-content>
+</button>

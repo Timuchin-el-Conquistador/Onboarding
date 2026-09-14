@@ -1,0 +1,11 @@
+<label class="checkbox">
+  <input
+    type="checkbox"
+    [id]="id()"
+    [checked]="checked()"
+    [attr.aria-label]="ariaLabel()"
+    (change)="onChange($event)"
+  />
+  <span class="checkbox__icon"></span>
+</label>
+

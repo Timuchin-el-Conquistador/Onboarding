@@ -6,16 +6,21 @@
   <ul class="todo-app__todos">
     @for (todo of todos; track todo.id) {
       <li class="todo-app__todo">
-        <app-todo-card [todo]="todo" />
+        <app-todo-card
+          [todo]="todo"
+          (removeTodo)="confirmTodoRemoval(todo.id, $event)"
+        />
       </li>
     }
 
     <li class="todo-app__skeleton" #skeleton *appTodoLoading></li>
-  </ul>
 
-  @if (todos && !todos.length && !loadingManagerService.loading()) {
-    <app-empty-state>
-      <p #p>No todos found. Create your first Todo List above.</p>
-    </app-empty-state>
-  }
+    @if (todos && !todos.length && !loadingManagerService.loading()) {
+      <li>
+        <app-empty-state>
+          <p #p>No todos found. Create your first Todo List above.</p>
+        </app-empty-state>
+      </li>
+    }
+  </ul>
 </div>

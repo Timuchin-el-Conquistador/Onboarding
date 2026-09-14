@@ -19,11 +19,6 @@
     pointer-events: none;
   }
 
-  &:hover {
-    transform: translateY(-0.125rem);
-    box-shadow: 0 0.3125rem 0.625rem var(--box-shadow);
-  }
-
   &--completed {
     background-color: var(--light);
     opacity: 0.5;
@@ -35,68 +30,11 @@
     }
   }
 
-  &__checkbox {
-    position: relative;
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    width: 1.5rem;
-    height: 1.5rem;
-    margin-right: 1rem;
-    cursor: pointer;
-
-    input {
-      position: absolute;
-      width: 0;
-      height: 0;
-      opacity: 0;
-    }
+  &:hover {
+    transform: translateY(-0.125rem);
+    box-shadow: 0 0.3125rem 0.625rem var(--box-shadow);
   }
 
-  &__checkbox-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.25rem;
-    height: 1.25rem;
-    background-color: var(--summary-action-hover-color);
-    border: 0.1rem solid var(--summary-border-color);
-    border-radius: 50%;
-    transition:
-      background-color 0.2s,
-      border-color 0.2s,
-      transform 0.2s;
-
-    &::after {
-      content: '✓';
-      color: transparent;
-      font-size: 0.8rem;
-      font-weight: 700;
-      transform: scale(0);
-      transition: transform 0.2s;
-    }
-  }
-
-  &__checkbox input:checked + &__checkbox-icon {
-    background-color: var(--primary);
-    border-color: var(--primary);
-
-    &::after {
-      color: var(--summary-action-hover-color);
-      transform: scale(1);
-    }
-  }
-
-  &__checkbox:hover &__checkbox-icon {
-    border-color: var(--primary);
-  }
-
-  &__details {
-    flex: 1;
-    min-width: 0;
-    cursor: pointer;
-  }
 
   &__title {
     margin: 0;
@@ -122,6 +60,10 @@
       flex: 1;
       min-width: 0;
     }
+  }
+
+  &__actions{
+    margin-left: auto;
   }
 
   &__save {
@@ -153,57 +95,6 @@
 
     &:focus-visible {
       outline: 0.125rem solid var(--primary);
-      outline-offset: 0.125rem;
-    }
-  }
-  &__edit,
-  &__delete {
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    margin-left: 0.75rem;
-    padding: 0;
-    background: transparent;
-    border: 0;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    transition:
-      color 0.2s,
-      background-color 0.2s,
-      opacity 0.2s;
-  }
-
-  &__edit {
-    color: var(--auth-blue-800);
-    font-size: 0.9rem;
-    font-weight: 600;
-
-    &:hover {
-      background-color: var(--summary-action-hover-color);
-      color: var(--primary);
-    }
-
-    &:focus-visible {
-      outline: 0.125rem solid var(--primary);
-      outline-offset: 0.125rem;
-    }
-  }
-  &__delete {
-    color: var(--secondary);
-    font-size: 2.1rem;
-    line-height: 1;
-    opacity: 0.7;
-
-    &:hover {
-      background-color: color-mix(in srgb, var(--secondary) 10%, transparent);
-      opacity: 1;
-    }
-
-    &:focus-visible {
-      outline: 0.125rem solid var(--secondary);
       outline-offset: 0.125rem;
     }
   }
