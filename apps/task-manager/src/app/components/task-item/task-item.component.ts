@@ -15,7 +15,7 @@ import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { DynamicFormFactory } from '@org/shared/forms';
 import { requiredTrimmed } from '../../validators';
 import { TaskLoadingDirective } from '../../directives';
-import { IconButtonComponent } from '../ui/icon-button/icon-button.component';
+import { ButtonComponent } from '../ui/button/button.component';
 import { IconComponent } from '../ui/icon/icon.component';
 import { CheckboxComponent } from '../ui/checkbox/checkbox.component';
 import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
@@ -25,7 +25,7 @@ import { LoaderManagerService } from '@org/shared/services';
   imports: [
     ReactiveFormsModule,
     TodoFormComponent,
-    IconButtonComponent,
+    ButtonComponent,
     IconComponent,
     CheckboxComponent,
     TaskLoadingDirective,
@@ -77,7 +77,7 @@ export class TaskItemComponent implements OnInit {
   }
 
   toggleStatus(completed: boolean): void {
-    this.toggleTaskCompletion.emit({completed, injector: this.#injector})
+    this.toggleTaskCompletion.emit({ completed, injector: this.#injector });
   }
 
   remove(): void {

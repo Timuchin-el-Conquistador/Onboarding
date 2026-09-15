@@ -7,18 +7,16 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-checkbox',
+  selector: 'app-ui-checkbox',
   templateUrl: './checkbox.component.html',
   styleUrls: ['./checkbox.component.scss'],
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckboxComponent {
-  readonly id = input.required<string>();
+  readonly id = input<string>();
   readonly checked = input(false);
   readonly label = input('');
-
-  readonly checkedChange = output<boolean>();
+  readonly changed = output<boolean>();
 
   readonly ariaLabel = computed(
     () => this.label() || (this.checked() ? 'Finished Task' : 'Pending Task'),
@@ -26,6 +24,6 @@ export class CheckboxComponent {
 
   onChange(event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
-    this.checkedChange.emit(checked);
+    this.changed.emit(checked);
   }
 }

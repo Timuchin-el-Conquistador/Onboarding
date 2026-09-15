@@ -1,16 +1,28 @@
+/* checkbox.component.scss */
+:host {
+  display: inline-flex;
+
+  --comp-checkbox-size: var(--checkbox-size, 1.5rem);
+  --comp-checkbox-radius: var(--checkbox-radius, 50%); 
+  --comp-checkbox-bg: var(--checkbox-bg, var(--summary-action-hover-color, #f4f4f5));
+  --comp-checkbox-border: var(--checkbox-border-color, var(--summary-border-color, #d4d4d8));
+  --comp-checkbox-brand: var(--checkbox-brand-color, var(--primary, #007bff));
+  --comp-checkbox-mark-color: var(--checkbox-mark-color, var(--summary-action-hover-color, #ffffff));
+}
+
 .checkbox {
   position: relative;
   display: flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: var(--comp-checkbox-size);
+  height: var(--comp-checkbox-size);
   margin-right: 1rem;
   cursor: pointer;
 }
 
-.checkbox input {
+.checkbox__input {
   position: absolute;
   width: 0;
   height: 0;
@@ -23,9 +35,9 @@
   justify-content: center;
   width: 1.25rem;
   height: 1.25rem;
-  background-color: var(--summary-action-hover-color);
-  border: 0.1rem solid var(--summary-border-color);
-  border-radius: 50%;
+  background-color: var(--comp-checkbox-bg);
+  border: 0.1rem solid var(--comp-checkbox-border);
+  border-radius: var(--comp-checkbox-radius);
   transition:
     background-color 0.2s,
     border-color 0.2s,
@@ -41,21 +53,22 @@
   transition: transform 0.2s;
 }
 
-.checkbox input:checked + .checkbox__icon {
-  background-color: var(--primary);
-  border-color: var(--primary);
+
+.checkbox__input:checked + .checkbox__icon {
+  background-color: var(--comp-checkbox-brand);
+  border-color: var(--comp-checkbox-brand);
 }
 
-.checkbox input:checked + .checkbox__icon::after {
-  color: var(--summary-action-hover-color);
+.checkbox__input:checked + .checkbox__icon::after {
+  color: var(--comp-checkbox-mark-color);
   transform: scale(1);
 }
 
 .checkbox:hover .checkbox__icon {
-  border-color: var(--primary);
+  border-color: var(--comp-checkbox-brand);
 }
 
-.checkbox input:focus-visible + .checkbox__icon {
-  outline: 0.125rem solid var(--primary);
+.checkbox__input:focus-visible + .checkbox__icon {
+  outline: 0.125rem solid var(--comp-checkbox-brand);
   outline-offset: 0.125rem;
 }

@@ -3,11 +3,11 @@
   [class.task-item--completed]="!this.editing() && completed()"
   *appTaskLoading
 >
-  <app-checkbox
+  <app-ui-checkbox
     [id]="`task- ${id()}`"
     [checked]="completed()"
     [label]="completed() ? 'Finished Task' : 'Pending Task'"
-    (checkedChange)="toggleStatus($event)"
+    (changed)="toggleStatus($event)"
   />
 
   @if (editing()) {
@@ -22,23 +22,13 @@
       {{ name() }}
     </p>
     <div class="task-item__actions">
-      <app-icon-button
-        label="Edit task"
-        type="button"
-        buttonClass="edit"
-        (action)="startEdit()"
-      >
+      <app-ui-button label="Edit task" (clicked)="startEdit()">
         <app-icon name="edit" />
-      </app-icon-button>
+      </app-ui-button>
 
-      <app-icon-button
-        label="Remove task"
-        type="button"
-        buttonClass="delete"
-        (action)="remove()"
-      >
+      <app-ui-button label="Remove task" (clicked)="remove()" variant="danger">
         <app-icon name="delete" />
-      </app-icon-button>
+      </app-ui-button>
     </div>
   }
 </div>

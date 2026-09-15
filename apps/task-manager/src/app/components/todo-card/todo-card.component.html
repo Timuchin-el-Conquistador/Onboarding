@@ -21,14 +21,13 @@
   </div>
 
   <app-todo-summary [totalTasksCount]="incompleteTasksCount()">
-    <app-icon-button
+    <app-ui-button
       label="Delete todo list"
-      type="button"
-      buttonClass="delete delete-all"
-      (action)="remove()"
+      (clicked)="remove()"
+      variant="danger"
     >
       <span>Remove</span>
       <app-icon name="delete" />
-    </app-icon-button>
+    </app-ui-button>
   </app-todo-summary>
 </article>

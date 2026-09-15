@@ -15,7 +15,7 @@ import { TaskListComponent } from '../task-list/task-list.component';
 import { TodoLoadingDirective } from '../../directives';
 import { TodoSummaryComponent } from '../todo-summary/todo-summary.component';
 import { IconComponent } from '../ui/icon/icon.component';
-import { IconButtonComponent } from '../ui/icon-button/icon-button.component';
+import { ButtonComponent } from '../ui/button/button.component';
 
 @Component({
   imports: [
@@ -24,7 +24,7 @@ import { IconButtonComponent } from '../ui/icon-button/icon-button.component';
     TodoLoadingDirective,
     TodoSummaryComponent,
     IconComponent,
-    IconButtonComponent,
+    ButtonComponent,
   ],
   selector: 'app-todo-card',
   templateUrl: './todo-card.component.html',
@@ -41,18 +41,15 @@ export class TodoCardComponent {
   readonly id = computed(() => this.todo().id);
   readonly name = computed(() => this.todo().name);
   readonly tasks = computed(() => this.todo().tasks);
+  readonly incompleteTasksCount = computed(
+    () => this.tasks().filter((task) => !task.completed).length,
+  );
+  readonly isTodoCompleted = computed(
+    () =>
+      this.tasks().length > 0 && this.tasks().every((task) => task.completed),
+  );
 
   readonly #injector = inject(Injector);
-
-  incompleteTasksCount(): number {
-    return this.tasks().filter((task) => !task.completed).length;
-  }
-
-  isTodoCompleted(): boolean {
-    return (
-      this.tasks().length > 0 && this.tasks().every((task) => task.completed)
-    );
-  }
 
   remove(): void {
     this.removeTodo.emit(this.#injector);
