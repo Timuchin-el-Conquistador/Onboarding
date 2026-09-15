@@ -7,7 +7,7 @@ import {
   ElementRef,
   ViewChild,
   effect,
-  Renderer2,
+  Renderer2, DestroyRef
 } from '@angular/core';
 import { TaskItemComponent } from '../task-item/task-item.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -18,6 +18,7 @@ import { TaskManagerService, TodoManagerService } from '../../services';
 import { TaskLoadingDirective } from '../../directives';
 import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 import { LoaderManagerService } from '@org/shared/services';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   imports: [
@@ -48,6 +49,7 @@ export class TaskListComponent {
   readonly #injector = inject(Injector);
   readonly #taskManager = inject(TaskManagerService);
   readonly #todoManager = inject(TodoManagerService);
+  readonly #destroyRef = inject(DestroyRef);
 
   constructor() {
     effect(() => {
@@ -75,6 +77,7 @@ export class TaskListComponent {
   createTask(title: string): void {
     this.#taskManager
       .createTask(this.todoId(), title, this.#injector)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
       .subscribe(() => this.#todoManager.refreshTodos());
   }
 }

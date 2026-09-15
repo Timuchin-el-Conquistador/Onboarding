@@ -4,7 +4,7 @@ import {
   ChangeDetectionStrategy,
   inject,
   computed,
-  Injector,
+  Injector, DestroyRef
 } from '@angular/core';
 import { TodoManagerService } from '../../services';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -18,6 +18,7 @@ import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 import { TaskListComponent } from '../task-list/task-list.component';
 import { CONFIRM_MODAL_CONFIG } from '../../config';
 import { TodoLoadingDirective } from '../../directives';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   imports: [
@@ -44,6 +45,7 @@ export class TodoCardComponent {
   readonly #injector = inject(Injector);
   readonly #todoManager = inject(TodoManagerService);
   readonly #confirmDialogManager = inject(ConfirmDialogManagerService);
+  readonly #destroyRef = inject(DestroyRef);
 
   incompleteTasksCount(): number {
     return this.tasks().filter((task) => !task.completed).length;
@@ -67,6 +69,7 @@ export class TodoCardComponent {
     if (confirmed) {
       this.#todoManager
         .removeTodo(this.id(), this.#injector)
+        .pipe(takeUntilDestroyed(this.#destroyRef))
         .subscribe(() => this.#todoManager.refreshTodos());
     }
   }

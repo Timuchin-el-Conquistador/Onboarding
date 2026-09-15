@@ -6,7 +6,7 @@ import {
   ElementRef,
   effect,
   Injector,
-  Renderer2,
+  Renderer2, DestroyRef
 } from '@angular/core';
 import { TodoManagerService } from '../../services';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +16,7 @@ import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 import { EmptyStateComponent } from '../ui/empty-state/empty-state.component';
 import { TodoLoadingDirective } from '../../directives';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   imports: [
@@ -42,6 +43,7 @@ export class TodoListComponent {
   readonly #renderer = inject(Renderer2);
   readonly #injector = inject(Injector);
   readonly #todoManager = inject(TodoManagerService);
+  readonly #destroyRef = inject(DestroyRef);
 
   constructor() {
     effect(() => {
@@ -69,6 +71,7 @@ export class TodoListComponent {
   createTodo(title: string): void {
     this.#todoManager
       .createTodo(title, this.#injector)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
       .subscribe(() => this.#todoManager.refreshTodos());
   }
 }

@@ -7,6 +7,7 @@ import {
   computed,
   OnInit,
   Injector,
+  DestroyRef,
 } from '@angular/core';
 import type { ITask, ITaskForm } from '../../models';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -17,6 +18,7 @@ import { LoaderManagerService } from '@org/shared/services';
 import { requiredTrimmed } from '../../validators';
 import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 import { TaskLoadingDirective } from '../../directives';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   imports: [ReactiveFormsModule, TodoFormComponent, TaskLoadingDirective],
@@ -44,6 +46,7 @@ export class TaskItemComponent implements OnInit {
   readonly #formFactory = inject(DynamicFormFactory);
   readonly #taskManager = inject(TaskManagerService);
   readonly #todoManager = inject(TodoManagerService);
+  readonly #destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.taskForm = this.#formFactory.createForm<ITaskForm>({
@@ -66,6 +69,7 @@ export class TaskItemComponent implements OnInit {
   removeTask(): void {
     this.#taskManager
       .removeTask(this.todoId(), this.id(), this.#injector)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
       .subscribe(() => this.#todoManager.refreshTodos());
   }
 
@@ -77,6 +81,7 @@ export class TaskItemComponent implements OnInit {
         this.id(),
         this.#injector,
       )
+      .pipe(takeUntilDestroyed(this.#destroyRef))
       .subscribe(() => this.#todoManager.refreshTodos());
   }
 
@@ -87,6 +92,7 @@ export class TaskItemComponent implements OnInit {
   completeTaskEdit(name: string): void {
     this.#taskManager
       .updateTask({ name }, this.todoId(), this.id(), this.#injector)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
       .subscribe(() => {
         this.#todoManager.refreshTodos();
         this.editing.set(false);
