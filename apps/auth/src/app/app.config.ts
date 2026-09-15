@@ -9,7 +9,6 @@ import { environment } from '../environments/environment';
 import {
   provideHttpClient,
   withInterceptors,
-  withInterceptorsFromDi,
 } from '@angular/common/http';
 import { authInterceptor } from './interceptors';
 import { LoadingInterceptor } from '@org/shared/interceptors';
@@ -24,7 +23,6 @@ export const appConfig: ApplicationConfig = {
     },
     provideHttpClient(
       withInterceptors([authInterceptor, LoadingInterceptor]),
-      withInterceptorsFromDi(),
     ),
   ],
 };
