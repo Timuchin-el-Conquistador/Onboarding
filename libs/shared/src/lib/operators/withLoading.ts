@@ -1,13 +1,13 @@
-import { WritableSignal } from '@angular/core';
 import { Observable, defer, finalize } from 'rxjs';
+import { ILoaderManagerService } from '../models';
 
 export function withLoading(
-  signal: WritableSignal<boolean>,
+  loaderManagerService: ILoaderManagerService,
 ): <T>(source$: Observable<T>) => Observable<T> {
   return <T>(source$: Observable<T>): Observable<T> =>
     defer(() => {
-      signal.set(true);
+      loaderManagerService.show();
 
-      return source$.pipe(finalize(() => signal.set(false)));
+      return source$.pipe(finalize(() => loaderManagerService.hide()));
     });
 }

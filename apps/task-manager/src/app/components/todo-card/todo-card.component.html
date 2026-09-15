@@ -1,7 +1,7 @@
 <article
   class="todo-list-card"
   [class.todo-list-card--completed]="isTodoCompleted()"
-  [class.todo-list-card--removing]="removingTodo()"
+  *appTodoLoading
 >
   <header
     class="todo-list-card__header"
@@ -47,16 +47,8 @@
     }
   </header>
 
-  <div class="todo-list-card__form">
-    <app-todo-form (save)="createTask($event)" submitLabel="Add Task" />
-  </div>
-
   <div class="todo-list-card__tasks">
-    @if (!loadingTasks()) {
-      <app-task-list [todoId]="id()" [tasks]="tasks()" />
-    } @else {
-      <app-task-loading />
-    }
+    <app-task-list [todoId]="id()" [tasks]="tasks()" />
   </div>
 
   <app-todo-actions

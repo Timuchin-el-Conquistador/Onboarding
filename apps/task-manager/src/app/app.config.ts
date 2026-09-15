@@ -3,10 +3,14 @@ import {
   provideBrowserGlobalErrorListeners,
   importProvidersFrom,
 } from '@angular/core';
+import {
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { environment } from '../environments/environment';
 import { API_URL_TOKEN } from '@org/shared/tokens';
 import { authInterceptor } from '@org/my-lib/interceptors';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { loadingInterceptor } from '@org/shared/interceptors';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 export const appConfig: ApplicationConfig = {
@@ -14,6 +18,6 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     importProvidersFrom(MatSnackBarModule),
     { provide: API_URL_TOKEN, useValue: environment.apiUrl },
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, loadingInterceptor])),
   ],
 };

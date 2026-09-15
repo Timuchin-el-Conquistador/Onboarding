@@ -26,6 +26,7 @@
       "@org/shared/environments": ["./libs/shared/src/index.ts"],
       "@org/shared/tokens": ["./libs/shared/src/index.ts"],
       "@org/shared/services": ["./libs/shared/src/index.ts"],
+      "@org/shared/interceptors": ["./libs/shared/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -3,52 +3,49 @@ import {
   input,
   ChangeDetectionStrategy,
   inject,
-  signal,
   computed,
+  Injector, DestroyRef
 } from '@angular/core';
-import { TodoManagerService, TaskManagerService } from '../../services';
+import { TodoManagerService } from '../../services';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { TodoActionsComponent } from '../todo-actions/todo-actions.component';
 import type { ITodo } from '../../models';
-import { withLoading } from '@org/shared/operators';
-import { ConfirmDialogManagerService } from '@org/shared/services';
-import { TaskLoadingComponent } from '../ui/loading/task/task-loading.component';
+import {
+  ConfirmDialogManagerService,
+  LoaderManagerService,
+} from '@org/shared/services';
+import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 import { TaskListComponent } from '../task-list/task-list.component';
 import { CONFIRM_MODAL_CONFIG } from '../../config';
+import { TodoLoadingDirective } from '../../directives';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   imports: [
     ReactiveFormsModule,
     TaskListComponent,
-    TodoFormComponent,
     TodoActionsComponent,
-    TaskLoadingComponent,
+    TodoLoadingDirective,
   ],
   selector: 'app-todo-card',
   templateUrl: './todo-card.component.html',
   styleUrls: ['./todo-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    { provide: LOADER_MANAGER_SERVICE, useClass: LoaderManagerService },
+  ],
 })
 export class TodoCardComponent {
   readonly todo = input.required<ITodo>();
 
-  readonly removingTodo = signal(false);
-  readonly loadingTasks = signal(false);
   readonly id = computed(() => this.todo().id);
   readonly name = computed(() => this.todo().name);
   readonly tasks = computed(() => this.todo().tasks);
 
+  readonly #injector = inject(Injector);
   readonly #todoManager = inject(TodoManagerService);
-  readonly #taskManager = inject(TaskManagerService);
   readonly #confirmDialogManager = inject(ConfirmDialogManagerService);
-
-  createTask(title: string): void {
-    this.#taskManager
-      .createTask(this.id(), title)
-      .pipe(withLoading(this.loadingTasks))
-      .subscribe(() => this.#todoManager.refreshTodos());
-  }
+  readonly #destroyRef = inject(DestroyRef);
 
   incompleteTasksCount(): number {
     return this.tasks().filter((task) => !task.completed).length;
@@ -71,8 +68,8 @@ export class TodoCardComponent {
   #removeTodo(confirmed: boolean): void {
     if (confirmed) {
       this.#todoManager
-        .removeTodo(this.id())
-        .pipe(withLoading(this.removingTodo))
+        .removeTodo(this.id(), this.#injector)
+        .pipe(takeUntilDestroyed(this.#destroyRef))
         .subscribe(() => this.#todoManager.refreshTodos());
     }
   }

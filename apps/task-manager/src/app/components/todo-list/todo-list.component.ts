@@ -5,19 +5,27 @@ import {
   ViewChild,
   ElementRef,
   effect,
+  Injector,
+  Renderer2, DestroyRef
 } from '@angular/core';
 import { TodoManagerService } from '../../services';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TodoCardComponent } from '../todo-card/todo-card.component';
-import { TodoLoadingComponent } from '../ui/loading/todo/todo-loading.component';
 import { AsyncPipe } from '@angular/common';
+import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
+import { EmptyStateComponent } from '../ui/empty-state/empty-state.component';
+import { TodoLoadingDirective } from '../../directives';
+import { TodoFormComponent } from '../todo-form/todo-form.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   imports: [
     TodoCardComponent,
     ReactiveFormsModule,
-    TodoLoadingComponent,
     AsyncPipe,
+    EmptyStateComponent,
+    TodoLoadingDirective,
+    TodoFormComponent,
   ],
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
@@ -25,21 +33,32 @@ import { AsyncPipe } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoListComponent {
+  readonly loadingManagerService = inject(LOADER_MANAGER_SERVICE);
+
   readonly todos$ = inject(TodoManagerService).todos$;
-  readonly loading = inject(TodoManagerService).loading;
 
   @ViewChild('skeleton', { read: ElementRef })
   skeleton?: ElementRef<HTMLElement>;
 
+  readonly #renderer = inject(Renderer2);
+  readonly #injector = inject(Injector);
+  readonly #todoManager = inject(TodoManagerService);
+  readonly #destroyRef = inject(DestroyRef);
+
   constructor() {
     effect(() => {
-      if (!this.loading()) {
+      if (!this.loadingManagerService.loading()) {
         return;
       }
 
-      if (!this.skeleton?.nativeElement) {
+      if (!this.skeleton) {
         return;
       }
+
+      this.#renderer.addClass(
+        this.skeleton.nativeElement,
+        'todo-app__skeleton--display',
+      );
 
       this.skeleton.nativeElement.scrollIntoView({
         behavior: 'smooth',
@@ -47,5 +66,12 @@ export class TodoListComponent {
         inline: 'nearest',
       });
     });
+  }
+
+  createTodo(title: string): void {
+    this.#todoManager
+      .createTodo(title, this.#injector)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe(() => this.#todoManager.refreshTodos());
   }
 }
