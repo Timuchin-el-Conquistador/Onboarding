@@ -7,7 +7,6 @@ import { appRoutes } from './app.routes';
 import { API_URL_TOKEN } from './tokens';
 import { environment } from '../environments/environment';
 import {
-  HTTP_INTERCEPTORS,
   provideHttpClient,
   withInterceptors,
   withInterceptorsFromDi,
@@ -24,9 +23,8 @@ export const appConfig: ApplicationConfig = {
       useValue: environment.apiUrl,
     },
     provideHttpClient(
-      withInterceptors([authInterceptor]),
+      withInterceptors([authInterceptor, LoadingInterceptor]),
       withInterceptorsFromDi(),
     ),
-    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
   ],
 };

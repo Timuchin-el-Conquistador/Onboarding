@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:2026'
+  apiUrl: 'https://animated-marigold-5a0544.netlify.app'
 };
