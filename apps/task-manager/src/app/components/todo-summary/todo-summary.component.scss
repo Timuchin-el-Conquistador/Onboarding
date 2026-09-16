@@ -1,0 +1,36 @@
+:host {
+  display: block;
+  width: 100%;
+  max-height: 12.5rem;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9375rem;
+  border-top: 0.0625rem solid var(--summary-border-color);
+  color: var(--summary-text-color);
+  font-size: 0.9rem;
+  text-align: center;
+
+  &__todo-count {
+    color: var(--summary-count-color);
+    font-weight: 600;
+  }
+
+  span {
+    font-size: 1rem;
+    color: #5f6368;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .summary__task-count {
+    font-size: 1.3rem;
+    color: #5f6368;
+    font-weight: 500;
+    line-height: 1;
+  }
+}

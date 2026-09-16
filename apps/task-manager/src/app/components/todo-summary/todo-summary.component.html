@@ -1,0 +1,14 @@
+<div class="actions">
+  <div>
+    <span>You have</span>
+    <span class="summary__task-count" id="task-count">
+      {{ totalTasksCount() }}
+    </span>
+    <span>
+      task{{ totalTasksCount() > 1 ? 's' : '' }}
+      remaining
+    </span>
+  </div>
+
+  <ng-content></ng-content>
+</div>

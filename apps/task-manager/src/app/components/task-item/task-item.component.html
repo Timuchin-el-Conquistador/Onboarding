@@ -3,85 +3,32 @@
   [class.task-item--completed]="!this.editing() && completed()"
   *appTaskLoading
 >
-  <label class="task-item__checkbox" [for]="`task- ${id()}`">
-    <input
-      type="checkbox"
-      [id]="`task- ${id()}`"
-      [checked]="completed()"
-      [attr.aria-label]="completed() ? 'Finished Task' : 'Pending Task'"
-      (change)="toggleTaskCompletion($event.target.checked)"
-    />
-    <span class="task-item__checkbox-icon"></span>
-  </label>
+  <app-ui-checkbox
+    [id]="`task- ${id()}`"
+    [checked]="completed()"
+    [label]="completed() ? 'Finished Task' : 'Pending Task'"
+    (changed)="toggleStatus($event)"
+  />
 
   @if (editing()) {
     <app-todo-form
-      (save)="completeTaskEdit($event)"
+      (save)="completeEdit($event)"
       [shouldResetOnSave]="false"
       submitLabel="Save"
       [form]="taskForm"
     />
   } @else {
-    <label class="task-item__details" [for]="`task- ${id()}`">
-      <p class="task-item__title">
-        {{ name() }}
-      </p>
-    </label>
-    <button
-      type="button"
-      class="task-item__edit"
-      (click)="beginTaskEdit()"
-      aria-label="Edit task"
-    >
-      <svg
-        class="task-item__edit-icon"
-        viewBox="0 0 24 24"
-        width="18"
-        height="18"
-        aria-hidden="true"
-        focusable="false"
-      >
-        <path
-          d="M4 20h4L19.5 8.5a2.121 2.121 0 0 0-3-3L5 17v3Z"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="m14.5 7.5 2 2"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-        />
-      </svg>
-    </button>
-  }
+    <p class="task-item__title">
+      {{ name() }}
+    </p>
+    <div class="task-item__actions">
+      <app-ui-button label="Edit task" (clicked)="startEdit()">
+        <app-icon name="edit" />
+      </app-ui-button>
 
-  <button
-    type="button"
-    class="task-item__delete"
-    (click)="removeTask()"
-    aria-label="Remove task"
-  >
-    <svg
-      class="summary__delete-icon"
-      viewBox="0 0 24 24"
-      width="18"
-      height="18"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <path
-        d="M3 6h18M9 6V4h6v2M19 6l-1 15H6L5 6M10 11v6M14 11v6"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
-  </button>
+      <app-ui-button label="Remove task" (clicked)="remove()" variant="danger">
+        <app-icon name="delete" />
+      </app-ui-button>
+    </div>
+  }
 </div>

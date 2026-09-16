@@ -6,22 +6,30 @@ import {
   inject,
   computed,
   OnInit,
+  output,
   Injector,
-  DestroyRef,
 } from '@angular/core';
 import type { ITask, ITaskForm } from '../../models';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
-import { TaskManagerService, TodoManagerService } from '../../services';
 import { DynamicFormFactory } from '@org/shared/forms';
-import { LoaderManagerService } from '@org/shared/services';
 import { requiredTrimmed } from '../../validators';
-import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 import { TaskLoadingDirective } from '../../directives';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ButtonComponent } from '../ui/button/button.component';
+import { IconComponent } from '../ui/icon/icon.component';
+import { CheckboxComponent } from '../ui/checkbox/checkbox.component';
+import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
+import { LoaderManagerService } from '@org/shared/services';
 
 @Component({
-  imports: [ReactiveFormsModule, TodoFormComponent, TaskLoadingDirective],
+  imports: [
+    ReactiveFormsModule,
+    TodoFormComponent,
+    ButtonComponent,
+    IconComponent,
+    CheckboxComponent,
+    TaskLoadingDirective,
+  ],
   selector: 'app-task-item',
   templateUrl: './task-item.component.html',
   styleUrls: ['./task-item.component.scss'],
@@ -31,8 +39,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   ],
 })
 export class TaskItemComponent implements OnInit {
-  readonly todoId = input.required<string>();
   readonly task = input.required<ITask>();
+  readonly removeTask = output<Injector>();
+  readonly toggleTaskCompletion = output<{
+    completed: boolean;
+    injector: Injector;
+  }>();
+  readonly completeTaskEdit = output<{ name: string; injector: Injector }>();
 
   readonly id = computed<string>(() => this.task().id);
   readonly name = computed<string>(() => this.task().name);
@@ -44,9 +57,6 @@ export class TaskItemComponent implements OnInit {
 
   readonly #injector = inject(Injector);
   readonly #formFactory = inject(DynamicFormFactory);
-  readonly #taskManager = inject(TaskManagerService);
-  readonly #todoManager = inject(TodoManagerService);
-  readonly #destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.taskForm = this.#formFactory.createForm<ITaskForm>({
@@ -66,36 +76,20 @@ export class TaskItemComponent implements OnInit {
     });
   }
 
-  removeTask(): void {
-    this.#taskManager
-      .removeTask(this.todoId(), this.id(), this.#injector)
-      .pipe(takeUntilDestroyed(this.#destroyRef))
-      .subscribe(() => this.#todoManager.refreshTodos());
+  toggleStatus(completed: boolean): void {
+    this.toggleTaskCompletion.emit({ completed, injector: this.#injector });
   }
 
-  toggleTaskCompletion(completed: boolean): void {
-    this.#taskManager
-      .updateTask(
-        { name: this.name(), completed },
-        this.todoId(),
-        this.id(),
-        this.#injector,
-      )
-      .pipe(takeUntilDestroyed(this.#destroyRef))
-      .subscribe(() => this.#todoManager.refreshTodos());
+  remove(): void {
+    this.removeTask.emit(this.#injector);
   }
 
-  beginTaskEdit(): void {
+  startEdit(): void {
     this.editing.set(true);
   }
 
-  completeTaskEdit(name: string): void {
-    this.#taskManager
-      .updateTask({ name }, this.todoId(), this.id(), this.#injector)
-      .pipe(takeUntilDestroyed(this.#destroyRef))
-      .subscribe(() => {
-        this.#todoManager.refreshTodos();
-        this.editing.set(false);
-      });
+  completeEdit(name: string): void {
+    this.editing.set(false);
+    this.completeTaskEdit.emit({ name, injector: this.#injector });
   }
 }

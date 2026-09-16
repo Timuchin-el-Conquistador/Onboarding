@@ -6,7 +6,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { TodoLoadingComponent } from '../components/ui/loading/todo/todo-loading.component';
-import { LOADER_MANAGER_SERVICE } from '@org/shared';
+import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 
 @Directive({
   selector: '[appTodoLoading]',

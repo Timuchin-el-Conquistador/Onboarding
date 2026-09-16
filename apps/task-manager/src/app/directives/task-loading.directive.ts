@@ -7,7 +7,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { TaskLoadingComponent } from '../components/ui/loading/task/task-loading.component';
-import { LOADER_MANAGER_SERVICE } from '@org/shared';
+import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 
 @Directive({
   selector: '[appTaskLoading]',

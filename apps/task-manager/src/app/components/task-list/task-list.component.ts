@@ -7,7 +7,8 @@ import {
   ElementRef,
   ViewChild,
   effect,
-  Renderer2, DestroyRef
+  DestroyRef,
+  Renderer2,
 } from '@angular/core';
 import { TaskItemComponent } from '../task-item/task-item.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -77,6 +78,29 @@ export class TaskListComponent {
   createTask(title: string): void {
     this.#taskManager
       .createTask(this.todoId(), title, this.#injector)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe(() => {
+        this.#todoManager.refreshTodos();
+      });
+  }
+
+  removeTask(id: string, injector: Injector): void {
+    this.#taskManager
+      .removeTask(this.todoId(), id, injector)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe(() => this.#todoManager.refreshTodos());
+  }
+
+  toggleTaskCompletion(id: string, name: string, completed: boolean, injector: Injector): void {
+    this.#taskManager
+      .updateTask({ name, completed }, this.todoId(), id, injector)
+      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .subscribe(() => this.#todoManager.refreshTodos());
+  }
+
+  completeTaskEdit(id: string, name: string, injector: Injector): void {
+    this.#taskManager
+      .updateTask({ name }, this.todoId(), id, injector)
       .pipe(takeUntilDestroyed(this.#destroyRef))
       .subscribe(() => this.#todoManager.refreshTodos());
   }

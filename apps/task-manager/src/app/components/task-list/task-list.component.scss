@@ -1,8 +1,5 @@
 :host {
-  position: relative;
-  overflow: auto;
   display: block;
-  height: 100%;
 }
 
 .form {
@@ -19,15 +16,24 @@
   margin: 0;
   padding: 0;
   list-style: none;
+  position: relative;
+  overflow: auto;
+  display: block;
+  height: 14rem;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
 
   &__skeleton {
     display: none;
+    flex-shrink: 0;
     height: 7rem;
 
-    &--display{
+    &--display {
       display: block;
     }
   }
+
   @media (max-width: 31.25rem) {
     max-width: 100%;
   }

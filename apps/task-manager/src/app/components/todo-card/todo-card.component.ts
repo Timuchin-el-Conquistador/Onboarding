@@ -2,30 +2,29 @@ import {
   Component,
   input,
   ChangeDetectionStrategy,
-  inject,
   computed,
-  Injector, DestroyRef
+  output,
+  inject,
+  Injector,
 } from '@angular/core';
-import { TodoManagerService } from '../../services';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TodoActionsComponent } from '../todo-actions/todo-actions.component';
 import type { ITodo } from '../../models';
-import {
-  ConfirmDialogManagerService,
-  LoaderManagerService,
-} from '@org/shared/services';
+import { LoaderManagerService } from '@org/shared/services';
 import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 import { TaskListComponent } from '../task-list/task-list.component';
-import { CONFIRM_MODAL_CONFIG } from '../../config';
 import { TodoLoadingDirective } from '../../directives';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TodoSummaryComponent } from '../todo-summary/todo-summary.component';
+import { IconComponent } from '../ui/icon/icon.component';
+import { ButtonComponent } from '../ui/button/button.component';
 
 @Component({
   imports: [
     ReactiveFormsModule,
     TaskListComponent,
-    TodoActionsComponent,
     TodoLoadingDirective,
+    TodoSummaryComponent,
+    IconComponent,
+    ButtonComponent,
   ],
   selector: 'app-todo-card',
   templateUrl: './todo-card.component.html',
@@ -37,40 +36,22 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class TodoCardComponent {
   readonly todo = input.required<ITodo>();
+  readonly removeTodo = output<Injector>();
 
   readonly id = computed(() => this.todo().id);
   readonly name = computed(() => this.todo().name);
   readonly tasks = computed(() => this.todo().tasks);
+  readonly incompleteTasksCount = computed(
+    () => this.tasks().filter((task) => !task.completed).length,
+  );
+  readonly isTodoCompleted = computed(
+    () =>
+      this.tasks().length > 0 && this.tasks().every((task) => task.completed),
+  );
 
   readonly #injector = inject(Injector);
-  readonly #todoManager = inject(TodoManagerService);
-  readonly #confirmDialogManager = inject(ConfirmDialogManagerService);
-  readonly #destroyRef = inject(DestroyRef);
 
-  incompleteTasksCount(): number {
-    return this.tasks().filter((task) => !task.completed).length;
-  }
-
-  isTodoCompleted(): boolean {
-    return (
-      this.tasks().length > 0 && this.tasks().every((task) => task.completed)
-    );
-  }
-
-  confirmTodoRemoval(): void {
-    this.#confirmDialogManager.open(CONFIRM_MODAL_CONFIG);
-
-    this.#confirmDialogManager
-      .confirmed()
-      .subscribe(this.#removeTodo.bind(this));
-  }
-
-  #removeTodo(confirmed: boolean): void {
-    if (confirmed) {
-      this.#todoManager
-        .removeTodo(this.id(), this.#injector)
-        .pipe(takeUntilDestroyed(this.#destroyRef))
-        .subscribe(() => this.#todoManager.refreshTodos());
-    }
+  remove(): void {
+    this.removeTodo.emit(this.#injector);
   }
 }
