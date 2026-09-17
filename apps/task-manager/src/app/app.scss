@@ -24,10 +24,11 @@
 
   &__header {
     position: relative;
-    padding: 1.875rem;
+    padding: 1.9rem;
     background-color: var(--primary);
     color: var(--summary-action-hover-color);
     text-align: center;
+    min-height: 6rem;
   }
 
   &__title {

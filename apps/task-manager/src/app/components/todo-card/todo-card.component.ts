@@ -7,7 +7,6 @@ import {
   inject,
   Injector,
 } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 import type { ITodo } from '../../models';
 import { LoaderManagerService } from '@org/shared/services';
 import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
@@ -19,7 +18,6 @@ import { ButtonComponent } from '../ui/button/button.component';
 
 @Component({
   imports: [
-    ReactiveFormsModule,
     TaskListComponent,
     TodoLoadingDirective,
     TodoSummaryComponent,

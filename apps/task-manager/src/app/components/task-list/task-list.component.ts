@@ -11,7 +11,6 @@ import {
   Renderer2,
 } from '@angular/core';
 import { TaskItemComponent } from '../task-item/task-item.component';
-import { ReactiveFormsModule } from '@angular/forms';
 import { ITask } from '../../models';
 import { EmptyStateComponent } from '../ui/empty-state/empty-state.component';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
@@ -28,7 +27,6 @@ import { TASK_SUCCESS_MESSAGES } from '../../types';
 @Component({
   imports: [
     TaskItemComponent,
-    ReactiveFormsModule,
     EmptyStateComponent,
     TodoFormComponent,
     TaskLoadingDirective,
@@ -52,11 +50,6 @@ export class TaskListComponent {
   skeleton?: ElementRef<HTMLElement>;
 
   readonly #renderer = inject(Renderer2);
-  readonly #injector = inject(Injector);
-  readonly #taskManager = inject(TaskManagerService);
-  readonly #todoManager = inject(TodoManagerService);
-  readonly #destroyRef = inject(DestroyRef);
-
   constructor() {
     effect(() => {
       if (!this.loadingManagerService.loading()) {
@@ -74,11 +67,15 @@ export class TaskListComponent {
 
       this.skeleton.nativeElement.scrollIntoView({
         behavior: 'smooth',
-        block: 'end',
-        inline: 'end',
+        block: 'nearest',
+        inline: 'nearest',
       });
     });
   }
+  readonly #injector = inject(Injector);
+  readonly #taskManager = inject(TaskManagerService);
+  readonly #todoManager = inject(TodoManagerService);
+  readonly #destroyRef = inject(DestroyRef);
 
   createTask(name: string): void {
     this.#taskManager

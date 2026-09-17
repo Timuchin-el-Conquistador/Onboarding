@@ -19,7 +19,7 @@
     />
   } @else {
     <p class="task-item__title">
-      {{ name() }}
+      {{ name() | textTruncation }}
     </p>
     <div class="task-item__actions">
       <app-ui-button label="Edit task" (clicked)="startEdit()">

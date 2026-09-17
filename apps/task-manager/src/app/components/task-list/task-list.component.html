@@ -23,7 +23,9 @@
     </li>
   }
 
-  <li class="tasks__skeleton" #skeleton *appTaskLoading></li>
+  <li class="tasks__skeleton" #skeleton>
+    <div *appTaskLoading></div>
+  </li>
 
   @if (!tasks().length && !loadingManagerService.loading()) {
     <li class="tasks--empty">

@@ -13,7 +13,9 @@
       </li>
     }
 
-    <li class="todo-app__skeleton" #skeleton *appTodoLoading></li>
+    <li class="todo-app__skeleton" #skeleton>
+      <div *appTodoLoading></div>
+    </li>
 
     @if (todos && !todos.length && !loadingManagerService.loading()) {
       <li class="todo-app--empty">

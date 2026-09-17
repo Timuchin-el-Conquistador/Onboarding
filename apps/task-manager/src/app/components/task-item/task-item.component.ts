@@ -20,6 +20,7 @@ import { IconComponent } from '../ui/icon/icon.component';
 import { CheckboxComponent } from '../ui/checkbox/checkbox.component';
 import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 import { LoaderManagerService } from '@org/shared/services';
+import { TextTruncationPipe } from '../../pipes';
 
 @Component({
   imports: [
@@ -29,6 +30,7 @@ import { LoaderManagerService } from '@org/shared/services';
     IconComponent,
     CheckboxComponent,
     TaskLoadingDirective,
+    TextTruncationPipe,
   ],
   selector: 'app-task-item',
   templateUrl: './task-item.component.html',

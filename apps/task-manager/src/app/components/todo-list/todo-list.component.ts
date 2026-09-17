@@ -10,7 +10,6 @@ import {
   Renderer2,
 } from '@angular/core';
 import { TodoManagerService } from '../../services';
-import { ReactiveFormsModule } from '@angular/forms';
 import { TodoCardComponent } from '../todo-card/todo-card.component';
 import { AsyncPipe } from '@angular/common';
 import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
@@ -27,7 +26,6 @@ import { TODO_SUCCESS_MESSAGES } from '../../types';
 @Component({
   imports: [
     TodoCardComponent,
-    ReactiveFormsModule,
     AsyncPipe,
     EmptyStateComponent,
     TodoLoadingDirective,
@@ -65,13 +63,13 @@ export class TodoListComponent {
 
       this.#renderer.addClass(
         this.skeleton.nativeElement,
-        'tasks__skeleton--display',
+        'todo-app__skeleton--display',
       );
 
       this.skeleton.nativeElement.scrollIntoView({
         behavior: 'smooth',
-        block: 'start',
-        inline: 'nearest',
+        block: 'end',
+        inline: 'end',
       });
     });
   }
