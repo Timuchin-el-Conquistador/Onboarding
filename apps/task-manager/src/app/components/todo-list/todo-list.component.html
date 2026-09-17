@@ -16,7 +16,7 @@
     <li class="todo-app__skeleton" #skeleton *appTodoLoading></li>
 
     @if (todos && !todos.length && !loadingManagerService.loading()) {
-      <li>
+      <li class="todo-app--empty">
         <app-empty-state>
           <p #p>No todos found. Create your first Todo List above.</p>
         </app-empty-state>

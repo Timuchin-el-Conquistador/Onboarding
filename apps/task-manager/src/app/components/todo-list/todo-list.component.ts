@@ -19,7 +19,10 @@ import { TodoLoadingDirective } from '../../directives';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConfirmDialogManagerService } from '@org/shared/services';
-import { CONFIRM_MODAL_CONFIG } from '../../config';
+import { BASE_ENDPOINT, CONFIRM_MODAL_CONFIG } from '../../config';
+import { ToasterService } from '@org/my-lib/services';
+import { withToaster } from '@org/my-lib/operators';
+import { TODO_SUCCESS_MESSAGES } from '../../types';
 
 @Component({
   imports: [
@@ -37,6 +40,7 @@ import { CONFIRM_MODAL_CONFIG } from '../../config';
 })
 export class TodoListComponent {
   readonly loadingManagerService = inject(LOADER_MANAGER_SERVICE);
+  readonly toasterService = inject(ToasterService);
 
   readonly todos$ = inject(TodoManagerService).todos$;
 
@@ -72,10 +76,13 @@ export class TodoListComponent {
     });
   }
 
-  createTodo(title: string): void {
+  createTodo(name: string): void {
     this.#todoManager
-      .createTodo(title, this.#injector)
-      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .create(BASE_ENDPOINT, { name }, { injector: this.#injector })
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef),
+        withToaster(this.toasterService, TODO_SUCCESS_MESSAGES.CREATE),
+      )
       .subscribe(() => {
         this.#todoManager.refreshTodos();
       });
@@ -90,11 +97,14 @@ export class TodoListComponent {
       .subscribe((confirmed) => this.#removeTodo(todoId, confirmed, injector));
   }
 
-  #removeTodo(todoId: string, confirmed: boolean, injector: Injector): void {
+  #removeTodo(id: string, confirmed: boolean, injector: Injector): void {
     if (confirmed) {
       this.#todoManager
-        .removeTodo(todoId, injector)
-        .pipe(takeUntilDestroyed(this.#destroyRef))
+        .delete(BASE_ENDPOINT, { params: { id }, injector })
+        .pipe(
+          takeUntilDestroyed(this.#destroyRef),
+          withToaster(this.toasterService, TODO_SUCCESS_MESSAGES.DELETE),
+        )
         .subscribe(() => this.#todoManager.refreshTodos());
     }
   }

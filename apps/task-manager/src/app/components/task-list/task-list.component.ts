@@ -20,6 +20,10 @@ import { TaskLoadingDirective } from '../../directives';
 import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 import { LoaderManagerService } from '@org/shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ENDPOINTS_CONFIG } from '../../config';
+import { ToasterService } from '@org/my-lib/services';
+import { withToaster } from '@org/my-lib/operators';
+import { TASK_SUCCESS_MESSAGES } from '../../types';
 
 @Component({
   imports: [
@@ -42,6 +46,7 @@ export class TaskListComponent {
   readonly tasks = input.required<ITask[]>();
 
   readonly loadingManagerService = inject(LOADER_MANAGER_SERVICE);
+  readonly toasterService = inject(ToasterService);
 
   @ViewChild('skeleton', { read: ElementRef })
   skeleton?: ElementRef<HTMLElement>;
@@ -75,10 +80,17 @@ export class TaskListComponent {
     });
   }
 
-  createTask(title: string): void {
+  createTask(name: string): void {
     this.#taskManager
-      .createTask(this.todoId(), title, this.#injector)
-      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .create(
+        ENDPOINTS_CONFIG.CREATE_TASK,
+        { name },
+        { params: { id: this.todoId() }, injector: this.#injector },
+      )
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef),
+        withToaster(this.toasterService, TASK_SUCCESS_MESSAGES.CREATE),
+      )
       .subscribe(() => {
         this.#todoManager.refreshTodos();
       });
@@ -86,22 +98,47 @@ export class TaskListComponent {
 
   removeTask(id: string, injector: Injector): void {
     this.#taskManager
-      .removeTask(this.todoId(), id, injector)
-      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .delete(ENDPOINTS_CONFIG.DELETE_TASK, {
+        params: { id: this.todoId(), 'task-id': id },
+        injector,
+      })
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef),
+        withToaster(this.toasterService, TASK_SUCCESS_MESSAGES.DELETE),
+      )
       .subscribe(() => this.#todoManager.refreshTodos());
   }
 
-  toggleTaskCompletion(id: string, name: string, completed: boolean, injector: Injector): void {
+  toggleTaskCompletion(
+    id: string,
+    name: string,
+    completed: boolean,
+    injector: Injector,
+  ): void {
     this.#taskManager
-      .updateTask({ name, completed }, this.todoId(), id, injector)
-      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .update(
+        ENDPOINTS_CONFIG.EDIT_TASK,
+        { name, completed },
+        { params: { id: this.todoId(), 'task-id': id }, injector },
+      )
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef),
+        withToaster(this.toasterService, TASK_SUCCESS_MESSAGES.UPDATE),
+      )
       .subscribe(() => this.#todoManager.refreshTodos());
   }
 
   completeTaskEdit(id: string, name: string, injector: Injector): void {
     this.#taskManager
-      .updateTask({ name }, this.todoId(), id, injector)
-      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .update(
+        ENDPOINTS_CONFIG.EDIT_TASK,
+        { name },
+        { params: { id: this.todoId(), 'task-id': id }, injector },
+      )
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef),
+        withToaster(this.toasterService, TASK_SUCCESS_MESSAGES.UPDATE),
+      )
       .subscribe(() => this.#todoManager.refreshTodos());
   }
 }

@@ -10,7 +10,7 @@ export interface ITask {
   completed: boolean;
 }
 
-export interface IEditTask {
+export interface IBody {
   name: string;
   completed?: boolean;
 }

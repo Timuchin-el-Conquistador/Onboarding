@@ -34,6 +34,10 @@
     }
   }
 
+  &--empty {
+    margin: 2rem auto;
+  }
+
   @media (max-width: 31.25rem) {
     max-width: 100%;
   }

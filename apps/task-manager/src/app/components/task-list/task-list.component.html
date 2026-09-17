@@ -26,7 +26,7 @@
   <li class="tasks__skeleton" #skeleton *appTaskLoading></li>
 
   @if (!tasks().length && !loadingManagerService.loading()) {
-    <li>
+    <li class="tasks--empty">
       <app-empty-state>
         <p #p>No tasks yet. Add a task to get started!</p>
       </app-empty-state>
