@@ -29,16 +29,6 @@
   padding-top: 1rem;
   padding-inline: 0.5rem;
 
-  &__skeleton {
-    display: none;
-    flex-shrink: 0;
-    height: 7rem;
-
-    &--display {
-      display: block;
-    }
-  }
-
   &--empty {
     display: flex;
     align-items: center;
@@ -49,5 +39,15 @@
 
   @media (max-width: 31.25rem) {
     max-width: 100%;
+  }
+}
+
+.skeleton {
+  display: none;
+  flex-shrink: 0;
+  height: 7rem;
+
+  &--display {
+    display: block;
   }
 }

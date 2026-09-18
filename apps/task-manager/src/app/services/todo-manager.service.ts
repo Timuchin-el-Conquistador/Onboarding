@@ -1,43 +1,41 @@
-import { inject, Injectable } from '@angular/core';
-import { Observable, Subject, switchMap } from 'rxjs';
-import { withCondition, withToaster } from '@org/my-lib/operators';
-import { ToasterService } from '@org/my-lib/services';
-import { HttpClient } from '@angular/common/http';
-import { API_URL_TOKEN, LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
-import { withLoading } from '@org/shared/operators';
-import { ITodo, ITodoManager } from '../models';
-import { TODO_SUCCESS_MESSAGES } from '../types';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { IOptions, IBody, ITodo } from '../models';
 import { BaseResourceManagerService } from './base-resource-manager.service';
+import { BASE_ENDPOINT } from '../config/endpoints.config';
+import { TodoResourceChangeNotifierService } from './todo-resource-change-notifier.service';
+import { HttpContext, HttpParams } from '@angular/common/http';
+import { LOADER_INJECTOR } from '@org/shared';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class TodoManagerService<T extends ITodo>
-  extends BaseResourceManagerService<T>
-  implements ITodoManager
+  extends TodoResourceChangeNotifierService<T>
+  implements BaseResourceManagerService<T>
 {
-  readonly #loadingManagerService = inject(LOADER_MANAGER_SERVICE);
-  readonly #toasterService = inject(ToasterService);
-  readonly #refreshTodos$ = new Subject<boolean>();
+  create(body: IBody, options?: IOptions): Observable<T> {
+    const config = this.#createRequestConfig(options);
 
-  constructor() {
-    super(inject(HttpClient), inject(API_URL_TOKEN));
+    return this.http.post<T>(`${this.baseUrl}/${BASE_ENDPOINT}`, body, config);
   }
 
-  todos$: Observable<ITodo[]> = this.#refreshTodos$.pipe(
-    switchMap((initial: boolean) =>
-      this.http
-        .get<ITodo[]>(this.baseUrl + '/v1/todo')
-        .pipe(
-          withCondition(initial, [
-            withLoading(this.#loadingManagerService),
-            withToaster(this.#toasterService, TODO_SUCCESS_MESSAGES.GET),
-          ]),
-        ),
-    ),
-  );
+  delete(options?: IOptions): Observable<string> {
+    const config = this.#createRequestConfig(options);
 
-  refreshTodos(initial: boolean = false): void {
-    this.#refreshTodos$.next(initial);
+    return this.http.delete<string>(`${this.baseUrl}/${BASE_ENDPOINT}`, config);
+  }
+
+  #createRequestConfig(options?: IOptions) {
+    let params = new HttpParams();
+    let context = new HttpContext();
+
+    for (const [key, value] of Object.entries(options?.params ?? {})) {
+      params = params.set(key, value);
+    }
+
+    if (options?.injector) {
+      context = context.set(LOADER_INJECTOR, options.injector);
+    }
+
+    return { params, context };
   }
 }

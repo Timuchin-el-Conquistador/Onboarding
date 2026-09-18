@@ -7,12 +7,12 @@
     [id]="`task- ${id()}`"
     [checked]="completed()"
     [label]="completed() ? 'Finished Task' : 'Pending Task'"
-    (changed)="toggleStatus($event)"
+    (changed)="completeEdit(name(), $event)"
   />
 
   @if (editing()) {
     <app-todo-form
-      (save)="completeEdit($event)"
+      (save)="completeEdit($event, completed())"
       [shouldResetOnSave]="false"
       submitLabel="Save"
       [form]="taskForm"

@@ -8,29 +8,26 @@
       <app-task-item
         [task]="task"
         (removeTask)="removeTask(task.id, $event)"
-        (toggleTaskCompletion)="
-          toggleTaskCompletion(
+        (updateTask)="
+          updateTask(
             task.id,
-            task.name,
+            $event.name,
             $event.completed,
             $event.injector
           )
-        "
-        (completeTaskEdit)="
-          completeTaskEdit(task.id, $event.name, $event.injector)
         "
       />
     </li>
   }
 
-  <li class="tasks__skeleton" #skeleton>
+  <li class="skeleton" appScrollOnLoading>
     <div *appTaskLoading></div>
   </li>
 
-  @if (!tasks().length && !loadingManagerService.loading()) {
+  @if (!tasks().length && !loader.loading()) {
     <li class="tasks--empty">
       <app-empty-state>
-        <p #p>No tasks yet. Add a task to get started!</p>
+        <p>No tasks yet. Add a task to get started!</p>
       </app-empty-state>
     </li>
   }
