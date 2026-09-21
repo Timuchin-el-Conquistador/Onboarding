@@ -1,6 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { TODO_RESOURCE_CHANGE_TOKEN } from '../tokens';
-import { Observable, switchMap } from 'rxjs';
+import { Observable, Subject, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import {
   API_URL_TOKEN,
@@ -13,14 +12,14 @@ import { TODO_SUCCESS_MESSAGES } from '../types';
 import { BASE_ENDPOINT } from '../config';
 import { ITodo } from '../models';
 
-@Injectable()
-export class TodoResourceChangeNotifierService<T extends ITodo> {
-  protected readonly toaster = inject(ToasterService);
-  protected readonly loader = inject(LOADER_MANAGER_SERVICE);
-  protected readonly http = inject(HttpClient);
-  protected readonly baseUrl = inject(API_URL_TOKEN);
+@Injectable({ providedIn: 'root' })
+export class ResourceChangeNotifierManagerService<T extends ITodo> {
+  readonly toaster = inject(ToasterService);
+  readonly loader = inject(LOADER_MANAGER_SERVICE);
+  readonly http = inject(HttpClient);
+  readonly baseUrl = inject(API_URL_TOKEN);
 
-  readonly #refreshSubject = inject(TODO_RESOURCE_CHANGE_TOKEN);
+  readonly #refreshSubject = new Subject<boolean>();
 
   todos$: Observable<T[]> = this.#refreshSubject.pipe(
     switchMap((initial: boolean) =>
@@ -35,7 +34,7 @@ export class TodoResourceChangeNotifierService<T extends ITodo> {
     ),
   );
 
-  protected refresh(initial = false) {
+  refresh(initial = false) {
     this.#refreshSubject.next(initial);
   }
 }
