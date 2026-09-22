@@ -10,7 +10,7 @@ import {
   Injector,
 } from '@angular/core';
 import type { ITask, ITaskForm } from '../../models';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { DynamicFormFactory } from '@org/shared/forms';
 import { requiredTrimmed } from '../../validators';
@@ -20,15 +20,16 @@ import { IconComponent } from '../ui/icon/icon.component';
 import { CheckboxComponent } from '../ui/checkbox/checkbox.component';
 import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 import { LoaderManagerService } from '@org/shared/services';
+import { TextTruncationPipe } from '../../pipes';
 
 @Component({
   imports: [
-    ReactiveFormsModule,
     TodoFormComponent,
     ButtonComponent,
     IconComponent,
     CheckboxComponent,
     TaskLoadingDirective,
+    TextTruncationPipe,
   ],
   selector: 'app-task-item',
   templateUrl: './task-item.component.html',
@@ -41,11 +42,11 @@ import { LoaderManagerService } from '@org/shared/services';
 export class TaskItemComponent implements OnInit {
   readonly task = input.required<ITask>();
   readonly removeTask = output<Injector>();
-  readonly toggleTaskCompletion = output<{
+  readonly updateTask = output<{
+    name: string;
     completed: boolean;
     injector: Injector;
   }>();
-  readonly completeTaskEdit = output<{ name: string; injector: Injector }>();
 
   readonly id = computed<string>(() => this.task().id);
   readonly name = computed<string>(() => this.task().name);
@@ -76,10 +77,6 @@ export class TaskItemComponent implements OnInit {
     });
   }
 
-  toggleStatus(completed: boolean): void {
-    this.toggleTaskCompletion.emit({ completed, injector: this.#injector });
-  }
-
   remove(): void {
     this.removeTask.emit(this.#injector);
   }
@@ -88,8 +85,12 @@ export class TaskItemComponent implements OnInit {
     this.editing.set(true);
   }
 
-  completeEdit(name: string): void {
+  completeEdit(name: string, completed: boolean): void {
     this.editing.set(false);
-    this.completeTaskEdit.emit({ name, injector: this.#injector });
+    this.updateTask.emit({
+      name,
+      completed,
+      injector: this.#injector,
+    });
   }
 }

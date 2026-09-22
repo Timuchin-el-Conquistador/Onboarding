@@ -2,100 +2,91 @@ import {
   Component,
   inject,
   ChangeDetectionStrategy,
-  ViewChild,
-  ElementRef,
-  effect,
   Injector,
+  AfterViewInit,
   DestroyRef,
-  Renderer2,
 } from '@angular/core';
-import { TodoManagerService } from '../../services';
-import { ReactiveFormsModule } from '@angular/forms';
+import { BaseResourceManagerService, TodoManagerService } from '../../services';
 import { TodoCardComponent } from '../todo-card/todo-card.component';
 import { AsyncPipe } from '@angular/common';
-import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 import { EmptyStateComponent } from '../ui/empty-state/empty-state.component';
-import { TodoLoadingDirective } from '../../directives';
+import {
+  TodoLoadingDirective,
+  ScrollOnLoadingDirective,
+} from '../../directives';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ConfirmDialogManagerService } from '@org/shared/services';
+import { ResourceCoordinatorManagerService } from '../../services/resource-coordinator-manager.service';
+import { ITodo } from '../../models';
 import { CONFIRM_MODAL_CONFIG } from '../../config';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter, switchMap } from 'rxjs';
+import { withToaster } from '@org/my-lib/interceptors';
+import { TODO_SUCCESS_MESSAGES } from '../../types';
+import { ConfirmDialogManagerService } from '@org/shared';
 
 @Component({
   imports: [
     TodoCardComponent,
-    ReactiveFormsModule,
     AsyncPipe,
     EmptyStateComponent,
     TodoLoadingDirective,
     TodoFormComponent,
+    ScrollOnLoadingDirective,
   ],
   selector: 'app-todo-list',
   templateUrl: './todo-list.component.html',
   styleUrls: ['./todo-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: BaseResourceManagerService,
+      useExisting: TodoManagerService,
+    },
+  ],
 })
-export class TodoListComponent {
-  readonly loadingManagerService = inject(LOADER_MANAGER_SERVICE);
+export class TodoListComponent<T extends ITodo>
+  extends ResourceCoordinatorManagerService<T>
+  implements AfterViewInit
+{
+  readonly dialog = inject(ConfirmDialogManagerService);
 
-  readonly todos$ = inject(TodoManagerService).todos$;
-
-  @ViewChild('skeleton', { read: ElementRef })
-  skeleton?: ElementRef<HTMLElement>;
-
-  readonly #renderer = inject(Renderer2);
   readonly #injector = inject(Injector);
-  readonly #todoManager = inject(TodoManagerService);
   readonly #destroyRef = inject(DestroyRef);
-  readonly #confirmDialogManager = inject(ConfirmDialogManagerService);
 
-  constructor() {
-    effect(() => {
-      if (!this.loadingManagerService.loading()) {
-        return;
-      }
-
-      if (!this.skeleton) {
-        return;
-      }
-
-      this.#renderer.addClass(
-        this.skeleton.nativeElement,
-        'tasks__skeleton--display',
-      );
-
-      this.skeleton.nativeElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-        inline: 'nearest',
-      });
-    });
+  ngAfterViewInit(): void {
+    this.getAll(true);
   }
 
-  createTodo(title: string): void {
-    this.#todoManager
-      .createTodo(title, this.#injector)
-      .pipe(takeUntilDestroyed(this.#destroyRef))
+  createTodo(name: string): void {
+    this.create(
+      { name },
+      this.createRequestConfig({ injector: this.#injector }),
+    )
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef),
+        withToaster(this.toaster, TODO_SUCCESS_MESSAGES.CREATE),
+      )
       .subscribe(() => {
-        this.#todoManager.refreshTodos();
+        this.getAll();
       });
   }
 
-  confirmTodoRemoval(todoId: string, injector: Injector): void {
-    this.#confirmDialogManager.open(CONFIRM_MODAL_CONFIG);
+  confirmTodoRemoval(id: string, injector: Injector): void {
+    this.dialog.open(CONFIRM_MODAL_CONFIG);
 
-    this.#confirmDialogManager
+    this.dialog
       .confirmed()
-      .pipe(takeUntilDestroyed(this.#destroyRef))
-      .subscribe((confirmed) => this.#removeTodo(todoId, confirmed, injector));
-  }
-
-  #removeTodo(todoId: string, confirmed: boolean, injector: Injector): void {
-    if (confirmed) {
-      this.#todoManager
-        .removeTodo(todoId, injector)
-        .pipe(takeUntilDestroyed(this.#destroyRef))
-        .subscribe(() => this.#todoManager.refreshTodos());
-    }
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef),
+        filter((confirmed) => confirmed),
+        switchMap(() =>
+          this.delete(
+            this.createRequestConfig({ params: { id }, injector }),
+          ).pipe(withToaster(this.toaster, TODO_SUCCESS_MESSAGES.DELETE)),
+        ),
+      )
+      .subscribe(() => {
+        this.getAll();
+      });
   }
 }

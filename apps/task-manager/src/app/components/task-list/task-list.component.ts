@@ -4,30 +4,31 @@ import {
   input,
   inject,
   Injector,
-  ElementRef,
-  ViewChild,
-  effect,
   DestroyRef,
-  Renderer2,
 } from '@angular/core';
 import { TaskItemComponent } from '../task-item/task-item.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ITask } from '../../models';
+import { ITask, ITodo } from '../../models';
 import { EmptyStateComponent } from '../ui/empty-state/empty-state.component';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
-import { TaskManagerService, TodoManagerService } from '../../services';
-import { TaskLoadingDirective } from '../../directives';
+import { BaseResourceManagerService, TaskManagerService } from '../../services';
+import {
+  TaskLoadingDirective,
+  ScrollOnLoadingDirective,
+} from '../../directives';
 import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 import { LoaderManagerService } from '@org/shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { withToaster } from '@org/my-lib/operators';
+import { TASK_SUCCESS_MESSAGES } from '../../types';
+import { ResourceCoordinatorManagerService } from '../../services/resource-coordinator-manager.service';
 
 @Component({
   imports: [
     TaskItemComponent,
-    ReactiveFormsModule,
     EmptyStateComponent,
     TodoFormComponent,
     TaskLoadingDirective,
+    ScrollOnLoadingDirective,
   ],
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
@@ -35,73 +36,70 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     { provide: LOADER_MANAGER_SERVICE, useClass: LoaderManagerService },
+    { provide: BaseResourceManagerService, useExisting: TaskManagerService },
   ],
 })
-export class TaskListComponent {
+export class TaskListComponent<
+  T extends ITodo,
+> extends ResourceCoordinatorManagerService<T> {
   readonly todoId = input.required<string>();
   readonly tasks = input.required<ITask[]>();
 
-  readonly loadingManagerService = inject(LOADER_MANAGER_SERVICE);
-
-  @ViewChild('skeleton', { read: ElementRef })
-  skeleton?: ElementRef<HTMLElement>;
-
-  readonly #renderer = inject(Renderer2);
   readonly #injector = inject(Injector);
-  readonly #taskManager = inject(TaskManagerService);
-  readonly #todoManager = inject(TodoManagerService);
   readonly #destroyRef = inject(DestroyRef);
 
-  constructor() {
-    effect(() => {
-      if (!this.loadingManagerService.loading()) {
-        return;
-      }
-
-      if (!this.skeleton) {
-        return;
-      }
-
-      this.#renderer.addClass(
-        this.skeleton.nativeElement,
-        'tasks__skeleton--display',
-      );
-
-      this.skeleton.nativeElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'end',
-        inline: 'end',
-      });
-    });
-  }
-
-  createTask(title: string): void {
-    this.#taskManager
-      .createTask(this.todoId(), title, this.#injector)
-      .pipe(takeUntilDestroyed(this.#destroyRef))
+  createTask(name: string): void {
+    this.create(
+      { name },
+      this.createRequestConfig({
+        params: { id: this.todoId() },
+        injector: this.#injector,
+      }),
+    )
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef),
+        withToaster(this.toaster, TASK_SUCCESS_MESSAGES.CREATE),
+      )
       .subscribe(() => {
-        this.#todoManager.refreshTodos();
+        this.getAll();
       });
   }
 
   removeTask(id: string, injector: Injector): void {
-    this.#taskManager
-      .removeTask(this.todoId(), id, injector)
-      .pipe(takeUntilDestroyed(this.#destroyRef))
-      .subscribe(() => this.#todoManager.refreshTodos());
+    this.delete(
+      this.createRequestConfig({
+        params: { id: this.todoId(), 'task-id': id },
+        injector,
+      }),
+    )
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef),
+        withToaster(this.toaster, TASK_SUCCESS_MESSAGES.DELETE),
+      )
+      .subscribe(() => {
+        this.getAll();
+      });
   }
 
-  toggleTaskCompletion(id: string, name: string, completed: boolean, injector: Injector): void {
-    this.#taskManager
-      .updateTask({ name, completed }, this.todoId(), id, injector)
-      .pipe(takeUntilDestroyed(this.#destroyRef))
-      .subscribe(() => this.#todoManager.refreshTodos());
-  }
-
-  completeTaskEdit(id: string, name: string, injector: Injector): void {
-    this.#taskManager
-      .updateTask({ name }, this.todoId(), id, injector)
-      .pipe(takeUntilDestroyed(this.#destroyRef))
-      .subscribe(() => this.#todoManager.refreshTodos());
+  updateTask(
+    id: string,
+    name: string,
+    completed: boolean,
+    injector: Injector,
+  ): void {
+    this.update(
+      { name, completed },
+      this.createRequestConfig({
+        params: { id: this.todoId(), 'task-id': id },
+        injector,
+      }),
+    )
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef),
+        withToaster(this.toaster, TASK_SUCCESS_MESSAGES.UPDATE),
+      )
+      .subscribe(() => {
+        this.getAll();
+      });
   }
 }

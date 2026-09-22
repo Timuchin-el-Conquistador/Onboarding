@@ -9,8 +9,3 @@ export interface ITask {
   name: string;
   completed: boolean;
 }
-
-export interface IEditTask {
-  name: string;
-  completed?: boolean;
-}
