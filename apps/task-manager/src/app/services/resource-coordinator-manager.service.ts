@@ -28,6 +28,9 @@ export class ResourceCoordinatorManagerService<
   readonly baseUrl = inject(API_URL_TOKEN);
 
   readonly #refreshSubject = inject(SUBJECT_TOKEN);
+  readonly #service: BaseResourceManagerService<T> = inject(
+    BaseResourceManagerService,
+  );
 
   todos$: Observable<T[]> = this.#refreshSubject.pipe(
     switchMap((initial: boolean) =>
@@ -42,18 +45,16 @@ export class ResourceCoordinatorManagerService<
     ),
   );
 
-  constructor(private readonly service: BaseResourceManagerService<T>) {}
-
   create(body: IBody, config?: IConfig): Observable<T> {
-    return this.service.create(body, config);
+    return this.#service.create(body, config);
   }
 
   delete(config?: IConfig): Observable<T> {
-    return this.service.delete(config);
+    return this.#service.delete(config);
   }
 
   update(body: IBody, config?: IConfig): Observable<T> {
-    return this.service.update!(body, config);
+    return this.#service.update!(body, config);
   }
 
   getAll(initial = false) {

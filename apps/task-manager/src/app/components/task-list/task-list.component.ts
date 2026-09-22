@@ -10,7 +10,7 @@ import { TaskItemComponent } from '../task-item/task-item.component';
 import { ITask, ITodo } from '../../models';
 import { EmptyStateComponent } from '../ui/empty-state/empty-state.component';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
-import { TaskManagerService } from '../../services';
+import { BaseResourceManagerService, TaskManagerService } from '../../services';
 import {
   TaskLoadingDirective,
   ScrollOnLoadingDirective,
@@ -36,6 +36,7 @@ import { ResourceCoordinatorManagerService } from '../../services/resource-coord
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     { provide: LOADER_MANAGER_SERVICE, useClass: LoaderManagerService },
+    { provide: BaseResourceManagerService, useExisting: TaskManagerService },
   ],
 })
 export class TaskListComponent<
@@ -46,10 +47,6 @@ export class TaskListComponent<
 
   readonly #injector = inject(Injector);
   readonly #destroyRef = inject(DestroyRef);
-
-  constructor() {
-    super(inject(TaskManagerService));
-  }
 
   createTask(name: string): void {
     this.create(

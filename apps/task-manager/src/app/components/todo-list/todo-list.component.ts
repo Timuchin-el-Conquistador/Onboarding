@@ -6,7 +6,7 @@ import {
   AfterViewInit,
   DestroyRef,
 } from '@angular/core';
-import { TodoManagerService } from '../../services';
+import { BaseResourceManagerService, TodoManagerService } from '../../services';
 import { TodoCardComponent } from '../todo-card/todo-card.component';
 import { AsyncPipe } from '@angular/common';
 import { EmptyStateComponent } from '../ui/empty-state/empty-state.component';
@@ -37,6 +37,12 @@ import { ConfirmDialogManagerService } from '@org/shared';
   templateUrl: './todo-list.component.html',
   styleUrls: ['./todo-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {
+      provide: BaseResourceManagerService,
+      useExisting: TodoManagerService,
+    },
+  ],
 })
 export class TodoListComponent<T extends ITodo>
   extends ResourceCoordinatorManagerService<T>
@@ -46,10 +52,6 @@ export class TodoListComponent<T extends ITodo>
 
   readonly #injector = inject(Injector);
   readonly #destroyRef = inject(DestroyRef);
-
-  constructor() {
-    super(inject(TodoManagerService));
-  }
 
   ngAfterViewInit(): void {
     this.getAll(true);
