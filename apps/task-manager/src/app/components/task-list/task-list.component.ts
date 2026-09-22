@@ -7,13 +7,10 @@ import {
   DestroyRef,
 } from '@angular/core';
 import { TaskItemComponent } from '../task-item/task-item.component';
-import { ITask } from '../../models';
+import { ITask, ITodo } from '../../models';
 import { EmptyStateComponent } from '../ui/empty-state/empty-state.component';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
-import {
-  ResourceChangeNotifierManagerService,
-  TaskManagerService,
-} from '../../services';
+import { TaskManagerService } from '../../services';
 import {
   TaskLoadingDirective,
   ScrollOnLoadingDirective,
@@ -21,9 +18,9 @@ import {
 import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
 import { LoaderManagerService } from '@org/shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ToasterService, withToaster } from '@org/my-lib/operators';
+import { withToaster } from '@org/my-lib/operators';
 import { TASK_SUCCESS_MESSAGES } from '../../types';
-import { ABSTRACTION_TOKEN } from '../../tokens';
+import { ResourceCoordinatorManagerService } from '../../services/resource-coordinator-manager.service';
 
 @Component({
   imports: [
@@ -39,48 +36,51 @@ import { ABSTRACTION_TOKEN } from '../../tokens';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     { provide: LOADER_MANAGER_SERVICE, useClass: LoaderManagerService },
-    { provide: ABSTRACTION_TOKEN, useClass: TaskManagerService },
   ],
 })
-export class TaskListComponent {
+export class TaskListComponent<
+  T extends ITodo,
+> extends ResourceCoordinatorManagerService<T> {
   readonly todoId = input.required<string>();
   readonly tasks = input.required<ITask[]>();
 
-  readonly toaster = inject(ToasterService);
-  readonly loader = inject(LOADER_MANAGER_SERVICE);
-
   readonly #injector = inject(Injector);
   readonly #destroyRef = inject(DestroyRef);
-  readonly #takManager = inject(ABSTRACTION_TOKEN);
-  readonly #notificationManager = inject(ResourceChangeNotifierManagerService);
+
+  constructor() {
+    super(inject(TaskManagerService));
+  }
 
   createTask(name: string): void {
-    this.#takManager
-      .create(
-        { name },
-        { params: { id: this.todoId() }, injector: this.#injector },
-      )
+    this.create(
+      { name },
+      this.createRequestConfig({
+        params: { id: this.todoId() },
+        injector: this.#injector,
+      }),
+    )
       .pipe(
         takeUntilDestroyed(this.#destroyRef),
         withToaster(this.toaster, TASK_SUCCESS_MESSAGES.CREATE),
       )
       .subscribe(() => {
-        this.#notificationManager.refresh();
+        this.getAll();
       });
   }
 
   removeTask(id: string, injector: Injector): void {
-    this.#takManager
-      .delete({
+    this.delete(
+      this.createRequestConfig({
         params: { id: this.todoId(), 'task-id': id },
         injector,
-      })
+      }),
+    )
       .pipe(
         takeUntilDestroyed(this.#destroyRef),
         withToaster(this.toaster, TASK_SUCCESS_MESSAGES.DELETE),
       )
       .subscribe(() => {
-        this.#notificationManager.refresh();
+        this.getAll();
       });
   }
 
@@ -90,17 +90,19 @@ export class TaskListComponent {
     completed: boolean,
     injector: Injector,
   ): void {
-    this.#takManager
-      .update?.(
-        { name, completed },
-        { params: { id: this.todoId(), 'task-id': id }, injector },
-      )
+    this.update(
+      { name, completed },
+      this.createRequestConfig({
+        params: { id: this.todoId(), 'task-id': id },
+        injector,
+      }),
+    )
       .pipe(
         takeUntilDestroyed(this.#destroyRef),
         withToaster(this.toaster, TASK_SUCCESS_MESSAGES.UPDATE),
       )
       .subscribe(() => {
-        this.#notificationManager.refresh();
+        this.getAll();
       });
   }
 }

@@ -1,16 +1,19 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BaseResourceManagerService } from './base-resource-manager.service';
-import { IOptions, ITodo, IBody } from '../models';
+import { ITodo, IBody, IConfig } from '../models';
 import { Observable } from 'rxjs';
 import { ENDPOINTS_CONFIG } from '../config/endpoints.config';
+import { HttpClient } from '@angular/common/http';
+import { API_URL_TOKEN } from '@org/shared';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class TaskManagerService<
   T extends ITodo,
-> extends BaseResourceManagerService<T> {
-  create(body: IBody, options?: IOptions): Observable<T> {
-    const config = this.createRequestConfig(options);
+> implements BaseResourceManagerService<T> {
+  readonly http = inject(HttpClient);
+  readonly baseUrl = inject(API_URL_TOKEN);
 
+  create(body: IBody, config?: IConfig): Observable<T> {
     return this.http.post<T>(
       `${this.baseUrl}/${ENDPOINTS_CONFIG.CREATE_TASK}`,
       body,
@@ -18,18 +21,14 @@ export class TaskManagerService<
     );
   }
 
-  delete(options?: IOptions): Observable<string> {
-    const config = this.createRequestConfig(options);
-
-    return this.http.delete<string>(
+  delete(config?: IConfig): Observable<T> {
+    return this.http.delete<T>(
       `${this.baseUrl}/${ENDPOINTS_CONFIG.DELETE_TASK}`,
       config,
     );
   }
 
-  override update(body: IBody, options?: IOptions): Observable<T> {
-    const config = this.createRequestConfig(options);
-
+  update(body: IBody, config?: IConfig): Observable<T> {
     return this.http.post<T>(
       `${this.baseUrl}/${ENDPOINTS_CONFIG.EDIT_TASK}`,
       body,
