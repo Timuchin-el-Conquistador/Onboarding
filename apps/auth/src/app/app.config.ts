@@ -6,13 +6,9 @@ import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { API_URL_TOKEN } from './tokens';
 import { environment } from '../environments/environment';
-import {
-  provideHttpClient,
-  withInterceptors,
-  withInterceptorsFromDi,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './interceptors';
-import { LoadingInterceptor } from '@org/shared/interceptors';
+import { loadingInterceptor } from '@org/shared/interceptors';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,9 +18,6 @@ export const appConfig: ApplicationConfig = {
       provide: API_URL_TOKEN,
       useValue: environment.apiUrl,
     },
-    provideHttpClient(
-      withInterceptors([authInterceptor, LoadingInterceptor]),
-      withInterceptorsFromDi(),
-    ),
+    provideHttpClient(withInterceptors([authInterceptor, loadingInterceptor])),
   ],
 };

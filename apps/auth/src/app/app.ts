@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { AppRoute } from './app.routes';
+import { AppRoutes } from '@org/shared';
 
 @Component({
   standalone: true,
@@ -12,5 +12,5 @@ import { AppRoute } from './app.routes';
   styleUrl: './app.scss',
 })
 export class App {
-  protected readonly appRoute = AppRoute;
+  protected readonly appRoute = AppRoutes;
 }

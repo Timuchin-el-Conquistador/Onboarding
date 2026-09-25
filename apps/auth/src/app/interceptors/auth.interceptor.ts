@@ -8,7 +8,7 @@ import { Observable, tap } from 'rxjs';
 import { HANDLE_LOGIN, HANDLE_LOGOUT } from '../services/user-identity-manager';
 import { inject } from '@angular/core';
 import { LOCAL_STORAGE } from '../tokens';
-import { AUTH_HEADER } from '../models';
+import { AUTH_TOKEN } from '@org/shared';
 
 export function authInterceptor(
   req: HttpRequest<unknown>,
@@ -23,19 +23,19 @@ export function authInterceptor(
           return;
         }
 
-        const token = event.headers.get(AUTH_HEADER);
+        const token = event.headers.get(AUTH_TOKEN);
 
         if (token) {
-          storage.setItem(AUTH_HEADER, token);
+          storage.setItem(AUTH_TOKEN, token);
         }
       }),
     );
   }
 
   if (req.context.get(HANDLE_LOGOUT)) {
-    const token = storage.getItem(AUTH_HEADER) ?? '';
+    const token = storage.getItem(AUTH_TOKEN) ?? '';
     const newReq = req.clone({
-      headers: req.headers.append(AUTH_HEADER, token),
+      headers: req.headers.append(AUTH_TOKEN, token),
     });
 
     return next(newReq);

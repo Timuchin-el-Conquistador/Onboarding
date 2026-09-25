@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { API_URL_TOKEN, LOCAL_STORAGE } from '../tokens';
+import { API_URL_TOKEN } from '../tokens';
 import {
   HttpClient,
   HttpContext,
@@ -8,7 +8,7 @@ import {
 import type { IUser } from '../models';
 import { Observable } from 'rxjs';
 import { withLoading, withSuccessMessage } from '../operators';
-import { AUTH_HEADER, SUCCESS_MESSAGES } from '../models';
+import { SUCCESS_MESSAGES } from '../models';
 
 export const HANDLE_LOGIN = new HttpContextToken(() => false);
 export const HANDLE_LOGOUT = new HttpContextToken(() => false);
@@ -22,7 +22,6 @@ export class UserIdentityManager {
 
   readonly #http = inject(HttpClient);
   readonly #base_url = inject(API_URL_TOKEN);
-  readonly #storage = inject(LOCAL_STORAGE);
 
   login(user: IUser): Observable<unknown> {
     return this.#http
@@ -65,10 +64,5 @@ export class UserIdentityManager {
         withLoading(this.loading),
         withSuccessMessage(this.successMessage, SUCCESS_MESSAGES.LOGOUT),
       );
-  }
-
-  isAuthenticated(): boolean {
-    const isAuthenticated = !!this.#storage.getItem(AUTH_HEADER);
-    return isAuthenticated;
   }
 }

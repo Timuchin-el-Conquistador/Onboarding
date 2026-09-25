@@ -6,9 +6,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
-import { AppRoute } from '../app.routes';
+import { AppRoutes } from '@org/shared';
 import { PasswordFieldComponent } from '../ui';
-import { DYNAMIC_FORM_FACTORY, DEFAULT_AUTH_FORM } from '../models';
+import { DEFAULT_AUTH_FORM } from '../models';
+import { DYNAMIC_FORM_FACTORY } from '@org/shared';
 import type { IAuthForm } from '../models';
 import { UserIdentityManager } from '../services';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,7 +34,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResetPasswordPageComponent {
-  readonly appRoute = AppRoute;
+  readonly appRoute = AppRoutes;
 
   readonly loading = inject(UserIdentityManager).loading;
   readonly successMessage = inject(UserIdentityManager).successMessage;
