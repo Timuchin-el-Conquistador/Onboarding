@@ -7,7 +7,7 @@ import {
 import { Observable, tap } from 'rxjs';
 import { HANDLE_LOGIN, HANDLE_LOGOUT } from '../services/user-identity-manager';
 import { inject } from '@angular/core';
-import { LOCAL_STORAGE } from '../tokens';
+import { LOCAL_STORAGE } from '@org/shared';
 import { AUTH_TOKEN } from '@org/shared';
 
 export function authInterceptor(

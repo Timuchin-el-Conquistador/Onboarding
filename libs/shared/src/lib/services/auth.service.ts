@@ -8,7 +8,7 @@ import { AUTH_TOKEN } from '../consts';
 export class AuthService {
   readonly #storage = inject(LOCAL_STORAGE);
 
-  isAuthentificated(): boolean {
+  isAuthenticated(): boolean {
     return !!this.#storage.getItem(AUTH_TOKEN);
   }
 }

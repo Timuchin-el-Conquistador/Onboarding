@@ -4,8 +4,8 @@ import {
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
-import { API_URL_TOKEN } from './tokens';
 import { environment } from '../environments/environment';
+import { API_URL_TOKEN } from '@org/shared/tokens';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './interceptors';
 import { loadingInterceptor } from '@org/shared/interceptors';

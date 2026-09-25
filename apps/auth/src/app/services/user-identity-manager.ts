@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { API_URL_TOKEN } from '../tokens';
+import { API_URL_TOKEN } from '@org/shared/tokens';
 import {
   HttpClient,
   HttpContext,
