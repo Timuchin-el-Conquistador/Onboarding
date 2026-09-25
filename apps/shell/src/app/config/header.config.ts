@@ -1,7 +1,7 @@
 import { ButtonConfigType } from '@org/shared';
 import { AppRoutes } from '@org/shared';
 
-export const authentificated: ButtonConfigType[] = [
+export const authenticated: ButtonConfigType[] = [
   {
     value: '',
     label: 'Logout',
@@ -10,7 +10,7 @@ export const authentificated: ButtonConfigType[] = [
   },
 ];
 
-export const nonAutentificated: ButtonConfigType[] = [
+export const nonAuthenticated: ButtonConfigType[] = [
   {
     value: '',
     label: 'Login',

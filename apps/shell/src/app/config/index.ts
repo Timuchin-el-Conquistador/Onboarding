@@ -1,1 +1,1 @@
-export { authentificated, nonAutentificated } from './header.config';
+export { authenticated, nonAuthenticated } from './header.config';

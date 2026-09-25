@@ -12,6 +12,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { AsyncPipe } from '@angular/common';
 import { map, Observable } from 'rxjs';
 import { ButtonConfigType } from '@org/shared';
+import { nonAuthenticated } from '../config';
 
 @Component({
   imports: [
@@ -33,7 +34,7 @@ export class HeaderComponent {
   readonly config$: Observable<ButtonConfigType[]> =
     this.#activatedRoute.data.pipe(
       map((data: Data) => {
-        return data['config'];
+        return data['config'] ?? nonAuthenticated;
       }),
     );
 }
