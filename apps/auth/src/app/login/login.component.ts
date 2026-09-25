@@ -8,11 +8,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
-import { AppRoute } from '../app.routes';
+import { AppRoutes } from '@org/shared';
 import { PasswordFieldComponent } from '../ui';
-import { DYNAMIC_FORM_FACTORY, DEFAULT_AUTH_FORM } from '../models';
 import type { IAuthForm } from '../models';
 import { UserIdentityManager } from '../services';
+import { DYNAMIC_FORM_FACTORY } from '@org/shared';
+import { DEFAULT_AUTH_FORM } from '../models';
 
 @Component({
   selector: 'app-login-page',
@@ -33,7 +34,7 @@ import { UserIdentityManager } from '../services';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginPageComponent {
-  readonly appRoute = AppRoute;
+  readonly appRoute = AppRoutes;
 
   readonly loading = inject(UserIdentityManager).loading;
   readonly successMessage = inject(UserIdentityManager).successMessage;

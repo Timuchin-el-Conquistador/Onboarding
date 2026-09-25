@@ -26,7 +26,11 @@
       "@org/shared/environments": ["./libs/shared/src/index.ts"],
       "@org/shared/tokens": ["./libs/shared/src/index.ts"],
       "@org/shared/services": ["./libs/shared/src/index.ts"],
-      "@org/shared/interceptors": ["./libs/shared/src/index.ts"]
+      "@org/shared/interceptors": ["./libs/shared/src/index.ts"],
+      "@org/auth": ["./apps/auth/src/app/app.routes.ts"],
+      "@org/auth/config": ["./apps/auth/src/app/app.config.ts"],
+      "@org/task-manager": ["./apps/task-manager/src/app/app.routes.ts"],
+      "@org/task-manager/config": ["./apps/task-manager/src/app/app.config.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

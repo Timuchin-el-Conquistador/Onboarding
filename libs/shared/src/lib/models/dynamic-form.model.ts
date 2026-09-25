@@ -1,6 +1,4 @@
-import { InjectionToken, inject } from '@angular/core';
 import { AbstractControl, FormGroup, ValidatorFn } from '@angular/forms';
-import { DynamicFormFactory } from '../forms/dynamic-form.factory';
 
 export type FieldTypes = 'email' | 'password' | 'custom';
 
@@ -29,10 +27,3 @@ export interface IDynamicFormFactory {
     schema: IFormSchemaConfig,
   ): FormGroup<T>;
 }
-
-export const DYNAMIC_FORM_FACTORY = new InjectionToken<IDynamicFormFactory>(
-  'DYNAMIC_FORM_FACTORY',
-  {
-    factory: () => inject(DynamicFormFactory),
-  },
-);
