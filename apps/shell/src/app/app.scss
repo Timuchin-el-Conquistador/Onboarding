@@ -1,0 +1,33 @@
+:host {
+  --auth-page-bg: #f7f8fc;
+  --auth-surface: #ffffff;
+  --auth-primary: #3b82f6;
+  --auth-primary-soft: rgb(220, 231, 250);
+  --auth-action-button-bg: rgb(210, 224, 248);
+  --auth-action-button-text: rgb(30, 60, 100);
+  --auth-border-soft: rgba(255, 255, 255, 0.85);
+  --auth-shadow-soft: rgba(15, 23, 42, 0.12);
+
+  --auth-blue-50: #eff6ff;
+  --auth-blue-100: #dbeafe;
+  --auth-blue-200: #bfdbfe;
+  --auth-blue-300: #93c5fd;
+  --auth-blue-400: #60a5fa;
+  --auth-blue-500: #3b82f6;
+  --auth-blue-600: #2563eb;
+  --auth-blue-700: #1d4ed8;
+  --auth-blue-800: #1e40af;
+  --auth-blue-900: #1e3a8a;
+
+  --auth-error-bg: #fef2f2;
+  --auth-error-border: #fecaca;
+  --auth-error-text: #b42318;
+  --auth-success-bg: #f0fdf4;
+  --auth-success-border: #bbf7d0;
+  --auth-success-text: #15803d;
+  
+  display: block;
+  min-height: 100vh;
+  background: var(--auth-page-bg);
+  user-select: none;
+}
