@@ -7,7 +7,7 @@ import {
 import { Observable, tap } from 'rxjs';
 import { HANDLE_LOGIN, HANDLE_LOGOUT } from '../services/user-identity-manager';
 import { inject } from '@angular/core';
-import { LOCAL_STORAGE } from '@org/shared';
+import { APP_EVENTS, LOCAL_STORAGE } from '@org/shared';
 import { AUTH_TOKEN } from '@org/shared';
 
 export function authInterceptor(
@@ -24,6 +24,9 @@ export function authInterceptor(
         }
 
         const token = event.headers.get(AUTH_TOKEN);
+
+        const loginEvent = new CustomEvent(APP_EVENTS.AUTH_USER_LOGGED_IN);
+        window.dispatchEvent(loginEvent);
 
         if (token) {
           storage.setItem(AUTH_TOKEN, token);

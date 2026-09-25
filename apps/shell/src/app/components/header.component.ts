@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   ActivatedRoute,
@@ -13,6 +13,7 @@ import { AsyncPipe } from '@angular/common';
 import { map, Observable } from 'rxjs';
 import { ButtonConfigType } from '@org/shared';
 import { nonAuthenticated } from '../config';
+import { AppEventManager } from '../services';
 
 @Component({
   imports: [
@@ -28,8 +29,9 @@ import { nonAuthenticated } from '../config';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnDestroy {
   #activatedRoute = inject(ActivatedRoute);
+  #eventManager = inject(AppEventManager);
 
   readonly config$: Observable<ButtonConfigType[]> =
     this.#activatedRoute.data.pipe(
@@ -37,4 +39,8 @@ export class HeaderComponent {
         return data['config'] ?? nonAuthenticated;
       }),
     );
+
+  ngOnDestroy(): void {
+    this.#eventManager.clean()
+  }
 }
