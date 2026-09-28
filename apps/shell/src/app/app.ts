@@ -1,10 +1,17 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, inject, OnDestroy } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { AppEventManager } from '@org/shared';
 
 @Component({
-  imports: [RouterModule],
+  imports: [RouterOutlet],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App {}
+export class App implements OnDestroy {
+  #eventManager = inject(AppEventManager);
+
+  ngOnDestroy(): void {
+    this.#eventManager.clean();
+  }
+}

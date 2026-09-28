@@ -19,6 +19,7 @@
       "@org/my-lib/operators": ["./libs/my-lib//src/index.ts"],
       "@org/my-lib/models": ["./libs/my-lib/src/index.ts"],
       "@org/my-lib/services": ["./libs/my-lib/src/index.ts"],
+      "@org/my-lib/tokens": ["./libs/my-lib/src/index.ts"],
       "@org/shared": ["./libs/shared/src/index.ts"],
       "@org/shared/forms": ["./libs/shared/src/index.ts"],
       "@org/shared/operators": ["./libs/shared/src/index.ts"],

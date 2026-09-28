@@ -1,4 +1,4 @@
-import { ButtonConfigType } from '@org/shared';
+import { ButtonConfigType, ShellRoutes } from '@org/shared';
 import { AppRoutes } from '@org/shared';
 
 export const authenticated: ButtonConfigType[] = [
@@ -7,6 +7,7 @@ export const authenticated: ButtonConfigType[] = [
     label: 'Logout',
     color: 'primary',
     variant: 'raised',
+    routerLink: `/${ShellRoutes.Auth}/${AppRoutes.Logout}`,
   },
 ];
 
@@ -16,13 +17,13 @@ export const nonAuthenticated: ButtonConfigType[] = [
     label: 'Login',
     color: 'primary',
     variant: 'raised',
-    routerLink: `/auth/${AppRoutes.Login}`,
+    routerLink: `/${ShellRoutes.Auth}}/${AppRoutes.Login}`,
   },
   {
     value: '',
     label: 'Register',
     color: 'primary',
     variant: 'raised',
-    routerLink: `/auth/${AppRoutes.Register}`,
+    routerLink: `/${ShellRoutes.Auth}/${AppRoutes.Register}`,
   },
 ];

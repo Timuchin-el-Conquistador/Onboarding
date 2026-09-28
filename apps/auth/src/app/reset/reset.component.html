@@ -46,9 +46,9 @@
         color="primary"
         type="submit"
         class="auth-form__action"
-        [disabled]="loading() || form.invalid"
+        [disabled]="loader.loading() || form.invalid"
       >
-        @if (loading()) {
+        @if (loader.loading()) {
           <mat-icon style="width: fit-content">
             <mat-spinner diameter="30"></mat-spinner>
           </mat-icon>
