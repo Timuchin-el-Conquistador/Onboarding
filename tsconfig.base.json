@@ -16,6 +16,7 @@
     "paths": {
       "@org/my-lib": ["/libs/my-lib/src/index.ts"],
       "@org/my-lib/interceptors": ["./libs/my-lib//src/index.ts"],
+      "@org/my-lib/types": ["./libs/my-lib//src/index.ts"],
       "@org/my-lib/operators": ["./libs/my-lib//src/index.ts"],
       "@org/my-lib/models": ["./libs/my-lib/src/index.ts"],
       "@org/my-lib/services": ["./libs/my-lib/src/index.ts"],

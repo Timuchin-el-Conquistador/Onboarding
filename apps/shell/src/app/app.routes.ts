@@ -1,5 +1,9 @@
 import { Route } from '@angular/router';
-import { API_URL_TOKEN, authGuard, ShellRoutes } from '@org/shared';
+import {
+  API_URL_TOKEN,
+  authGuard,
+  ShellRoutes,
+} from '@org/shared';
 import { headerConfigResolver } from './resolvers';
 import { HeaderComponent } from './components/header.component';
 import { appConfig as taskManagerConfig } from '@org/task-manager/config';

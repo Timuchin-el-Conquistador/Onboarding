@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Injector } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   ActivatedRoute,
@@ -11,7 +11,7 @@ import {
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AsyncPipe } from '@angular/common';
 import { map, Observable } from 'rxjs';
-import { ButtonConfigType } from '@org/shared';
+import { ShellButtonConfigType } from '@org/my-lib/types';
 import { nonAuthenticated } from '../config';
 
 @Component({
@@ -29,9 +29,11 @@ import { nonAuthenticated } from '../config';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  #activatedRoute = inject(ActivatedRoute);
+  readonly injector = inject(Injector)
 
-  readonly config$: Observable<ButtonConfigType[]> =
+  readonly #activatedRoute = inject(ActivatedRoute);
+
+  readonly config$: Observable<ShellButtonConfigType[]> =
     this.#activatedRoute.data.pipe(
       map((data: Data) => {
         return data['config'] ?? nonAuthenticated;
