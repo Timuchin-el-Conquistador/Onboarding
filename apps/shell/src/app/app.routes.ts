@@ -16,29 +16,34 @@ export const appRoutes: Route[] = [
     redirectTo: ShellRoutes.Auth,
   },
   {
-    path: ShellRoutes.Auth,
+    path: ShellRoutes.Root,
     component: ListenerComponent,
-    loadChildren: () => {
-      return import('@org/auth').then((m) => m.appRoutes);
-    },
-    providers: [
-      ...authConfig.providers,
+    children: [
       {
-        provide: API_URL_TOKEN,
-        useValue: environment.apiUrl,
+        path: ShellRoutes.Auth,
+        loadChildren: () => {
+          return import('@org/auth').then((m) => m.appRoutes);
+        },
+        providers: [
+          ...authConfig.providers,
+          {
+            provide: API_URL_TOKEN,
+            useValue: environment.apiUrl,
+          },
+        ],
       },
-    ],
-  },
-  {
-    path: ShellRoutes.Dashboard,
-    component: ListenerComponent,
-    loadChildren: () => import('@org/task-manager').then((m) => m.appRoutes),
-    canActivate: [authGuard],
-    providers: [
-      ...taskManagerConfig.providers,
       {
-        provide: API_URL_TOKEN,
-        useValue: environment.apiUrl,
+        path: ShellRoutes.Dashboard,
+        loadChildren: () =>
+          import('@org/task-manager').then((m) => m.appRoutes),
+        canActivate: [authGuard],
+        providers: [
+          ...taskManagerConfig.providers,
+          {
+            provide: API_URL_TOKEN,
+            useValue: environment.apiUrl,
+          },
+        ],
       },
     ],
   },
