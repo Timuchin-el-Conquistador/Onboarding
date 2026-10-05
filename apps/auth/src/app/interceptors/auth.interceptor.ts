@@ -38,7 +38,13 @@ export function authInterceptor(
       headers: req.headers.append(AUTH_TOKEN, token),
     });
 
-    return next(newReq);
+    return next(newReq).pipe(
+      tap((event) => {
+        if (event.type === HttpEventType.Response) {
+          storage.removeItem(AUTH_TOKEN);
+        }
+      }),
+    );
   }
 
   return next(req);

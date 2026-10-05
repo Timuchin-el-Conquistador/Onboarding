@@ -1,33 +1,54 @@
 import { Route } from '@angular/router';
-import { authGuard } from '@org/shared';
-import { headerConfigResolver } from './resolvers';
-import { HeaderComponent } from './components/header.component';
+import {
+  API_URL_TOKEN,
+  authGuard,
+  environment,
+  ShellRoutes,
+} from '@org/shared';
 import { appConfig as authConfig } from '@org/auth/config';
 import { appConfig as taskManagerConfig } from '@org/task-manager/config';
+import { ListenerComponent } from './components/listener.component';
 
 export const appRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'auth',
+    redirectTo: ShellRoutes.Auth,
   },
   {
-    path: 'auth',
-    component: HeaderComponent,
-    loadChildren: () => import('@org/auth').then((m) => m.appRoutes),
-    resolve: { config: headerConfigResolver },
-    providers: [...authConfig.providers],
-  },
-  {
-    path: 'dashboard',
-    component: HeaderComponent,
-    loadChildren: () => import('@org/task-manager').then((m) => m.appRoutes),
-    resolve: { config: headerConfigResolver },
-    canActivate: [authGuard],
-    providers: [...taskManagerConfig.providers],
+    path: ShellRoutes.Root,
+    component: ListenerComponent,
+    children: [
+      {
+        path: ShellRoutes.Auth,
+        loadChildren: () => {
+          return import('@org/auth').then((m) => m.appRoutes);
+        },
+        providers: [
+          ...authConfig.providers,
+          {
+            provide: API_URL_TOKEN,
+            useValue: environment.apiUrl,
+          },
+        ],
+      },
+      {
+        path: ShellRoutes.Dashboard,
+        loadChildren: () =>
+          import('@org/task-manager').then((m) => m.appRoutes),
+        canActivate: [authGuard],
+        providers: [
+          ...taskManagerConfig.providers,
+          {
+            provide: API_URL_TOKEN,
+            useValue: environment.apiUrl,
+          },
+        ],
+      },
+    ],
   },
   {
     path: '**',
-    redirectTo: 'auth',
+    redirectTo: ShellRoutes.Auth,
   },
 ];

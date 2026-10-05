@@ -6,7 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
-import { AppRoutes } from '@org/shared';
+import { AppRoutes } from '../config';
 import { PasswordFieldComponent } from '../ui';
 import { DEFAULT_AUTH_FORM } from '../models';
 import { DYNAMIC_FORM_FACTORY } from '@org/shared';

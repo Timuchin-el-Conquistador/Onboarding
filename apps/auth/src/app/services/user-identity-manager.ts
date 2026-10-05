@@ -13,9 +13,7 @@ import { SUCCESS_MESSAGES } from '../models';
 export const HANDLE_LOGIN = new HttpContextToken(() => false);
 export const HANDLE_LOGOUT = new HttpContextToken(() => false);
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class UserIdentityManager {
   readonly loading = signal(false);
   readonly successMessage = signal('');

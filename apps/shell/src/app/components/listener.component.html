@@ -1,0 +1,27 @@
+<header>
+  <mat-toolbar color="primary" class="app-header">
+    <div class="app-header__toolbar-inner">
+      <div class="app-header__brand">Access Portal</div>
+
+      <nav class="app-header__links" aria-label="Authentication navigation">
+        <button
+          mat-stroked-button
+          routerLinkActive="active-link"
+          (click)="login()"
+        >
+          Login
+        </button>
+
+        <button
+          mat-stroked-button
+          routerLinkActive="active-link"
+          (click)="register()"
+        >
+          Register
+        </button>
+      </nav>
+    </div>
+  </mat-toolbar>
+</header>
+
+<router-outlet />

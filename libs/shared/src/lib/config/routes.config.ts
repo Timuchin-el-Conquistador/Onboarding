@@ -1,6 +1,5 @@
-export enum AppRoutes {
+export enum ShellRoutes {
   Root = '',
-  Login = 'login',
-  Register = 'register',
-  Reset = 'reset',
+  Auth = 'auth',
+  Dashboard = 'dashboard',
 }
