@@ -8,12 +8,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
-import { AppRoutes } from '@org/shared';
+import { APP_EVENTS, BaseEventManagerService } from '@org/shared';
 import { PasswordFieldComponent } from '../ui';
 import type { IAuthForm } from '../models';
 import { UserIdentityManager } from '../services';
 import { DYNAMIC_FORM_FACTORY } from '@org/shared';
 import { DEFAULT_AUTH_FORM } from '../models';
+import { AppRoutes } from '../config';
 
 @Component({
   selector: 'app-login-page',
@@ -43,12 +44,16 @@ export class LoginPageComponent {
     inject(DYNAMIC_FORM_FACTORY).createForm<IAuthForm>(DEFAULT_AUTH_FORM);
 
   readonly #userIdentityManager = inject(UserIdentityManager);
+  readonly #eventManager = inject(BaseEventManagerService);
 
   login(): void {
     const email = this.form.value.email?.trim() ?? '';
     const password = this.form.value.password?.trim() ?? '';
 
     this.#userIdentityManager.login({ email, password }).subscribe({
+      complete: () => {
+        this.#eventManager.dispatch(APP_EVENTS.AUTH_USER_LOGGED_IN);
+      },
       error: (error) => {
         const {
           error: { error: serverError },

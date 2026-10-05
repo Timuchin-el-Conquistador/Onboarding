@@ -3,5 +3,4 @@ export type ButtonConfigType = {
   value: any;
   color?: 'primary' | 'accent' | 'warn';
   variant?: 'basic' | 'raised';
-  routerLink?: string;
 };

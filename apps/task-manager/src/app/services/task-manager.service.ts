@@ -6,7 +6,7 @@ import { ENDPOINTS_CONFIG } from '../config/endpoints.config';
 import { HttpClient } from '@angular/common/http';
 import { API_URL_TOKEN } from '@org/shared';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class TaskManagerService<
   T extends ITodo,
 > implements BaseResourceManagerService<T> {
