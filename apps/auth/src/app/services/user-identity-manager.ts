@@ -54,13 +54,8 @@ export class UserIdentityManager {
   }
 
   logout(): Observable<unknown> {
-    return this.#http
-      .delete(this.#base_url + '/v1/sign-in/out', {
-        context: new HttpContext().set(HANDLE_LOGOUT, true),
-      })
-      .pipe(
-        withLoading(this.loading),
-        withSuccessMessage(this.successMessage, SUCCESS_MESSAGES.LOGOUT),
-      );
+    return this.#http.delete(this.#base_url + '/v1/sign-in/out', {
+      context: new HttpContext().set(HANDLE_LOGOUT, true),
+    });
   }
 }

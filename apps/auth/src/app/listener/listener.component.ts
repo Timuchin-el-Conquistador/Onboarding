@@ -1,17 +1,34 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { APP_EVENTS, BaseEventManagerService } from '@org/shared';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { AppRoutes } from '../config';
 import { distinctUntilChanged } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserIdentityManager } from '../services';
+import { ToasterService, withToaster } from '@org/my-lib/interceptors';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { SUCCESS_MESSAGES } from '../models';
+import { withLoading } from '../operators';
 
 @Component({
   selector: 'app-listener',
-  imports: [RouterOutlet],
-  template: `<router-outlet />`,
+  imports: [
+    RouterOutlet,
+    MatCardModule,
+    MatFormFieldModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+  ],
+  templateUrl: './listener.component.html',
+  styleUrl: './listener.component.scss',
 })
 export class ListenerComponent {
+  readonly loading = signal(false);
+
+  readonly toaster = inject(ToasterService);
   readonly activeRoute = inject(ActivatedRoute);
   readonly router = inject(Router);
 
@@ -46,7 +63,11 @@ export class ListenerComponent {
   #logout(): void {
     this.#userIdentityManager
       .logout()
-      .pipe(takeUntilDestroyed(this.#destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef),
+        withLoading(this.loading),
+        withToaster(this.toaster, SUCCESS_MESSAGES.LOGOUT),
+      )
       .subscribe(() => {
         this.#eventManager.dispatch(APP_EVENTS.AUTH_USER_LOGGED_OUT);
       });
