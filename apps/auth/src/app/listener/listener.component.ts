@@ -1,10 +1,9 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { APP_EVENTS, BaseEventManagerService } from '@org/shared';
+import { APP_EVENTS, BaseEventManagerService, WINDOW } from '@org/shared';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { AppRoutes } from '../config';
-import { distinctUntilChanged } from 'rxjs';
+import { filter, fromEvent } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { UserIdentityManager } from '../services';
 import { ToasterService, withToaster } from '@org/my-lib/interceptors';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -12,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { SUCCESS_MESSAGES } from '../models';
 import { withLoading } from '../operators';
+import { UserIdentityManager } from '../services';
 
 @Component({
   selector: 'app-listener',
@@ -28,19 +28,23 @@ import { withLoading } from '../operators';
 export class ListenerComponent {
   readonly loading = signal(false);
 
-  readonly toaster = inject(ToasterService);
   readonly activeRoute = inject(ActivatedRoute);
   readonly router = inject(Router);
+  readonly toaster = inject(ToasterService);
 
+  readonly #window = inject(WINDOW);
   readonly #destroyRef = inject(DestroyRef);
   readonly #userIdentityManager = inject(UserIdentityManager);
   readonly #eventManager = inject(BaseEventManagerService);
 
   ngOnInit(): void {
-    this.#eventManager.events$
-      .pipe(takeUntilDestroyed(this.#destroyRef), distinctUntilChanged())
-      .subscribe((message) => {
-        switch (message) {
+    fromEvent<MessageEvent>(this.#window, 'message')
+      .pipe(
+        takeUntilDestroyed(this.#destroyRef),
+        filter((event) => event.origin === this.#window.location.origin),
+      )
+      .subscribe((event) => {
+        switch (event.data) {
           case APP_EVENTS.AUTH_USER_LOGIN:
             this.router.navigate([AppRoutes.Login], {
               relativeTo: this.activeRoute,

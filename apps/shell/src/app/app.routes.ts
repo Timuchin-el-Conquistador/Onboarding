@@ -17,7 +17,7 @@ export const appRoutes: Route[] = [
     pathMatch: 'full',
     redirectTo: () => {
       const authService = inject(AuthService);
-
+      
       return authService.isAuthenticated()
         ? ShellRoutes.Dashboard
         : ShellRoutes.Auth;

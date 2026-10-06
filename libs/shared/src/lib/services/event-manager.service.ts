@@ -1,14 +1,12 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { WINDOW } from '@org/shared';
 import { BaseEventManagerService } from './base-event-manager.service';
-import { ReplaySubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class BrowserEventManager implements BaseEventManagerService<string> {
-  readonly #events$ = new ReplaySubject<string>(1);
+  readonly #window = inject(WINDOW);
 
-  readonly events$ = this.#events$.asObservable();
-
-  dispatch(message: string): void {
-    this.#events$.next(message);
+  dispatch(event: string): void {
+    this.#window.postMessage(event);
   }
 }
