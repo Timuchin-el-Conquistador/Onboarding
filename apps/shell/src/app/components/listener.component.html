@@ -4,21 +4,31 @@
       <div class="app-header__brand">Access Portal</div>
 
       <nav class="app-header__links" aria-label="Authentication navigation">
-        <button
-          mat-stroked-button
-          routerLinkActive="active-link"
-          (click)="login()"
-        >
-          Login
-        </button>
+        @if (isAuthenticated()) {
+          <button
+            mat-stroked-button
+            routerLinkActive="active-link"
+            (click)="logout()"
+          >
+            Logout
+          </button>
+        } @else {
+          <button
+            mat-stroked-button
+            routerLinkActive="active-link"
+            (click)="login()"
+          >
+            Login
+          </button>
 
-        <button
-          mat-stroked-button
-          routerLinkActive="active-link"
-          (click)="register()"
-        >
-          Register
-        </button>
+          <button
+            mat-stroked-button
+            routerLinkActive="active-link"
+            (click)="register()"
+          >
+            Register
+          </button>
+        }
       </nav>
     </div>
   </mat-toolbar>

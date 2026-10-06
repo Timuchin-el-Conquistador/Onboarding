@@ -7,6 +7,7 @@ export const appRoutes: Route[] = [
   {
     path: AppRoutes.Root,
     component: ListenerComponent,
+    providers: [UserIdentityManager],
     children: [
       {
         path: AppRoutes.Root,
@@ -17,7 +18,6 @@ export const appRoutes: Route[] = [
         path: AppRoutes.Login,
         loadComponent: () =>
           import('./login/login.component').then((c) => c.LoginPageComponent),
-        providers: [UserIdentityManager],
       },
       {
         path: AppRoutes.Register,
@@ -25,7 +25,6 @@ export const appRoutes: Route[] = [
           import('./signup/signup.component').then(
             (c) => c.SignupPageComponent,
           ),
-        providers: [UserIdentityManager],
       },
       {
         path: AppRoutes.Reset,
@@ -33,7 +32,6 @@ export const appRoutes: Route[] = [
           import('./reset/reset.component').then(
             (c) => c.ResetPasswordPageComponent,
           ),
-        providers: [UserIdentityManager],
       },
     ],
   },
