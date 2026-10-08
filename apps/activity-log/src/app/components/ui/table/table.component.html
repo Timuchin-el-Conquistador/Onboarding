@@ -39,16 +39,10 @@
     </div>
 
     <div class="panel-footer">
-      <mat-paginator
-        appBubblePagination
-        [table]="table"
-        [appCustomLength]="dataSource().data.length"
-        [length]="dataSource().data.length"
-        [pageSize]="20"
-        aria-label="Select page"
-      >
-        >
-      </mat-paginator>
+      <app-ui-paginator
+        [total]="visibleItems().total"
+        [formControl]="form.controls.pagination"
+      />
     </div>
   </div>
 </div>

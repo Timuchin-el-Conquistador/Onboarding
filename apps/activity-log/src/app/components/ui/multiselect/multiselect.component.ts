@@ -40,12 +40,15 @@ export class MultiSelectComponent {
 
   readonly displayValue = computed(() => {
     const values = this.selectedValues();
+
     if (values.length === 0) {
       return 'Filter by event';
     }
+
     if (values.length === 1) {
       return values[0];
     }
+
     return `${values[0]} + ${values.length - 1} more`;
   });
 

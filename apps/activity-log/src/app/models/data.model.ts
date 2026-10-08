@@ -1,11 +1,11 @@
-export interface DummyData {
+export interface IDummyData {
   id: number;
   eventName: string;
   dateTime: string;
   additionalInfo: string;
 }
 
-export const dummyData: DummyData[] = [
+export const dummyData: IDummyData[] = [
   {
     id: 1,
     eventName: 'CREATE_TODO',

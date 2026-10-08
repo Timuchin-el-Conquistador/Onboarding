@@ -1,3 +1,9 @@
+:host ::ng-deep .mat-mdc-paginator,
+:host ::ng-deep .mat-mdc-paginator-container {
+  background: var(--activity-audit-footer-bg) !important;
+  color: var(--activity-audit-soft) !important;
+}
+
 .container {
   max-width: 90vw;
   margin: 0 auto;
@@ -205,12 +211,6 @@ thead th[data-sort-dir='desc'] .sort-indicator {
   font-size: 0.8125rem;
   color: var(--activity-audit-soft);
   position: relative;
-}
-
-:host ::ng-deep .mat-mdc-paginator,
-:host ::ng-deep .mat-mdc-paginator-container {
-  background: var(--activity-audit-footer-bg) !important;
-  color: var(--activity-audit-soft) !important;
 }
 
 .panel-footer strong {
