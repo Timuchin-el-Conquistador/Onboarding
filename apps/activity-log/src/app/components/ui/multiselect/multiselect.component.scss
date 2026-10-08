@@ -1,0 +1,193 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined');
+
+:host {
+  display: flex;
+  justify-content: center;
+  font-family: var(--inter-font);
+  --primary: var(--activity-audit-accent);
+  --primary-strong: var(--activity-audit-accent-strong);
+  --primary-soft: var(--activity-audit-accent-soft);
+  --surface: var(--activity-audit-surface);
+  --surface-alt: var(--activity-audit-surface-alt);
+  --surface-muted: var(--activity-audit-panel-bg);
+  --border: var(--activity-audit-border-strong);
+  --text: var(--activity-audit-text);
+  --muted: var(--activity-audit-muted);
+}
+
+.docs-light-mode {
+  --on-primary: #fff;
+}
+
+.select {
+  display: flex;
+  position: relative;
+  align-items: center;
+  border-radius: 999px;
+  color: var(--text);
+  background: linear-gradient(180deg, #ffffff 0%, #f7f9ff 100%);
+  border: 1px solid var(--border);
+  height: 3rem;
+  padding: 0 3.5rem;
+  cursor: pointer;
+  box-sizing: border-box;
+  width: 16rem;
+  user-select: none;
+  -webkit-user-select: none;
+  outline: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.select span {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.select:hover {
+  background: var(--surface-alt);
+  border-color: var(--primary);
+}
+
+.select[aria-disabled='true'] {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.selected-label-icon {
+  font-size: 1.25rem;
+  color: var(--primary-strong);
+}
+
+.select:focus,
+.select:focus-within {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--primary-soft);
+}
+
+.combobox-label {
+  gap: 1rem;
+  left: 1rem;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  pointer-events: none;
+}
+
+.example-arrow {
+  right: 1rem;
+  position: absolute;
+  pointer-events: none;
+  transition: transform 150ms ease-in-out;
+  color: var(--primary-strong);
+}
+
+.select[aria-expanded='true'] {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-soft);
+}
+
+.select[aria-expanded='true'] .example-arrow {
+  transform: rotate(180deg);
+}
+
+.example-popup-container {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 8px;
+  border-radius: 20px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow:
+    0 16px 40px rgba(79, 98, 255, 0.12),
+    0 8px 18px rgba(15, 23, 42, 0.08);
+  font-size: 0.9rem;
+  max-height: 13rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  animation: smoothPopupOpen 150ms ease-out forwards;
+  transform-origin: top;
+}
+
+@keyframes smoothPopupOpen {
+  0% {
+    max-height: 0;
+    opacity: 0;
+  }
+  16.7% {
+    opacity: 1;
+  }
+  100% {
+    max-height: 13rem;
+    opacity: 1;
+  }
+}
+
+.example-popup-container.closing {
+  animation: smoothPopupClose 150ms ease-in forwards;
+}
+
+@keyframes smoothPopupClose {
+  0% {
+    max-height: 13rem;
+    opacity: 1;
+  }
+  100% {
+    max-height: 0;
+    opacity: 0;
+  }
+}
+
+[ngListbox] {
+  gap: 2px;
+  padding: 2px;
+  height: 100%;
+  display: flex;
+  overflow: auto;
+  flex-direction: column;
+  outline: none;
+}
+
+[ngOption] {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  padding: 0 1rem;
+  min-height: 3rem;
+  border-radius: 999px;
+  outline: none;
+  color: var(--text);
+}
+
+[ngOption]:hover,
+[ngOption][data-active='true'] {
+  background-color: var(--surface-muted);
+}
+
+[ngOption][aria-selected='true'] {
+  color: var(--primary-strong);
+  background-color: var(--primary-soft);
+  font-weight: 600;
+}
+
+.example-option-icon {
+  font-size: 1.25rem;
+  padding-right: 1rem;
+}
+
+[ngOption]:not([aria-selected='true']) .example-option-check {
+  display: none;
+}
+
+.example-option-icon,
+.example-option-check {
+  font-size: 0.9rem;
+}
+
+.example-option-text {
+  flex: 1;
+}
