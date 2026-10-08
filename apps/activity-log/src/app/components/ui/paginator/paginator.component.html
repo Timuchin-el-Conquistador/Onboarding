@@ -1,0 +1,59 @@
+<div class="paginator-shell">
+  <div class="entries-info">
+    Showing {{ rangeStart() }}-{{ rangeEnd() }} of {{ total() }} entries
+  </div>
+
+  <div class="page-size-select">
+    <select (change)="selectPageSize($event)">
+      @for (size of pageSizes(); track $index) {
+        <option [value]="size" [selected]="size === value().pageSize">
+          {{ size }}
+        </option>
+      }
+    </select>
+  </div>
+
+  <div class="pagination">
+    <button
+      type="button"
+      [disabled]="value().page === 1"
+      (click)="selectPage(1)"
+    >
+      &lt;&lt;
+    </button>
+
+    <button
+      type="button"
+      [disabled]="value().page === 1"
+      (click)="selectPage(value().page - 1)"
+    >
+      &lt;
+    </button>
+
+    @for (page of visiblePages(); track page) {
+      <button
+        type="button"
+        [class.selected]="value().page === page"
+        (click)="selectPage(page)"
+      >
+        {{ page }}
+      </button>
+    }
+
+    <button
+      type="button"
+      [disabled]="value().page === totalPages()"
+      (click)="selectPage(value().page + 1)"
+    >
+      &gt;
+    </button>
+
+    <button
+      type="button"
+      [disabled]="value().page === totalPages()"
+      (click)="selectPage(totalPages())"
+    >
+      &gt;&gt;
+    </button>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="panel">
+    <div class="panel-header">
+      <div>
+        <div class="panel-title">Activity Audit</div>
+      </div>
+
+      <app-ui-multiselect />
+    </div>
+    <div class="table-wrapper" #table>
+      <table mat-table [dataSource]="dataSource()" class="mat-shadow-2">
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef>No.</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.id }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.eventName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let element">{{ element.dateTime }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="info">
+          <th mat-header-cell *matHeaderCellDef>Info</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.additionalInfo }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <div class="panel-footer">
+      <app-ui-paginator
+        [total]="visibleItems().total"
+        [formControl]="form.controls.pagination"
+      />
+    </div>
+  </div>
+</div>
