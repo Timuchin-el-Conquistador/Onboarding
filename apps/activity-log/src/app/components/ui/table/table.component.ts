@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   computed,
   ElementRef,
@@ -36,7 +37,7 @@ import { tap } from 'rxjs';
     ReactiveFormsModule,
   ],
 })
-export class TableComponent {
+export class TableComponent implements AfterViewInit {
   readonly form = inject(DYNAMIC_FORM_FACTORY).createForm<IForm>(FORM);
 
   readonly paginator = viewChild<MatPaginator>(MatPaginator);
