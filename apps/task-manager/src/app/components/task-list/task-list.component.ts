@@ -7,7 +7,7 @@ import {
   DestroyRef,
 } from '@angular/core';
 import { TaskItemComponent } from '../task-item/task-item.component';
-import { ITask, ITodo } from '../../models';
+import { ITask, ITodoResponse } from '../../models';
 import { EmptyStateComponent } from '../ui/empty-state/empty-state.component';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { BaseResourceManagerService, TaskManagerService } from '../../services';
@@ -15,12 +15,16 @@ import {
   TaskLoadingDirective,
   ScrollOnLoadingDirective,
 } from '../../directives';
-import { LOADER_MANAGER_SERVICE } from '@org/shared/tokens';
+import {
+  BaseEventManagerService,
+  LOADER_MANAGER_SERVICE,
+} from '@org/shared/tokens';
 import { LoaderManagerService } from '@org/shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { withToaster } from '@org/my-lib/operators';
 import { TASK_SUCCESS_MESSAGES } from '../../types';
 import { ResourceCoordinatorManagerService } from '../../services/resource-coordinator-manager.service';
+import { APP_EVENTS } from '../../config';
 
 @Component({
   imports: [
@@ -40,13 +44,14 @@ import { ResourceCoordinatorManagerService } from '../../services/resource-coord
   ],
 })
 export class TaskListComponent<
-  T extends ITodo,
+  T extends ITodoResponse,
 > extends ResourceCoordinatorManagerService<T> {
   readonly todoId = input.required<string>();
   readonly tasks = input.required<ITask[]>();
 
   readonly #injector = inject(Injector);
   readonly #destroyRef = inject(DestroyRef);
+  readonly #eventManager = inject(BaseEventManagerService);
 
   createTask(name: string): void {
     this.create(
@@ -61,11 +66,26 @@ export class TaskListComponent<
         withToaster(this.toaster, TASK_SUCCESS_MESSAGES.CREATE),
       )
       .subscribe(() => {
+        this.#eventManager.dispatch({
+          event: APP_EVENTS.CREATE_TODO,
+          todo_id: this.todoId(),
+          data: {
+            id: this.todoId(),
+            name,
+            completed: false,
+          },
+        });
+
         this.getAll();
       });
   }
 
-  removeTask(id: string, injector: Injector): void {
+  removeTask(
+    id: string,
+    name: string,
+    completed: boolean,
+    injector: Injector,
+  ): void {
     this.delete(
       this.createRequestConfig({
         params: { id: this.todoId(), 'task-id': id },
@@ -77,6 +97,17 @@ export class TaskListComponent<
         withToaster(this.toaster, TASK_SUCCESS_MESSAGES.DELETE),
       )
       .subscribe(() => {
+        this.#eventManager.dispatch({
+          event: APP_EVENTS.CREATE_TODO,
+          todo_id: this.todoId(),
+          data: {
+            id: this.todoId(),
+            'task-id': id,
+            name,
+            completed,
+          },
+        });
+
         this.getAll();
       });
   }
@@ -99,6 +130,17 @@ export class TaskListComponent<
         withToaster(this.toaster, TASK_SUCCESS_MESSAGES.UPDATE),
       )
       .subscribe(() => {
+        this.#eventManager.dispatch({
+          event: APP_EVENTS.CREATE_TODO,
+          todo_id: this.todoId(),
+          data: {
+            id: this.todoId(),
+            'task-id': id,
+            name,
+            completed,
+          },
+        });
+
         this.getAll();
       });
   }

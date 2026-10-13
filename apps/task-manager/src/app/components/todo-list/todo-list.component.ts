@@ -16,13 +16,16 @@ import {
 } from '../../directives';
 import { TodoFormComponent } from '../todo-form/todo-form.component';
 import { ResourceCoordinatorManagerService } from '../../services/resource-coordinator-manager.service';
-import { ITodo } from '../../models';
-import { CONFIRM_MODAL_CONFIG } from '../../config';
+import { ITodoResponse } from '../../models';
+import { APP_EVENTS, CONFIRM_MODAL_CONFIG } from '../../config';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, switchMap } from 'rxjs';
 import { withToaster } from '@org/my-lib/interceptors';
 import { TODO_SUCCESS_MESSAGES } from '../../types';
-import { ConfirmDialogManagerService } from '@org/shared';
+import {
+  BaseEventManagerService,
+  ConfirmDialogManagerService,
+} from '@org/shared';
 
 @Component({
   imports: [
@@ -44,7 +47,7 @@ import { ConfirmDialogManagerService } from '@org/shared';
     },
   ],
 })
-export class TodoListComponent<T extends ITodo>
+export class TodoListComponent<T extends ITodoResponse>
   extends ResourceCoordinatorManagerService<T>
   implements AfterViewInit
 {
@@ -52,6 +55,7 @@ export class TodoListComponent<T extends ITodo>
 
   readonly #injector = inject(Injector);
   readonly #destroyRef = inject(DestroyRef);
+  readonly #eventManager = inject(BaseEventManagerService);
 
   ngAfterViewInit(): void {
     this.getAll(true);
@@ -66,7 +70,13 @@ export class TodoListComponent<T extends ITodo>
         takeUntilDestroyed(this.#destroyRef),
         withToaster(this.toaster, TODO_SUCCESS_MESSAGES.CREATE),
       )
-      .subscribe(() => {
+      .subscribe((data: ITodoResponse) => {
+        this.#eventManager.dispatch({
+          event: APP_EVENTS.CREATE_TODO,
+          todo_id: data.id,
+          data,
+        });
+
         this.getAll();
       });
   }
@@ -86,6 +96,12 @@ export class TodoListComponent<T extends ITodo>
         ),
       )
       .subscribe(() => {
+        this.#eventManager.dispatch({
+          event: APP_EVENTS.CREATE_TODO,
+          todo_id: id,
+          data: { id },
+        });
+
         this.getAll();
       });
   }
