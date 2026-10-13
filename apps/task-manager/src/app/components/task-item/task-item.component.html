@@ -26,7 +26,7 @@
         <app-icon name="edit" />
       </app-ui-button>
 
-      <app-ui-button label="Remove task" (clicked)="remove()" variant="danger">
+      <app-ui-button label="Remove task" (clicked)="remove(name(), completed())" variant="danger">
         <app-icon name="delete" />
       </app-ui-button>
     </div>
