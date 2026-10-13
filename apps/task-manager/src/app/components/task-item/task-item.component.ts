@@ -41,7 +41,11 @@ import { TextTruncationPipe } from '../../pipes';
 })
 export class TaskItemComponent implements OnInit {
   readonly task = input.required<ITask>();
-  readonly removeTask = output<Injector>();
+  readonly removeTask = output<{
+    name: string;
+    completed: boolean;
+    injector: Injector;
+  }>();
   readonly updateTask = output<{
     name: string;
     completed: boolean;
@@ -77,8 +81,12 @@ export class TaskItemComponent implements OnInit {
     });
   }
 
-  remove(): void {
-    this.removeTask.emit(this.#injector);
+  remove(name: string, completed: boolean): void {
+    this.updateTask.emit({
+      name,
+      completed,
+      injector: this.#injector,
+    });
   }
 
   startEdit(): void {

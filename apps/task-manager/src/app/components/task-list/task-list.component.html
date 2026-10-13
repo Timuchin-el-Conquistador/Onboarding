@@ -7,14 +7,11 @@
     <li>
       <app-task-item
         [task]="task"
-        (removeTask)="removeTask(task.id, $event)"
+        (removeTask)="
+          removeTask(task.id, $event.name, $event.completed, $event.injector)
+        "
         (updateTask)="
-          updateTask(
-            task.id,
-            $event.name,
-            $event.completed,
-            $event.injector
-          )
+          updateTask(task.id, $event.name, $event.completed, $event.injector)
         "
       />
     </li>

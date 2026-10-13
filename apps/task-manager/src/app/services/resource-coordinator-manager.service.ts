@@ -1,7 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { BaseResourceManagerService } from './base-resource-manager.service';
 import { Observable, switchMap } from 'rxjs';
-import { IBody, IConfig, IOptions } from '../models';
+import {
+  ITodoBody,
+  IConfig,
+  IOptions,
+  ITodoResponse,
+  ITodoDeleted,
+} from '../models';
 import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import {
   API_URL_TOKEN,
@@ -20,7 +26,7 @@ import { SUBJECT_TOKEN } from '../tokens';
 
 @Injectable()
 export class ResourceCoordinatorManagerService<
-  T,
+  T extends ITodoResponse,
 > implements BaseResourceManagerService<T> {
   readonly toaster = inject(ToasterService);
   readonly loader = inject(LOADER_MANAGER_SERVICE);
@@ -45,15 +51,15 @@ export class ResourceCoordinatorManagerService<
     ),
   );
 
-  create(body: IBody, config?: IConfig): Observable<T> {
+  create(body: ITodoBody, config?: IConfig): Observable<T> {
     return this.#service.create(body, config);
   }
 
-  delete(config?: IConfig): Observable<T> {
+  delete(config?: IConfig): Observable<T | ITodoDeleted> {
     return this.#service.delete(config);
   }
 
-  update(body: IBody, config?: IConfig): Observable<T> {
+  update(body: ITodoBody, config?: IConfig): Observable<T> {
     return this.#service.update!(body, config);
   }
 
