@@ -26,6 +26,7 @@ import {
   BaseEventManagerService,
   ConfirmDialogManagerService,
 } from '@org/shared';
+import { withDispatchEvent } from '../../operators';
 
 @Component({
   imports: [
@@ -56,7 +57,6 @@ export class TodoListComponent<T extends ITodoResponse>
   readonly #injector = inject(Injector);
   readonly #destroyRef = inject(DestroyRef);
   readonly #eventManager = inject(BaseEventManagerService);
-
   ngAfterViewInit(): void {
     this.getAll(true);
   }
@@ -67,16 +67,11 @@ export class TodoListComponent<T extends ITodoResponse>
       this.createRequestConfig({ injector: this.#injector }),
     )
       .pipe(
-        takeUntilDestroyed(this.#destroyRef),
         withToaster(this.toaster, TODO_SUCCESS_MESSAGES.CREATE),
+        withDispatchEvent(this.#eventManager, APP_EVENTS.CREATE_TODO),
+        takeUntilDestroyed(this.#destroyRef),
       )
-      .subscribe((data: ITodoResponse) => {
-        this.#eventManager.dispatch({
-          event: APP_EVENTS.CREATE_TODO,
-          todo_id: data.id,
-          data,
-        });
-
+      .subscribe(() => {
         this.getAll();
       });
   }
@@ -87,21 +82,20 @@ export class TodoListComponent<T extends ITodoResponse>
     this.dialog
       .confirmed()
       .pipe(
-        takeUntilDestroyed(this.#destroyRef),
         filter((confirmed) => confirmed),
         switchMap(() =>
           this.delete(
             this.createRequestConfig({ params: { id }, injector }),
-          ).pipe(withToaster(this.toaster, TODO_SUCCESS_MESSAGES.DELETE)),
+          ).pipe(
+            withToaster(this.toaster, TODO_SUCCESS_MESSAGES.DELETE),
+            withDispatchEvent(this.#eventManager, APP_EVENTS.DELETE_TODO, id, {
+              id,
+            }),
+          ),
         ),
+        takeUntilDestroyed(this.#destroyRef),
       )
       .subscribe(() => {
-        this.#eventManager.dispatch({
-          event: APP_EVENTS.CREATE_TODO,
-          todo_id: id,
-          data: { id },
-        });
-
         this.getAll();
       });
   }

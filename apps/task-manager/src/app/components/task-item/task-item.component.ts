@@ -82,7 +82,7 @@ export class TaskItemComponent implements OnInit {
   }
 
   remove(name: string, completed: boolean): void {
-    this.updateTask.emit({
+    this.removeTask.emit({
       name,
       completed,
       injector: this.#injector,

@@ -25,6 +25,7 @@ import { withToaster } from '@org/my-lib/operators';
 import { TASK_SUCCESS_MESSAGES } from '../../types';
 import { ResourceCoordinatorManagerService } from '../../services/resource-coordinator-manager.service';
 import { APP_EVENTS } from '../../config';
+import { withDispatchEvent } from '../../operators';
 
 @Component({
   imports: [
@@ -62,20 +63,20 @@ export class TaskListComponent<
       }),
     )
       .pipe(
-        takeUntilDestroyed(this.#destroyRef),
         withToaster(this.toaster, TASK_SUCCESS_MESSAGES.CREATE),
-      )
-      .subscribe(() => {
-        this.#eventManager.dispatch({
-          event: APP_EVENTS.CREATE_TODO,
-          todo_id: this.todoId(),
-          data: {
+        withDispatchEvent(
+          this.#eventManager,
+          APP_EVENTS.CREATE_TASK,
+          this.todoId(),
+          {
             id: this.todoId(),
             name,
             completed: false,
           },
-        });
-
+        ),
+        takeUntilDestroyed(this.#destroyRef),
+      )
+      .subscribe(() => {
         this.getAll();
       });
   }
@@ -93,21 +94,21 @@ export class TaskListComponent<
       }),
     )
       .pipe(
-        takeUntilDestroyed(this.#destroyRef),
         withToaster(this.toaster, TASK_SUCCESS_MESSAGES.DELETE),
-      )
-      .subscribe(() => {
-        this.#eventManager.dispatch({
-          event: APP_EVENTS.CREATE_TODO,
-          todo_id: this.todoId(),
-          data: {
+        withDispatchEvent(
+          this.#eventManager,
+          APP_EVENTS.DELETE_TASK,
+          this.todoId(),
+          {
             id: this.todoId(),
             'task-id': id,
             name,
             completed,
           },
-        });
-
+        ),
+        takeUntilDestroyed(this.#destroyRef),
+      )
+      .subscribe(() => {
         this.getAll();
       });
   }
@@ -126,21 +127,21 @@ export class TaskListComponent<
       }),
     )
       .pipe(
-        takeUntilDestroyed(this.#destroyRef),
         withToaster(this.toaster, TASK_SUCCESS_MESSAGES.UPDATE),
-      )
-      .subscribe(() => {
-        this.#eventManager.dispatch({
-          event: APP_EVENTS.CREATE_TODO,
-          todo_id: this.todoId(),
-          data: {
+        withDispatchEvent(
+          this.#eventManager,
+          APP_EVENTS.UPDATE_TASK,
+          this.todoId(),
+          {
             id: this.todoId(),
             'task-id': id,
             name,
             completed,
           },
-        });
-
+        ),
+        takeUntilDestroyed(this.#destroyRef),
+      )
+      .subscribe(() => {
         this.getAll();
       });
   }
