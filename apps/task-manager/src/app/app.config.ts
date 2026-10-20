@@ -14,12 +14,20 @@ import { loadingInterceptor } from '@org/shared/interceptors';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { provideRouter } from '@angular/router';
 import { appRoutes } from './app.routes';
+import {
+  BaseEventManagerService,
+  BrowserEventManager,
+} from '@org/shared';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(appRoutes),
     importProvidersFrom(MatSnackBarModule),
+    {
+      provide: BaseEventManagerService,
+      useClass: BrowserEventManager,
+    },
     { provide: API_URL_TOKEN, useValue: environment.apiUrl },
     provideHttpClient(withInterceptors([authInterceptor, loadingInterceptor])),
   ],

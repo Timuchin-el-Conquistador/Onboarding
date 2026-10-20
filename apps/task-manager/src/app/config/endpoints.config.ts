@@ -7,3 +7,5 @@ export const ENDPOINTS_CONFIG = {
   EDIT_TASK: `${BASE_ENDPOINT}/edit-task`,
   CREATE_TASK: TASK_ENDPOINT,
 };
+
+export const HISTORY_ENDPOINT = 'v1/history'

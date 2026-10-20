@@ -6,4 +6,5 @@ export type {
   ITodoBody,
   ITodoResponse,
   ITodoDeleted,
+  IHistoryBody,
 } from './resource.model';
